@@ -15,50 +15,57 @@
 :- consult('init_form.pl').
 :- consult('display_game_helpers.pl').
 :- consult('valid_moves_helpers.pl').
-
-
-play:- 
-    write('Welcome to Blackstone!\n'),
-    input_form_start(GameConfig),
-    initial_state(GameConfig,GameState). % not done
-
-
-
-
-% initial_state(+GameConfig, -GameState)
-initial_state(GameConfig, GameState):- write(GameConfig). 
+play:-
+	write('Welcome to Blackstone!\n'),
+	input_form_start(GameConfig),
+	initial_state(GameConfig, GameState).% not done
+	% initial_state(+GameConfig, -GameState)
+	initial_state(GameConfig, GameState) :- write(GameConfig). 
 
 
 
 % display_game(+GameState)
-display_game(state(_, _,_, _,Board)):-
-    length(Board,Size),
-    display_grid_line(' ',' ',Size),
-    nl,
-    display_board(Board),
-    display_grid_line(' ',' ',Size),nl.
+display_game(state(_, _, _, _, Board)):-
+	length(Board, Size),
+	display_grid_line(' ', ' ', Size),
+	nl,
+	display_board(Board),
+	display_grid_line(' ', ' ', Size),
+	nl.
 
 
 
-get_turn_color(TurnNum,'r'):-
-    0 =:= TurnNum mod 2.
-get_turn_color(TurnNum,'b'):-
-    1 =:= TurnNum mod 2.
     
 % move(+GameState, +Move, -NewGameState)
 
 %move(originX-originY,targetX-targetY).
 %valid_moves(+GameState, -ListOfMoves):-
-
-
-
-valid_moves(state(TurnNumber, _,_,_,Board) 
-, ListOfMoves):- 
-    findall(Moves, valid_moves_aux(state(TurnNumber, _,_,_,Board),Moves), ListOfLists),
-    merge_moves(ListOfLists,ListOfMoves).
+valid_moves(state(TurnNumber, _, _, _, Board), ListOfMoves):-
+	findall(Moves,
+		valid_moves_aux(state(TurnNumber, _, _, _, Board),
+			Moves),
+		ListOfLists),
+	merge_moves(ListOfLists, ListOfMoves).
     
 
 % game_over(+GameState, -Winner)
+
+%game_over(+GameState, -Winner)
+game_over(state(_, _, _, _, Board), 'x'):-
+	 \+ (member(Line, Board),
+		member('r', Line)),
+	 \+ (member(Line, Board),
+		member('b', Line)),!.
+
+game_over(state(_, _, _, _, Board), 'b'):-
+	 \+ (member(Line, Board),
+		member('r', Line)).
+
+game_over(state(_, _, _, _, Board), 'r'):-
+	 \+ (member(Line, Board),
+		member('b', Line)).
+    
+
 
 % value(+GameState, +Player, -Value)
 

@@ -15,12 +15,14 @@
 :- consult('init_form.pl').
 :- consult('display_game_helpers.pl').
 :- consult('valid_moves_helpers.pl').
+:- consult('move_helpers.pl').
+
 play:-
 	write('Welcome to Blackstone!\n'),
 	input_form_start(GameConfig),
 	initial_state(GameConfig, GameState).% not done
 	% initial_state(+GameConfig, -GameState)
-	initial_state(GameConfig, GameState) :- write(GameConfig). 
+	initial_state(GameConfig, GameState)  :- write(GameConfig). 
 
 
 
@@ -35,8 +37,17 @@ display_game(state(_, _, _, _, Board)):-
 
 
 
+
+
+
     
 % move(+GameState, +Move, -NewGameState)
+move(state(TurnNumber, Player1, Player2, ChurnVariant, Board), Move, state(NTurnNumber, Player1, Player2, ChurnVariant, NBoard)):-
+    get_turn_color(TurnNumber,TurnColor),
+    create_new_board(TurnColor,Board,Move, B2), 
+    remove_dead_pieces(ChurnVariant,B2, NBoard),
+	NTurnNumber is TurnNumber + 1.
+
 
 %move(originX-originY,targetX-targetY).
 %valid_moves(+GameState, -ListOfMoves):-
@@ -49,18 +60,15 @@ valid_moves(state(TurnNumber, _, _, _, Board), ListOfMoves):-
     
 
 % game_over(+GameState, -Winner)
-
-%game_over(+GameState, -Winner)
 game_over(state(_, _, _, _, Board), 'x'):-
 	 \+ (member(Line, Board),
 		member('r', Line)),
 	 \+ (member(Line, Board),
-		member('b', Line)),!.
-
+		member('b', Line)),
+	!.
 game_over(state(_, _, _, _, Board), 'b'):-
 	 \+ (member(Line, Board),
 		member('r', Line)).
-
 game_over(state(_, _, _, _, Board), 'r'):-
 	 \+ (member(Line, Board),
 		member('b', Line)).

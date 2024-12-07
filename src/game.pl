@@ -14,6 +14,7 @@
 
 :- consult('init_form.pl').
 :- consult('display_game_helpers.pl').
+:- consult('valid_moves_helpers.pl').
 
 
 play:- 
@@ -39,10 +40,23 @@ display_game(state(_, _,_, _,Board)):-
 
 
 
-
+get_turn_color(TurnNum,'r'):-
+    0 =:= TurnNum mod 2.
+get_turn_color(TurnNum,'b'):-
+    1 =:= TurnNum mod 2.
+    
 % move(+GameState, +Move, -NewGameState)
 
-% valid_moves(+GameState, -ListOfMoves)
+%move(originX-originY,targetX-targetY).
+%valid_moves(+GameState, -ListOfMoves):-
+
+
+
+valid_moves(state(TurnNumber, _,_,_,Board) 
+, ListOfMoves):- 
+    findall(Moves, valid_moves_aux(state(TurnNumber, _,_,_,Board),Moves), ListOfLists),
+    merge_moves(ListOfLists,ListOfMoves).
+    
 
 % game_over(+GameState, -Winner)
 

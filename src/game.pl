@@ -1,4 +1,4 @@
-%state(TurnNo, Player1Info(Computador ou pessoa ), Player2Info(Computador ou pessoa), Board, churn Variant)
+%state(TurnNumber, Player1,Player2, Variant,Board) 
 
 % Move representation : Move([sX,sY],[tX,tY])
 
@@ -13,6 +13,7 @@
 % mandatory:
 
 :- consult('init_form.pl').
+:- consult('display_game_helpers.pl').
 
 
 play:- 
@@ -26,7 +27,18 @@ play:-
 % initial_state(+GameConfig, -GameState)
 initial_state(GameConfig, GameState):- write(GameConfig). 
 
+
+
 % display_game(+GameState)
+display_game(state(_, _,_, _,Board)):-
+    length(Board,Size),
+    display_grid_line(' ',' ',Size),
+    nl,
+    display_board(Board),
+    display_grid_line(' ',' ',Size),nl.
+
+
+
 
 % move(+GameState, +Move, -NewGameState)
 

@@ -7,12 +7,17 @@ get_turn_color(TurnNum,'b'):-
 
 
 
+%TODO: fix this so that I don't have to use cut. I hate cut.
+
+
 merge_moves([H|T],Acc,ListOfMoves):-
     append(Acc,H,Acc2),
     merge_moves(T,Acc2,ListOfMoves).
-    merge_moves([],ListOfMoves,ListOfMoves).
-    
-    merge_moves(LL,ListOfMoves):-merge_moves(LL,[],ListOfMoves).
+
+merge_moves([],ListOfMoves,ListOfMoves).
+
+
+merge_moves(LL,ListOfMoves):-merge_moves(LL,[],ListOfMoves).
 
 
 get_board_position(X-Y,Board,Elem):-
@@ -21,36 +26,36 @@ get_board_position(X-Y,Board,Elem):-
 
 
 explore_direction(Board,_,X-Y,_,ListOfMoves,ListOfMoves):-
-    \+ get_board_position(X-Y,Board,' ').    
+    \+ get_board_position(X-Y,Board,' '),!.    
 
 
 
 explore_direction(_,_,X-_,_,ListOfMoves,ListOfMoves):-
-        X<0.    
+        X<0,!.    
     
 
 explore_direction(_,_,_-Y,_,ListOfMoves,ListOfMoves):-
-            Y<0.    
+            Y<0,!.    
 
 
 explore_direction(Board,_,_-Y,_,ListOfMoves,ListOfMoves):-
                 length(Board,L),
-                Y>=L.            
+                Y>=L,!.            
 
 explore_direction(Board,_,X-_,_,ListOfMoves,ListOfMoves):-
     nth0(0,Board,Line),
     length(Line,L),
-     X>=L.            
+     X>=L,!.            
 
 
 
 explore_direction(Board,OriginX-OriginY,X-Y,DirX-DirY,Acc,ListOfMoves):-
+    get_board_position(X-Y,Board,' '),
     nth0(0,Board,Line),
     length(Line,LL),
     X<LL, X>=0,
     length(Board,L),
     Y<L,Y>=0,
-    get_board_position(X-Y,Board,' '),
     NewX is X+DirX,
     NewY is Y+DirY,
     explore_direction(Board,OriginX-OriginY,NewX-NewY,DirX-DirY,[move(OriginX-OriginY,X-Y)|Acc],ListOfMoves).
@@ -61,9 +66,11 @@ explore_direction(Board,OriginX-OriginY,X-Y,DirX-DirY,ListOfMoves):-
     X<LL, X>=0,
     length(Board,L),
     Y<L,Y>=0,
+    
     NewX is X+DirX,
     NewY is Y+DirY,
     explore_direction(Board,OriginX-OriginY,NewX-NewY,DirX-DirY,[],ListOfMoves).
+
 
 explore_space(X-Y,Board,ListOfMoves):-
     explore_direction(Board,X-Y,X-Y,1-0,L1),
@@ -78,8 +85,8 @@ explore_space(X-Y,Board,ListOfMoves):-
 
 
 
-valid_moves_aux(state(TurnNumber, _,_,_,Board) 
-, ListOfMoves):-
+piece_positions(TurnNumber,Board
+, X-Y):-
     length(Board,Len),
     Len2 is Len-1,
     between(0,Len2,Y),
@@ -92,6 +99,21 @@ valid_moves_aux(state(TurnNumber, _,_,_,Board)
 
     nth0(X,Line,Elem),
    
-    get_turn_color(TurnNumber,Elem),
-    explore_space(X-Y,Board,ListOfMoves).
+    get_turn_color(TurnNumber,Elem).
 
+
+
+
+valid_moves_aux([H|T],Board,Acc , ListOfMoves):- 
+    explore_space(H,Board,M),
+    append(M,Acc,Acc2),
+    valid_moves_aux(T,Board,Acc2,ListOfMoves).
+
+valid_moves_aux([],_,ListOfMoves,ListOfMoves). 
+
+valid_moves_aux(state(TurnNumber, _,_,_,Board) 
+    , ListOfMoves):-
+        findall(Position,piece_positions(TurnNumber,Board,Position),Positions),
+        valid_moves_aux(Positions,Board,[],ListOfMoves).
+
+    

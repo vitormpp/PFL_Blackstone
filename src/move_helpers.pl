@@ -1,5 +1,6 @@
 :- consult('valid_moves_helpers.pl').
-
+:- use_module(library(lists)).
+:- use_module(library(between)).
 copy_line(_,[], _,[]).
 
 copy_line(TurnColor,[_|T], move(OX-OY, 0-0),[TurnColor|T2]):-
@@ -63,7 +64,6 @@ get_dead_pieces_aux(3,Board,X-Y):-
     length(Board,Len),
     Len2 is Len-1,
     between(0,Len2,Y),
-    nth0(Board,Y,Line),
     
     nth0(Y,Board,Line),
     length(Line,LLen),
@@ -77,7 +77,6 @@ get_dead_pieces_aux(_,Board,X-Y):-
         length(Board,Len),
         Len2 is Len-1,
         between(0,Len2,Y),
-        nth0(Board,Y,Line),
         
         nth0(Y,Board,Line),
         length(Line,LLen),
@@ -93,7 +92,6 @@ get_dead_pieces_aux(2,Board,X-Y):-
     length(Board,Len),
     Len2 is Len-1,
         between(0,Len2,Y),
-            nth0(Board,Y,Line),
             
             nth0(Y,Board,Line),
             length(Line,LLen),
@@ -110,7 +108,6 @@ get_dead_pieces_aux(2,Board,X-Y):-
     length(Board,Len),
     Len2 is Len-1,
         between(0,Len2,Y),
-            nth0(Board,Y,Line),
             
             nth0(Y,Board,Line),
             length(Line,LLen),
@@ -126,7 +123,6 @@ get_dead_pieces_aux(2,Board,X-Y):-
     length(Board,Len),
     Len2 is Len-1,
         between(0,Len2,Y),
-            nth0(Board,Y,Line),
             
             nth0(Y,Board,Line),
             length(Line,LLen),
@@ -144,7 +140,6 @@ get_dead_pieces_aux(2,Board,X-Y):-
     length(Board,Len),
     Len2 is Len-1,
     between(0,Len2,Y),
-    nth0(Board,Y,Line),
                         
     nth0(Y,Board,Line),
     length(Line,LLen),
@@ -160,7 +155,6 @@ get_dead_pieces_aux(2,Board,X-Y):-
         length(Board,Len),
         Len2 is Len-1,
         between(0,Len2,Y),
-        nth0(Board,Y,Line),
                             
         nth0(Y,Board,Line),
         length(Line,LLen),
@@ -176,8 +170,7 @@ get_dead_pieces_aux(2,Board,X-Y):-
         length(Board,Len),
         Len2 is Len-1,
         between(0,Len2,Y),
-        nth0(Board,Y,Line),
-                            
+
         nth0(Y,Board,Line),
         length(Line,LLen),
         LLen2 is LLen-1,
@@ -193,7 +186,6 @@ get_dead_pieces_aux(2,Board,X-Y):-
     length(Board,Len),
     Len2 is Len-1,
     between(0,Len2,Y),
-    nth0(Board,Y,Line),
                         
     nth0(Y,Board,Line),
     length(Line,LLen),
@@ -209,8 +201,7 @@ get_dead_pieces_aux(2,Board,X-Y):-
         length(Board,Len),
         Len2 is Len-1,
         between(0,Len2,Y),
-        nth0(Board,Y,Line),
-                            
+        
         nth0(Y,Board,Line),
         length(Line,LLen),
         LLen2 is LLen-1,

@@ -4,7 +4,8 @@
 :- consult('valid_moves_helpers.pl').
 :- consult('move_helpers.pl').
 :- consult('game.pl').
-test1:- state(0, 'H', 'H', 1, [[' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' '],[' ',' ','r',' ',' ',' '],[' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ']]).
+
+test1( ListOfMoves):- S=state(0, 'H', 'H', 1, [[' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' '],[' ',' ','r',' ',' ',' '],[' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ']]),valid_moves(S, ListOfMoves).
 
 
 test2(ListOfMoves):- valid_moves(state(0, 'H', 'H', 1, [['r',' ']]), ListOfMoves).

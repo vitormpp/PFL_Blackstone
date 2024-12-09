@@ -83,3 +83,48 @@ game_over(state(_, _, _, _, Board), 'r'):-
 initial_state(config(Size, Variant), gamestate(1, Player1Info, Player2Info, Variant, Board)) :-
     create_board(Size, Board),
     initialize_players(Player1Info, Player2Info).
+
+
+% create_board(+Size, -Board)
+create_board(Size, Board) :-
+    length(Board, Size),
+    create_rows(Size, 0, Board).
+
+% create_rows(+Size, +Index, -Rows)
+create_rows(Size, Index, []) :-
+    Index =:= Size.
+create_rows(Size, Index, [Row | Rows]) :-
+    Index < Size,
+    create_row(Size, Index, Row),
+    NextIndex is Index + 1,
+    create_rows(Size, NextIndex, Rows).
+
+% create_row(+Size, +RowIndex, -Row)
+create_row(Size, RowIndex, Row) :-
+    length(Row, Size),
+    place_pieces(RowIndex, 0, Size, Row).
+
+% place_pieces(+RowIndex, +ColIndex, +Size, -Row)
+place_pieces(_, ColIndex, Size, []) :-
+    ColIndex =:= Size.
+place_pieces(RowIndex, ColIndex, Size, [Cell | Rest]) :-
+    piece_at(RowIndex, ColIndex, Size, Cell),
+    NextColIndex is ColIndex + 1,
+    place_pieces(RowIndex, NextColIndex, Size, Rest).
+
+% place_at(+RowIndex, +ColIndex, +Size, -Piece)
+piece_at(RowIndex, ColIndex, Size, 'r') :-
+    (RowIndex =:= 0 ; RowIndex =:= Size - 1),
+    ColIndex < Size - 2,
+    ColIndex mod 2 =:= 1, !.
+piece_at(RowIndex, ColIndex, Size, 'b') :-
+    RowIndex > 0,
+    RowIndex < Size - 1,
+    RowIndex mod 2 =:= 1,
+    ColIndex =:= 0, !.
+piece_at(RowIndex, ColIndex, Size, 'b') :-
+    RowIndex > 0,
+    RowIndex < Size - 1,
+    RowIndex mod 2 =:= 0,
+    ColIndex =:= Size - 1, !.
+piece_at(_, _, _, ' ').

@@ -5,6 +5,22 @@
 :- consult('move_helpers.pl').
 :- consult('game.pl').
 
+test_valid_moves_final_1:- valid_moves(state(0, 'H', 'H', 1, [['r',' ']]), ListOfMoves), length(ListOfMoves,1), member(move(0-0,1-0),ListOfMoves).
+
+test_valid_moves_final_2:- valid_moves(state(0, 'H', 'H', 1, [['r',' '],[' ',' ']]), ListOfMoves), length(ListOfMoves,3), member(move(0-0,1-0),ListOfMoves), member(move(0-0,1-1),ListOfMoves), member(move(0-0,0-1),ListOfMoves),!.
+
+
+
+
+
+
+
+
+
+
+
+
+
 test1( ListOfMoves):- S=state(0, 'H', 'H', 1, [[' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' '],[' ',' ','r',' ',' ',' '],[' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ']]),valid_moves(S, ListOfMoves).
 
 

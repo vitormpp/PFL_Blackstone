@@ -78,3 +78,8 @@ game_over(state(_, _, _, _, Board), 'r'):-
 % value(+GameState, +Player, -Value)
 
 % choose_move(+GameState, +Level, -Move)
+
+% initial_state(+GameConfig, -GameState)
+initial_state(config(Size, Variant), gamestate(1, Player1Info, Player2Info, Variant, Board)) :-
+    create_board(Size, Board),
+    initialize_players(Player1Info, Player2Info).

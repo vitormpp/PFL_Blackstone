@@ -61,58 +61,27 @@ piece_is_surrounded(X-Y,Board):-
 
 
 get_dead_pieces_aux(3,Board,X-Y):-
-    length(Board,Len),
-    Len2 is Len-1,
-    between(0,Len2,Y),
-    
-    nth0(Y,Board,Line),
-    length(Line,LLen),
-    LLen2 is LLen-1,
-    between(0,LLen2,X),
+    iterate_pieces(Board,X-Y,Line), 
 
     nth0(X,Line,'x').
 
 
 get_dead_pieces_aux(_,Board,X-Y):-
-        length(Board,Len),
-        Len2 is Len-1,
-        between(0,Len2,Y),
-        
-        nth0(Y,Board,Line),
-        length(Line,LLen),
-        LLen2 is LLen-1,
-        between(0,LLen2,X),
-    
-        \+nth0(X,Line,'x'),
-        \+nth0(X,Line,' '),
-        piece_is_surrounded(X-Y,Board).
+    iterate_pieces(Board,X-Y,Line), 
+    \+nth0(X,Line,'x'),
+    \+nth0(X,Line,' '),
+    piece_is_surrounded(X-Y,Board).
 
 
 get_dead_pieces_aux(2,Board,X-Y):-
-    length(Board,Len),
-    Len2 is Len-1,
-        between(0,Len2,Y),
-            
-            nth0(Y,Board,Line),
-            length(Line,LLen),
-            LLen2 is LLen-1,
-            between(0,LLen2,X),
-        
-            nth0(X,Line,'x'),
-
+    iterate_pieces(Board,X-Y,Line), 
+    nth0(X,Line,'x'),
             L is X-1,
             U is Y+1,
             piece_is_surrounded(L-U,Board).
 
 get_dead_pieces_aux(2,Board,X-Y):-
-    length(Board,Len),
-    Len2 is Len-1,
-        between(0,Len2,Y),
-            
-            nth0(Y,Board,Line),
-            length(Line,LLen),
-            LLen2 is LLen-1,
-            between(0,LLen2,X),
+    iterate_pieces(Board,X-Y,Line), 
         
             nth0(X,Line,'x'),
 
@@ -120,15 +89,8 @@ get_dead_pieces_aux(2,Board,X-Y):-
             piece_is_surrounded(X-U,Board).
 
 get_dead_pieces_aux(2,Board,X-Y):-
-    length(Board,Len),
-    Len2 is Len-1,
-        between(0,Len2,Y),
-            
-            nth0(Y,Board,Line),
-            length(Line,LLen),
-            LLen2 is LLen-1,
-            between(0,LLen2,X),
-        
+    iterate_pieces(Board,X-Y,Line),
+
             nth0(X,Line,'x'),
 
             R is X+1,
@@ -137,29 +99,15 @@ get_dead_pieces_aux(2,Board,X-Y):-
 
 
 get_dead_pieces_aux(2,Board,X-Y):-
-    length(Board,Len),
-    Len2 is Len-1,
-    between(0,Len2,Y),
-                        
-    nth0(Y,Board,Line),
-    length(Line,LLen),
-    LLen2 is LLen-1,
-    between(0,LLen2,X),
-    
+    iterate_pieces(Board,X-Y,Line),
+
     nth0(X,Line,'x'),
     R is X+1,
     piece_is_surrounded(R-Y,Board).    
 
 
 get_dead_pieces_aux(2,Board,X-Y):-
-        length(Board,Len),
-        Len2 is Len-1,
-        between(0,Len2,Y),
-                            
-        nth0(Y,Board,Line),
-        length(Line,LLen),
-        LLen2 is LLen-1,
-        between(0,LLen2,X),
+    iterate_pieces(Board,X-Y,Line),
         
         nth0(X,Line,'x'),
         L is X-1,
@@ -167,14 +115,7 @@ get_dead_pieces_aux(2,Board,X-Y):-
 
 
 get_dead_pieces_aux(2,Board,X-Y):-
-        length(Board,Len),
-        Len2 is Len-1,
-        between(0,Len2,Y),
-
-        nth0(Y,Board,Line),
-        length(Line,LLen),
-        LLen2 is LLen-1,
-        between(0,LLen2,X),
+    iterate_pieces(Board,X-Y,Line),
         
         nth0(X,Line,'x'),
         L is X-1,
@@ -183,34 +124,29 @@ get_dead_pieces_aux(2,Board,X-Y):-
 
     
 get_dead_pieces_aux(2,Board,X-Y):-
-    length(Board,Len),
-    Len2 is Len-1,
-    between(0,Len2,Y),
-                        
-    nth0(Y,Board,Line),
-    length(Line,LLen),
-    LLen2 is LLen-1,
-    between(0,LLen2,X),
-    
+    iterate_pieces(Board,X-Y,Line),
     nth0(X,Line,'x'),
     D is Y-1,
     piece_is_surrounded(X-D,Board).
 
 
 get_dead_pieces_aux(2,Board,X-Y):-
-        length(Board,Len),
-        Len2 is Len-1,
-        between(0,Len2,Y),
-        
-        nth0(Y,Board,Line),
-        length(Line,LLen),
-        LLen2 is LLen-1,
-        between(0,LLen2,X),
-        
+    iterate_pieces(Board,X-Y,Line),        
         nth0(X,Line,'x'),
         R is X+1,
         D is Y-1,
         piece_is_surrounded(R-D,Board).
+
+iterate_pieces(Board,X-Y,Line):-
+    length(Board,Len),
+    Len2 is Len-1,
+    between(0,Len2,Y),
+
+    nth0(Y,Board,Line),
+    length(Line,LLen),
+    LLen2 is LLen-1,
+    between(0,LLen2,X).
+
 
 get_dead_pieces(ChurnVariant,Board,DeadPieces):-
     findall(DeadPiece,get_dead_pieces_aux(ChurnVariant,Board,DeadPiece),DeadPieces).

@@ -10,12 +10,19 @@ test_valid_moves_final_1:- valid_moves(state(0, 'H', 'H', 1, [['r',' ']]), ListO
 test_valid_moves_final_2:- valid_moves(state(0, 'H', 'H', 1, [['r',' '],[' ',' ']]), ListOfMoves), length(ListOfMoves,3), member(move(0-0,1-0),ListOfMoves), member(move(0-0,1-1),ListOfMoves), member(move(0-0,0-1),ListOfMoves),!.
 
 
-test_move_final_1:-move(state(0, 'H', 'H', 1, [['r',' ',' ']]), move(0-0,2-0),state(0, 'H', 'H', 1, [['x',' ','r']])).
+test_move_final_1:-move(state(0, 'H', 'H', 1, [['r',' ',' ']]), move(0-0,2-0),state(1, 'H', 'H', 1, [['x',' ','r']])).
 
 
-test_move_final_2(M):-move(state(0, 'H', 'H', 1, [['r',' ']]), move(0-0,1-0),state(1, 'H', 'H', 1, [['x',' ']])).
+test_move_final_2:-move(state(0, 'H', 'H', 1, [['r',' ']]), move(0-0,1-0),state(1, 'H', 'H', 1, [['x',' ']])).
+
+test_display_final_1:- display_game(state(0, 'H', 'H', 1, [['r',' ']])).
 
 
+
+
+test_move_helper_1(R):-create_new_board('r',[['r',' ']],move(0-0,1-0), R).
+test_move_helper_2(R):-get_dead_pieces(0,[['x','r']],R).
+test_move_helper_3(R):-remove_dead_pieces(0,[['x','r']], R).
 
 
 

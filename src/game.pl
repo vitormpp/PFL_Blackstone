@@ -30,8 +30,11 @@ initial_state(GameConfig, GameState)  :- write(GameConfig).
 
 % display_game(+GameState)
 display_game(state(_, _, _, _, Board)):-
-	length(Board, Size),
-	display_grid_line(' ', ' ', Size),
+	length(Board, BSize),
+    BSize>0,
+    nth0(0,Board,Elem),
+    length(Elem,Size),
+    display_grid_line(' ', ' ', Size),
 	nl,
 	display_board(Board),
 	display_grid_line(' ', ' ', Size),

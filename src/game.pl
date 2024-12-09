@@ -21,8 +21,10 @@ play:-
 	write('Welcome to Blackstone!\n'),
 	input_form_start(GameConfig),
 	initial_state(GameConfig, GameState).% not done
-	% initial_state(+GameConfig, -GameState)
-	initial_state(GameConfig, GameState)  :- write(GameConfig). 
+
+
+% initial_state(+GameConfig, -GameState)
+initial_state(GameConfig, GameState)  :- write(GameConfig). 
 
 
 

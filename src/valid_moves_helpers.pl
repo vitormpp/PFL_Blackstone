@@ -1,5 +1,7 @@
 :- use_module(library(lists)).
 :- use_module(library(between)).
+
+%helper function to tell which plays is making amove on a given turn. The red player moves on even turns, while the blue player moves on odd turns
 get_turn_color(TurnNum,'r'):-
     0 =:= TurnNum mod 2.
 get_turn_color(TurnNum,'b'):-
@@ -10,19 +12,26 @@ get_turn_color(TurnNum,'b'):-
 %TODO: fix this so that I don't have to use cut. I hate cut.
 
 
+% ---
+
+% turns a list of lists into a single list using an accumulator
 merge_moves([H|T],Acc,ListOfMoves):-
     append(Acc,H,Acc2),
     merge_moves(T,Acc2,ListOfMoves).
-
+% base case: list is empty, result = accumulator
 merge_moves([],ListOfMoves,ListOfMoves).
 
-
+% entry point of the function. Calls the version of the function with the accumulator
 merge_moves(LL,ListOfMoves):-merge_moves(LL,[],ListOfMoves).
 
+% ---
 
+
+% helper function that obtains the value at a given board position.
 get_board_position(X-Y,Board,Elem):-
     nth0(Y,Board,Line),
     nth0(X,Line,Elem).
+
 
 
 explore_direction(Board,_,X-Y,_,ListOfMoves,ListOfMoves):-

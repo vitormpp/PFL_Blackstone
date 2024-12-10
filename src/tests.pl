@@ -16,6 +16,7 @@ test_move_final_1:-move(state(0, 'H', 'H', 1, [['r',' ',' ']]), move(0-0,2-0),st
 test_move_final_2:-move(state(0, 'H', 'H', 1, [['r',' ']]), move(0-0,1-0),state(1, 'H', 'H', 1, [['x',' ']])).
 
 test_display_final_1:- display_game(state(0, 'H', 'H', 1, [['r',' ']])).
+test_display_final_2:- display_game(state(0, 'H', 'H', 1, [['r',' '],[' ','x']])).
 
 
 

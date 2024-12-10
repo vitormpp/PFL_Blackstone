@@ -40,8 +40,6 @@ create_new_board(TurnColor,[H|T], move(OX-OY, TX-TY), [NH|NT]):-
     create_new_board(TurnColor,T, move(OX-NOY, TX-NTY),NT).
 
 
-%from valid_moves_helper:
-%get_board_position(X-Y,Board,Elem)
 
 piece_is_surrounded(X-Y,Board):-
     R is X+1,

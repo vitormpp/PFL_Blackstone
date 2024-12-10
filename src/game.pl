@@ -1,14 +1,11 @@
 %state(TurnNumber, Player1,Player2, Variant,Board) 
 
-% Move representation : Move([sX,sY],[tX,tY])
+% Move representation : move(OX-OY,TX-TY)
 
 % GameConfig( (H/H, H/PC, PC/H, or PC/PC) - ser computador vs computador/ vs pessoa, level 1 vs level 2 difficulty, board size, churn variant)
 
 % use  get_char for input
 
-
-
-%number_codes(11, "11")
 
 % mandatory:
 

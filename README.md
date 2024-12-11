@@ -1,8 +1,9 @@
 # pfl_project_2
 ##TODO:
 - move initial game state creation functions into a different file, for consistency's sake.
-- value(GameState, Player, Value) .
-- choose_move(+GameState, +Level, -Move) -> I would like to do this pls
+- value(GameState, Player, Value) . -> pls do this. actually, write it like this everywhere: value(GameState, _ , Value). Because the player variable won't be used anyway, as it si stored in the state. If the amount of parameters of the function wasn't predetermined, I would just put two. By the way: player 1 plays on even turns, player 2 plays on odd turns. Use mod 2. 
+
+Maybe we should have an "access tutorial" button/option somewhere.
 
 
 

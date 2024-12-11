@@ -15,6 +15,8 @@
 :- consult('move_helpers.pl').
 :- consult('gameloop.pl').
 :- consult('choose_move_helper.pl').
+:- use_module(library(random)).
+
 
 play:-
 	write('Welcome to Blackstone!\n'),

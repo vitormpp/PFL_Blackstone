@@ -13,15 +13,15 @@
 :- consult('display_game_helpers.pl').
 :- consult('valid_moves_helpers.pl').
 :- consult('move_helpers.pl').
+:- consult('gameloop.pl').
+
 
 play:-
 	write('Welcome to Blackstone!\n'),
 	input_form_start(GameConfig),
-	initial_state(GameConfig, GameState).% not done
+	initial_state(GameConfig, GameState),
+    gameloop(GamesState).% not done
 
-
-% initial_state(+GameConfig, -GameState)
-initial_state(GameConfig, GameState)  :- write(GameConfig). 
 
 
 
@@ -78,8 +78,12 @@ game_over(state(_, _, _, _, Board), 'r'):-
 
 
 % value(+GameState, +Player, -Value)
+value(GameState, Player, Value) .
 
 % choose_move(+GameState, +Level, -Move)
+choose_move(GameState, Level, Move).
+
+
 
 % initial_state(+GameConfig, -GameState)
 initial_state(config(Size, Variant), gamestate(1, Player1Info, Player2Info, Variant, Board)) :-

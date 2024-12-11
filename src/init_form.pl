@@ -140,9 +140,9 @@ input_form_difficulty(P1Type,GameConfig):-
 
 input_form(P1Type,GameConfig):-
     write('Player 2 type ((H)uman/(C)omputer): '),
-    get_char(P1Type),
+    get_char(P2Type),
     skip_line,!,
-    validate(P1Type,GameConfig).
+    validate(P1Type,P2Type,GameConfig).
     
 % prints the human/computer question
 input_form(GameConfig):-

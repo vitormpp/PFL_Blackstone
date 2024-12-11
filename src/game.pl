@@ -18,7 +18,7 @@
 
 play:-
 	write('Welcome to Blackstone!\n'),
-	input_form_start(GameConfig),
+	input_form(GameConfig),
 	initial_state(GameConfig, GameState),
     gameloop(GamesState).% not done
 

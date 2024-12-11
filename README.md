@@ -12,3 +12,5 @@ to check if we're on linux so we can use special characters and colors, we can u
 
 
 :- prolog_flag(host_type,Flag),atom_chars(Flag, List), append(_,[ 'l','i','n','u','x'| _],List), (do things that should only happen on linux - the best way is to consult a special linux-only file, because special characters cause the thing on windows to crash even if they're not executed.).
+
+By the way, this readme will need to be changed, because it is supposed to include actual information about our actual code.

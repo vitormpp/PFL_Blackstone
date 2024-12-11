@@ -1,42 +1,61 @@
 
+validate(P1Type,GameConfig):-
+    member(P1Type,['C']),!, 
+    input_form_difficulty(GameConfig).
+
+validate(P1Type,GameConfig):-
+    member(P1Type,['H']),!, 
+    input_form(player(p),GameConfig).
+validate(_,GameConfig):-input_form(GameConfig).
 
 
-% helper function that validates the input from the question of whether each player is a human or a computer. If the input is valid, it moves on to the next part of the input form 
-validate_type(P1Type,P2Type,GameConfig):-
-    member(P1Type,['C','H']),
-    member(P2Type,['C','H']),!, 
-    input_form_2(P1Type,P2Type,GameConfig).
-% Otherwise it repeats the question.
-validate_type(_,_,GameConfig):- write('Invalid input.\n'), input_form_start(GameConfig).
-% ----
+
+validate(P1Type,P2Type,GameConfig):-
+        member(P2Type,['C']),!, 
+        input_form_difficulty(P1Type,GameConfig).
+    
+validate(P1Type,P2Type,GameConfig):-
+        member(P2Type,['H']),!, 
+        input_form(P1Type,player(p),GameConfig).
+validate(P1Type,_,GameConfig):-input_form(P1Type,GameConfig).
+    
+
+
 
 
 % validates the answer to the difficulty question and moves on to the next question.
-validate_difficulty(DifficultyLevel,P1Type,P2Type,GameConfig):-
+validate_difficulty(DifficultyLevel,P1Type,GameConfig):-
     member(DifficultyLevel,[1,2]),!,
-    input_form_3(DifficultyLevel,P1Type,P2Type,GameConfig).
+    input_form(P1Type,player(h-DifficultyLevel),GameConfig).
 % if the input isn't valid, it repeats the question.
-validate_difficulty(_,P1Type,P2Type,GameConfig):- write('Invalid input.\n'), input_form_2(P1Type,P2Type,GameConfig).
+validate_difficulty(_,P1Type,GameConfig):- write('Invalid input.\n'), input_form_2(P1Type,GameConfig).
+
+validate_difficulty(DifficultyLevel,GameConfig):-
+    member(DifficultyLevel,[1,2]),!,
+    input_form(player(h-DifficultyLevel),GameConfig).
+
+% if the input isn't valid, it repeats the question.
+validate_difficulty(_,GameConfig):- write('Invalid input.\n'), input_form(GameConfig).
 
 %---
 
 % validates the answer to the churn question and moves on to the next question
-validate_churn(ChurnVariant,DifficultyLevel,P1Type,P2Type,GameConfig):-
+validate(ChurnVariant,P1Type,P2Type,GameConfig):-
     member(ChurnVariant,[1,2,3]),!,
-    input_form_4(ChurnVariant,DifficultyLevel,P1Type,P2Type,GameConfig).
+    input_form(ChurnVariant,P1Type,P2Type,GameConfig).
 % if the check fails, repeat the question.
-validate_churn(_,DifficultyLevel,P1Type,P2Type,GameConfig):-
+validate_churn(_,P1Type,P2Type,GameConfig):-
     write('Invalid input.\n'),
-    input_form_3(DifficultyLevel,P1Type,P2Type,GameConfig).
+    input_form(P1Type,P2Type,GameConfig).
 %---
 
 % validates the answer to the board size question and moves on to the next question. 
-validate_size(Size,ChurnVariant,DifficultyLevel,P1Type,P2Type,gameConfig(P1Type,P2Type,DifficultyLevel,ChurnVariant,Size)):-
+validate(Size,ChurnVariant,P1Type,P2Type,gameConfig(P1Type,P2Type,ChurnVariant,Size)):-
     Size>=6,!.
 % if the answer isn't valid, repeat the question.
-validate_size(_,ChurnVariant,DifficultyLevel,P1Type,P2Type,GameConfig):-
+validate(_,ChurnVariant,P1Type,P2Type,GameConfig):-
     write('Invalid input.\n'),
-    input_form_4(ChurnVariant,DifficultyLevel,P1Type,P2Type,GameConfig).
+    input_form_4(ChurnVariant,P1Type,P2Type,GameConfig).
 
 % helper function to conver a code to a number.
 number_from_code(Code,Number):-
@@ -87,35 +106,47 @@ read_until_between(Min,Max,Value):-
 
 
 % prints the board size question
-input_form_4(ChurnVariant,DifficultyLevel,P1Type,P2Type,GameConfig):-    
+input_form(ChurnVariant,P1Type,P2Type,GameConfig):-    
     write('Board size: '),
     read_number(Size),
     skip_line,!,
-    validate_size(Size,ChurnVariant,DifficultyLevel,P1Type,P2Type,GameConfig).     
+    validate(Size,ChurnVariant,P1Type,P2Type,GameConfig).     
 
 % prints the churn question
-input_form_3(DifficultyLevel,P1Type,P2Type,GameConfig):-    
+input_form(P1Type,P2Type,GameConfig):-    
     write('Churn variant (1 - default, 2 - medium, 3 - high): '),
     get_code(ChurnVariant),
     skip_line,
     number_from_code(ChurnVariant,Number),!,
-    validate_churn(Number,DifficultyLevel,P1Type,P2Type,GameConfig).
+    validate(Number,P1Type,P2Type,GameConfig).
 
 
 % prints the difficulty question
-input_form_2(P1Type,P2Type,GameConfig):-    
+input_form_difficulty(P1Type,P2Type,GameConfig):-    
     write('Difficulty level(1/2): '),
     get_code(DifficultyLevel),
     skip_line,!,
     number_from_code(DifficultyLevel,Number),
     validate_difficulty(Number,P1Type,P2Type,GameConfig).
 
-
-% prints the human/computer question
-input_form_start(GameConfig):-
-    write('Game type (H)uman/(C)omputer, H/H,C/C,C/H: '),
-    get_char(P1Type),
-    get_char(_),
-    get_char(P2Type),
+input_form_difficulty(P1Type,GameConfig):-    
+    write('Difficulty level(1/2): '),
+    get_code(DifficultyLevel),
     skip_line,!,
-    validate_type(P1Type,P2Type,GameConfig).
+    number_from_code(DifficultyLevel,Number),
+    validate_difficulty(Number,P1Type,GameConfig).
+
+
+
+input_form(P1Type,GameConfig):-
+    write('Player 2 type ((H)uman/(C)omputer): '),
+    get_char(P1Type),
+    skip_line,!,
+    validate(P1Type,GameConfig).
+    
+% prints the human/computer question
+input_form(GameConfig):-
+    write('Player 1 type ((H)uman/(C)omputer): '),
+    get_char(P1Type),
+    skip_line,!,
+    validate(P1Type,GameConfig).

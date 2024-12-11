@@ -1,10 +1,9 @@
 # pfl_project_2
 ##TODO:
-- need to put difficulty level into gamestate.
 - move initial game state creation functions into a different file, for consistency's sake.
 - value(GameState, Player, Value) .
 - choose_move(+GameState, +Level, -Move) -> I would like to do this pls
-- change initial form so that difficulty level is only asked if the given player is a computer, and if there are two computers they can have separate difficulties. Basically, Player will be player(c);player(h-DifficultyLevel).
+
 
 
 

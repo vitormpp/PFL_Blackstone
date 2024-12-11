@@ -2,6 +2,10 @@
 ##TODO:
 - need to put difficulty level into gamestate.
 - move initial game state creation functions into a different file, for consistency's sake.
+- value(GameState, Player, Value) .
+- choose_move(+GameState, +Level, -Move) -> I would like to do this pls
+
+
 
 
 to check if we're on linux so we can use special characters and colors, we can use:

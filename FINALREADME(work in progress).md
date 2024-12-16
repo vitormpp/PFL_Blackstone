@@ -51,10 +51,10 @@ In this implementation, we have integrated all churn variants described in the r
 
 In order to create the initial game state, information is requested from the user, and passed to the initial_state(+GameConfig, -GameState) function.
 
-< image of the configuration messages >
+![Initialization form](imgs/init_form.png)
 
 The GameConfig term matches the format gameConfig(P1Type,P2Type,ChurnVariant,Size), where:
-   - P1Type and P2 are either player(h), signalling a human player, or player(c-DifficultyLevel) otherwise.
+   - P1Type and P2 are either player(h), signalling a human player, or player(c-DifficultyLevel) otherwise, with DifficultyLevel being either 1 or 2.
    - ChurnVariant is a number between 1 and 3
    - Size is an even number greater than 6, representing the size in squares/positions of the side of the square board.
 

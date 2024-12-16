@@ -5,8 +5,7 @@
 
 - we need to improve the move predicate to iterate through valid moves, instead of gathering the valid moves in valid_moves... Basicallly, valid_moves should become :- findall move (STATE,X,NS). Even if we don't make this change, the move predicate should still be made to validate the input move. -> the verifying if it's valid now works and makes the move predicate "iterable", but valid moves wasn't changed
 
-- add a verification that the board size is an even number 
-
+- game_over should NOT print (it doesn't right, now, but I'll note it here)
 
 Maybe we should have an "access tutorial" button/option somewhere.
 

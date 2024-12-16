@@ -11,7 +11,6 @@
 
 :- consult('init_form.pl').
 :- consult('display_game_helpers.pl').
-:- consult('valid_moves_helpers.pl').
 :- consult('move_helpers.pl').
 :- consult('gameloop.pl').
 :- consult('choose_move_helper.pl').

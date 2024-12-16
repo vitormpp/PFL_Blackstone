@@ -1,6 +1,16 @@
-:- consult('valid_moves_helpers.pl').
-:- use_module(library(lists)).
-:- use_module(library(between)).
+:-use_module(library(lists)).
+:-use_module(library(between)).
+
+
+get_turn_color(TurnNum,'r'):-
+    0 =:= TurnNum mod 2.
+get_turn_color(TurnNum,'b'):-
+    1 =:= TurnNum mod 2.
+% helper function that obtains the value at a given board position.
+get_board_position(X-Y,Board,Elem):-
+    nth0(Y,Board,Line),
+    nth0(X,Line,Elem).
+
 
 has_piece_between(Board,X1-Y,X2-Y):-
 	\+(get_board_position(BX-Y,Board, ' ')), between(X1,X2,BX).

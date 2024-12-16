@@ -1,6 +1,18 @@
 :- consult('valid_moves_helpers.pl').
 :- use_module(library(lists)).
 :- use_module(library(between)).
+
+has_piece_between(Board,X1-Y,X2-Y):-
+	\+(get_board_position(BX-Y,Board, ' ')), between(X1,X2,BX).
+
+has_piece_between(Board,X-Y1,X-Y2):-
+	\+(get_board_position(X-BY,Board, ' ')), between(Y1,Y2,BY).
+
+has_piece_between(Board,X1-Y1,X2-Y2):-
+	abs(X1-X2)=:=abs(Y1-Y2),
+	\+(get_board_position(X-Y,Board, ' ')), abs(X1-X)=:=abs(Y1-Y),between(X1,X2,X),between(Y1,Y2,Y).
+
+
 copy_line(_,[], _,[]).
 
 copy_line(TurnColor,[_|T], move(OX-OY, 0-0),[TurnColor|T2]):-

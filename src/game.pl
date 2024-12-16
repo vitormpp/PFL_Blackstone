@@ -38,12 +38,14 @@ display_game(state(_, _, _, _, Board))  :-
 
 
 
+
     
 % move(+GameState, +Move, -NewGameState)
 move(state(TurnNumber, Player1, Player2, ChurnVariant, Board), move(OX-OY, TX-TY), state(NTurnNumber, Player1, Player2, ChurnVariant, NBoard)):-
 	get_turn_color(TurnNumber, TurnColor),
 	get_board_position(OX-OY,Board,TurnColor),
 	get_board_position(TX-TY,Board, ' '),
+	\+ (has_piece_between(Board,OX-OY,TX-TY)),
 	create_new_board(TurnColor, Board,  move(OX-OY, TX-TY), B2),
 	 remove_dead_pieces(ChurnVariant, B2, NBoard),
 	NTurnNumber is TurnNumber + 1.
@@ -51,12 +53,13 @@ move(state(TurnNumber, Player1, Player2, ChurnVariant, Board), move(OX-OY, TX-TY
 
 %move(originX-originY,targetX-targetY).
 %valid_moves(+GameState, -ListOfMoves):-
-valid_moves(state(TurnNumber, _, _, _, Board), ListOfMoves):-
-	findall(Moves,
-		valid_moves_aux(state(TurnNumber, _, _, _, Board),
-			Moves),
-		ListOfLists),
-	merge_moves(ListOfLists, ListOfMoves).
+valid_moves(state(TurnNumber, Player1,Player2, Variant, Board), ListOfMoves):-
+	findall(Move,move(state(TurnNumber, Player1,Player2, Variant, Board),Move,_),ListOfMoves).
+%	findall(Moves,
+%		valid_moves_aux(state(TurnNumber, _, _, _, Board),
+%			Moves),
+%		ListOfLists),
+%	merge_moves(ListOfLists, ListOfMoves).
     
 
 % game_over(+GameState, -Winner)

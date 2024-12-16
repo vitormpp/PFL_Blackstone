@@ -45,9 +45,10 @@ In this implementation, we have integrated all churn variants described in the r
 
 ## Logic, Arquitecture and Implementation
 
-
+< small introcution >
 
 ### Game Configuration Representation
+
 In order to create the initial game state, information is requested from the user, and passed to the initial_state(+GameConfig, -GameState) function.
 
 < image of the configuration messages >
@@ -59,13 +60,39 @@ The GameConfig term matches the format gameConfig(P1Type,P2Type,ChurnVariant,Siz
 
 ### Internal Game State Representation
 
+To represent a game state, the term state(TurnNumber, Player1, Player2, Variant, Board) is used, where:
+   - TurnNumber is a number starting at 0 that is incremented every turn.
+   - Player1 and Player2 are player configurations identical to that of gameConfig (player(h),player(c-DifficultyLevel)).
+   - Variant is a number between 1 and 3.
+   - Board is a list of lists of characters, representing the piece ('r' ofr red, 'b' for blue, 'x' for black), or lack thereof (' '), in each position.
+
 ### Move Representation
+
+To represent a move, the term move(OX-OY, TX-TY) is used, where:
+   - OX-OY is the original position of the piece the player wants to move.
+   - TX-TY is the position to which the player wants to move it.  
+The coordinate of the top-left of the board is 0-0.
 
 ### User Interaction
 
+During the main loop of the game, user interaction is handled by the predicate choose_move(+GameState, +Level, -Move), which takes into account the turn number - used to determine which player's turn it is - and whether that player is a computer or human.
+
+
+< image showing the player input form for choose_move >
+
+
+
+< a paragraph or two and maybe some images about how errors are handled and recovered from >
+
+
+
+
+
+
+< although no more sections are indicated in the project sheet, I think we should include here a new section with some implementation details of the code>
 
 ## Conclusions
 
 
 
-## Bibliographu
+## Bibliography

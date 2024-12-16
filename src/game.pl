@@ -40,9 +40,11 @@ display_game(state(_, _, _, _, Board))  :-
 
     
 % move(+GameState, +Move, -NewGameState)
-move(state(TurnNumber, Player1, Player2, ChurnVariant, Board), Move, state(NTurnNumber, Player1, Player2, ChurnVariant, NBoard)):-
+move(state(TurnNumber, Player1, Player2, ChurnVariant, Board), move(OX-OY, TX-TY), state(NTurnNumber, Player1, Player2, ChurnVariant, NBoard)):-
 	get_turn_color(TurnNumber, TurnColor),
-	create_new_board(TurnColor, Board, Move, B2),
+	get_board_position(OX-OY,Board,TurnColor),
+	get_board_position(TX-TY,Board, ' '),
+	create_new_board(TurnColor, Board,  move(OX-OY, TX-TY), B2),
 	 remove_dead_pieces(ChurnVariant, B2, NBoard),
 	NTurnNumber is TurnNumber + 1.
 

@@ -28,7 +28,7 @@ validate_difficulty(DifficultyLevel,P1Type,GameConfig):-
     member(DifficultyLevel,[1,2]),!,
     input_form(P1Type,player(c-DifficultyLevel),GameConfig).
 % if the input isn't valid, it repeats the question.
-validate_difficulty(_,P1Type,GameConfig):- write('Invalid input.\n'), input_form_2(P1Type,GameConfig).
+validate_difficulty(_,P1Type,GameConfig):- write('Invalid input.\n'), input_form(P1Type,GameConfig).
 
 validate_difficulty(DifficultyLevel,GameConfig):-
     member(DifficultyLevel,[1,2]),!,
@@ -51,11 +51,11 @@ validate_churn(_,P1Type,P2Type,GameConfig):-
 
 % validates the answer to the board size question and moves on to the next question. 
 validate(Size,ChurnVariant,P1Type,P2Type,gameConfig(P1Type,P2Type,ChurnVariant,Size)):-
-    Size>=6,!.
+    Size>=6, 0 is Size mod 2,!.
 % if the answer isn't valid, repeat the question.
 validate(_,ChurnVariant,P1Type,P2Type,GameConfig):-
     write('Invalid input.\n'),
-    input_form_4(ChurnVariant,P1Type,P2Type,GameConfig).
+    input_form(ChurnVariant,P1Type,P2Type,GameConfig).
 
 % helper function to conver a code to a number.
 number_from_code(Code,Number):-

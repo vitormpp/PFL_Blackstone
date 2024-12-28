@@ -12,8 +12,8 @@
 - In main loop -> input has glitches:
   - pressing enter before entering input ends the game. 
   - a second enter press is needed after input correctly inserted, for some reason.
-this needs to be fixed -> putting cuts everywhere fixed this and created... other problems...
-
+this needs to be fixed -> putting cuts everywhere fixed this but now there's a problem with the move where some pieces aren't being deleted where they should. See test_move_final_3.
+ 
 
 to check if we're on linux so we can use special characters and colors, we can use:
 

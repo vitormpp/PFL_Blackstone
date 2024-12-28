@@ -1,6 +1,6 @@
 
 checkMainLoopIteration(NewState):-
-    game_over(NewState,Winner), write('Game over: winner is '), write(Winner),!.
+    game_over(NewState,Winner),display_game(NewState), write('Game over: winner is '), write(Winner),!.
 checkMainLoopIteration(NewState):-!, 
 gameloop(NewState).
 

@@ -1,3 +1,11 @@
+main_menu_evaluate('1'):-!,input_form(GameConfig),
+initial_state(GameConfig, GameState),
+gameloop(GameState).
+main_menu_evaluate('2'):-!,write('Blackstone is a two-player game designed by Blackstone in March 2024. It is played on a square board of any even size.\nStarting with the red player, each player can, in each turn, move one of their own pieces any number of steps in an unobstructed horizontal, vertical or diagonal path. Before the other moves, a x piece is placed on the square the moved piece had originally been.\nIf a r or b piece is unnable to move, it is removed. In the medium churn variant, all x pieces surrounding it are removed as well. In the high churn variant, all x pieces are eliminated.\nA player wins when all of their oponent\'s pieces are eliminated.\n'),play.
+main_menu_evaluate('3'):-!.
+main_menu_evaluate(_):- write('Invalid input!\n'),play.
+% IDK if the previous things should be here, as they will not work unless olay is defined eventually.
+
 
 validate(P1Type,GameConfig):-
     member(P1Type,['C']),!, 

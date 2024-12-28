@@ -18,7 +18,7 @@
 
 
 play:-
-	write('Welcome to Blackstone!\n'),
+	write('Welcome to Blackstone!\n'), %TODO: add an optional explanation of the rules / a menu...
 	input_form(GameConfig),
 	initial_state(GameConfig, GameState),
 	gameloop(GameState).

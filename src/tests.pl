@@ -22,6 +22,7 @@ test_move_final_3:-move(state(1, player(h), player(h), 1, [['x','x',' '],['x','b
 
 test_remove_dead_pieces:-remove_dead_pieces(1,[['x','x','b'],['x','x','r']], NBoard),write(NBoard).
 test_remove_dead_pieces_final_1:-remove_dead_pieces(1,[['x','x','b'],['x','x','r']], [['x','x',' '],['x','x',' ']]). %is failing. It shouldn't fail!!!
+test_get_dead_pieces_helper:-get_dead_pieces(1,[['x','x','b'],['x','x','r']], Pieces),write(Pieces).
 
 test_display_final_1:- display_game(state(0, player(h), player(h), 1, [['r',' ']])).
 test_display_final_2:- display_game(state(0, player(h), player(h), 1, [['r',' '],[' ','x']])).

@@ -182,23 +182,22 @@ get_dead_pieces(ChurnVariant,Board,DeadPieces):-
 
 
 
-board_empty_position_aux(_,[],[]).
 
-board_empty_position_aux(X-Y,[H|T],[H|NT]):- 
-    \+ (X=0,Y=0),
-    NX is X-1,
-    board_empty_position_aux(NX-Y,T,NT).
-
-board_empty_position_aux(0-0,[_|T],[' '|NT]):- 
-    board_empty_position_aux((-1)-0,T,NT).
-
-
-board_empty_position(_,[],[]).
-board_empty_position(X-Y,[H|T],[NH|NT]):-
-    NY is Y-1,
-    board_empty_position_aux(X-Y,H,NH),
-    board_empty_position_aux(X-NY,T,NT).
-
+%board_empty_position(_,[],[]).
+board_empty_position(X-Y,Board , NewBoard):-
+    nth0(Y,Board,Line),
+    X1 is X+1,
+    length(BeforeElem, X),
+    length(L2, X1),
+    append(BeforeElem,_,Line),
+    append(L2,AfterElem,Line),
+    append(BeforeElem,[' '|AfterElem],NewLine),
+    Y1 is Y+1,
+    length(BeforeLine, Y),
+    length(L3, Y1),
+    append(BeforeLine,_,Board),
+    append(L3,AfterLine,Board),
+    append(BeforeLine,[NewLine|AfterLine],NewBoard). 
 
 
 remove_dead_pieces_aux([X-Y|T],Board, NBoard):-

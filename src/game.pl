@@ -42,7 +42,8 @@ move(state(TurnNumber, Player1, Player2, ChurnVariant, Board), move(OX-OY, TX-TY
 	get_turn_color(TurnNumber, TurnColor),
 	get_board_position(OX-OY,Board,TurnColor),
 	get_board_position(TX-TY,Board, ' '),
-	\+ (has_piece_between(Board,OX-OY,TX-TY)),
+	is_in_line_of_sight(Board,OX-OX,TX-TY),
+    \+ (has_piece_between(Board,OX-OY,TX-TY)),
 	create_new_board(TurnColor, Board,  move(OX-OY, TX-TY), B2),
 	 remove_dead_pieces(ChurnVariant, B2, NBoard),
 	NTurnNumber is TurnNumber + 1.

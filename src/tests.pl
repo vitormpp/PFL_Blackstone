@@ -9,6 +9,10 @@ test_valid_moves_final_1:- valid_moves(state(0, player(h), player(h), 1, [['r','
 test_valid_moves_final_2:- valid_moves(state(0, player(h), player(h), 1, [['r',' '],[' ',' ']]), ListOfMoves), length(ListOfMoves,3), member(move(0-0,1-0),ListOfMoves), member(move(0-0,1-1),ListOfMoves), member(move(0-0,0-1),ListOfMoves),!.
 
 
+
+test_valid_moves_final_3:- valid_moves(state(0, player(h), player(h), 1, [['r',' ',' '],['b',' ',' ']]), ListOfMoves),write(ListOfMoves), length(ListOfMoves,3), member(move(0-0,1-0),ListOfMoves), member(move(0-0,1-1),ListOfMoves), member(move(0-0,2-0),ListOfMoves),!.
+
+
 test_move_final_1:-move(state(0, player(h), player(h), 1, [['r',' ',' ']]), move(0-0,2-0),state(1, player(h), player(h), 1, [['x',' ','r']])).
 
 
@@ -30,6 +34,11 @@ test_choose_move_final_2:-choose_move(state(0, player(c-1), player(h), 1, [['r',
 
 
 test_loop_final_1:- gameloop(state(0, player(h), player(h), 1, [['r',' ',' '],['b',' ',' ']])).
+
+
+test_piece_is_surrounded_final_1:- piece_is_surrounded(0-1,[['x','x',' '],['b','r',' ']]).
+
+test_get_board_position_final_1:- between(0,1,Y), between(0,2,X), get_board_position(X-Y,[['x',' ',' '],['b','r',' ']],Elem),write(Elem).
 
 
 

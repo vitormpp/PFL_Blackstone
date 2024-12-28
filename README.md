@@ -12,7 +12,7 @@
 - In main loop -> input has glitches:
   - pressing enter before entering input ends the game. 
   - a second enter press is needed after input correctly inserted, for some reason.
-this needs to be fixed
+this needs to be fixed -> putting cuts everywhere fixed this and created... other problems...
 
 
 to check if we're on linux so we can use special characters and colors, we can use:

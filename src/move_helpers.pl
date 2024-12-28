@@ -12,6 +12,12 @@ get_board_position(X-Y,Board,Elem):-
     nth0(X,Line,Elem).
 
 
+
+is_in_line_of_sight(_-Y,_-Y).
+is_in_line_of_sight(X-_,X-_).
+is_in_line_of_sight(X1-Y1,X2-Y2):- abs(X1-X2)=:=abs(Y1-Y2).
+
+
 has_piece_between(Board,X1-Y,X2-Y):-
 	\+(get_board_position(BX-Y,Board, ' ')), between(X1,X2,BX).
 
@@ -19,8 +25,10 @@ has_piece_between(Board,X-Y1,X-Y2):-
 	\+(get_board_position(X-BY,Board, ' ')), between(Y1,Y2,BY).
 
 has_piece_between(Board,X1-Y1,X2-Y2):-
-	abs(X1-X2)=:=abs(Y1-Y2),
+    X1 \= X2, Y1 \= Y2,
+    abs(X1-X2)=:=abs(Y1-Y2),
 	\+(get_board_position(X-Y,Board, ' ')), abs(X1-X)=:=abs(Y1-Y),between(X1,X2,X),between(Y1,Y2,Y).
+
 
 
 copy_line(_,[], _,[]).
@@ -62,22 +70,22 @@ create_new_board(TurnColor,[H|T], move(OX-OY, TX-TY), [NH|NT]):-
     create_new_board(TurnColor,T, move(OX-NOY, TX-NTY),NT).
 
 
-
-piece_is_surrounded(X-Y,Board):-
+% bound checks aren't necessary, as get_board_position will fail for invalid numbers anyway.
+piece_is_surrounded(X-Y,[H|T]):-
     R is X+1,
     L is X-1,
     U is Y+1,
     D is Y-1,
-    \+ get_board_position(L-U,Board,' '),
-    \+ get_board_position(X-U,Board,' '),
-    \+ get_board_position(R-U,Board,' '),
-    \+ get_board_position(L-Y,Board,' '),
-    \+ get_board_position(X-Y,Board,' '),
-    \+ get_board_position(X-Y,Board,'x'),  % to help in other places... It's not strictly necessary
-    \+ get_board_position(R-Y,Board,' '),
-    \+ get_board_position(L-D,Board,' '),
-    \+ get_board_position(X-D,Board,' '),
-    \+ get_board_position(R-D,Board,' ').
+    \+ get_board_position(L-U,[H|T],' '),
+    \+ get_board_position(X-U,[H|T],' '),
+    \+ get_board_position(R-U,[H|T],' '),
+    \+ get_board_position(L-Y,[H|T],' '),
+    \+ get_board_position(X-Y,[H|T],' '),
+    \+ get_board_position(X-Y,[H|T],'x'),  % to help in other places... It's not strictly necessary
+    \+ get_board_position(R-Y,[H|T],' '),
+    \+ get_board_position(L-D,[H|T],' '),
+    \+ get_board_position(X-D,[H|T],' '),
+    \+ get_board_position(R-D,[H|T],' ').
 
 
 get_dead_pieces_aux(3,Board,X-Y):-

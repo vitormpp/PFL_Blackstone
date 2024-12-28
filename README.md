@@ -13,7 +13,7 @@
   - pressing enter before entering input ends the game. 
   - a second enter press is needed after input correctly inserted, for some reason.
 this needs to be fixed -> putting cuts everywhere fixed this but now there's a problem with the move where some pieces aren't being deleted where they should. See test_move_final_3.
-The dead pieces are all being correctly identified, but only the first one is being removed. I suspect this is because of a cut somewhere.
+
  
 
 to check if we're on linux so we can use special characters and colors, we can use:

@@ -16,12 +16,13 @@
 :- consult('choose_move_helper.pl').
 :- use_module(library(random)).
 
-
-play:-
-	write('Welcome to Blackstone!\n'), %TODO: add an optional explanation of the rules / a menu...
-	input_form(GameConfig),
-	initial_state(GameConfig, GameState),
-	gameloop(GameState).
+main_menu_evaluate('1'):-!,input_form(GameConfig),
+initial_state(GameConfig, GameState),
+gameloop(GameState).
+main_menu_evaluate('2'):-!,write('Blackstone is a two-player game designed by Blackstone in March 2024. It is played on a square board of any even size.\nStarting with the red player, each player can, in each turn, move one of their own pieces any number of steps in an unobstructed horizontal, vertical or diagonal path. Before the other moves, a x piece is placed on the square the moved piece had originally been.\nIf a r or b piece is unnable to move, it is removed. In the medium churn variant, all x pieces surrounding it are removed as well. In the high churn variant, all x pieces are eliminated.\nA player wins when all of their oponent\'s pieces are eliminated.\n'),play.
+main_menu_evaluate('3'):-!.
+main_menu_evaluate(_):- write('Invalid input!\n'),play.
+play:-write('Welcome to Blackstone!\nWould you like to:\n 1 - Play\n 2 - Consult Rules\n 3 - Quit\n'), get_char(C),skip_line,main_menu_evaluate(C).
 
 
 display_game(state(_, _, _, _, Board))  :- 
@@ -163,7 +164,7 @@ choose_move(state(TurnNumber, P1, player(c-1), Churn, Board), _, Move):-
 
 choose_move(state(TurnNumber, player(h), P2, Churn, Board), _, Move):-
     0 =:= TurnNumber mod 2,
-	write('Player one (Xi-Yi,Xf-Yf): '),nl,
+	write('Player one(r) (Xi-Yi,Xf-Yf): '),nl,
     read_number(X1),
     get_char(Sep1),
     read_number(Y1),
@@ -177,7 +178,7 @@ choose_move(state(TurnNumber, player(h), P2, Churn, Board), _, Move):-
 
 choose_move(state(TurnNumber, P1, player(h), Churn, Board), _, Move):-
     0 =\= TurnNumber mod 2,
-    write('Player two (Xi-Yi,Xf-Yf): '),nl,
+    write('Player two(b) (Xi-Yi,Xf-Yf): '),nl,
     read_number(X1),
     get_char(Sep1),
     read_number(Y1),

@@ -42,6 +42,8 @@ test_choose_move_helper:-choose_move(state(1, player(h), player(h), 1, [['x',' '
 
 test_loop_final_1:- gameloop(state(0, player(h), player(h), 1, [['r',' ',' '],['b',' ',' ']])).
 
+test_loop_final_2:- gameloop(state(0, player(h), player(c-1), 1, [['r',' ',' '],['b',' ',' ']])).
+
 
 test_piece_is_surrounded_final_1:- piece_is_surrounded(0-1,[['x','x',' '],['b','r',' ']]).
 

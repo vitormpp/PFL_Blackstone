@@ -8,7 +8,7 @@ read_play_again:-get_char('y'),play_without_preamble,!.
 read_play_again:- write('Ending game!\n').
 
 checkMainLoopIteration(NewState):-
-    game_over(NewState,Winner),display_game(NewState), write('Game over: winner is '), write(Winner),!,write('Do you want to play again?(y/n)\n'),read_play_again.
+    game_over(NewState,Winner),display_game(NewState), write('Game over: winner is '), write(Winner),write('!\n'),!,write('Do you want to play again?(y/n)\n'),read_play_again.
 
 checkMainLoopIteration(NewState):-!, 
 gameloop(NewState).

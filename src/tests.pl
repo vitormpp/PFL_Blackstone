@@ -31,6 +31,7 @@ test_move_helper_3(R):-remove_dead_pieces(0,[['x','r']], R).
 
 test_choose_move_final_1:-choose_move(state(0, player(h), player(h), 1, [['r',' ']]),_,move(0-0,1-0)).
 test_choose_move_final_2:-choose_move(state(0, player(c-1), player(h), 1, [['r',' ']]),_,move(0-0,1-0)),!.
+test_choose_move_final_3:-choose_move(state(1, player(h), player(h), 1, [['x',' ',' '],['b','r',' ']]),_,Move),write(Move).
 
 
 test_loop_final_1:- gameloop(state(0, player(h), player(h), 1, [['r',' ',' '],['b',' ',' ']])).

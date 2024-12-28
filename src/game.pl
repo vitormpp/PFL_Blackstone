@@ -176,7 +176,7 @@ choose_move(state(TurnNumber, player(h), P2, Churn, Board), _, Move):-
 
 
 choose_move(state(TurnNumber, P1, player(h), Churn, Board), _, Move):-
-    0 =:= TurnNumber mod 2,
+    0 =\= TurnNumber mod 2,
     write('Player two (Xi-Yi,Xf-Yf): '),nl,
     read_number(X1),
     get_char(Sep1),

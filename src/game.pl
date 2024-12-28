@@ -29,11 +29,9 @@ display_game(state(_, _, _, _, Board))  :-
 	BSize > 0,
 	nth0(0, Board, Elem),
 	length(Elem, Size),
-	display_grid_line(' ', ' ', Size),
-	nl,
-	display_board(Board),
-	display_grid_line(' ', ' ', Size),
-	nl.
+	Size>0,
+	display_board(Board).
+	
 
 
 

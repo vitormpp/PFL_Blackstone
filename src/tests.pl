@@ -1,7 +1,6 @@
 
 :- consult('init_form.pl').
 :- consult('display_game_helpers.pl').
-:- consult('valid_moves_helpers.pl').
 :- consult('move_helpers.pl').
 :- consult('game.pl').
 
@@ -30,6 +29,7 @@ test_choose_move_final_1:-choose_move(state(0, player(h), player(h), 1, [['r',' 
 test_choose_move_final_2:-choose_move(state(0, player(c-1), player(h), 1, [['r',' ']]),_,move(0-0,1-0)),!.
 
 
+test_loop_final_1:- gameloop(state(0, player(h), player(h), 1, [['r',' ',' '],['b',' ',' ']])).
 
 
 

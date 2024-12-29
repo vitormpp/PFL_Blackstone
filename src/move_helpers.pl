@@ -1,6 +1,36 @@
-:- consult('valid_moves_helpers.pl').
-:- use_module(library(lists)).
-:- use_module(library(between)).
+:-use_module(library(lists)).
+:-use_module(library(between)).
+
+
+get_turn_color(TurnNum,'r'):-
+    0 =:= TurnNum mod 2.
+get_turn_color(TurnNum,'b'):-
+    1 =:= TurnNum mod 2.
+% helper function that obtains the value at a given board position.
+get_board_position(X-Y,Board,Elem):-
+    nth0(Y,Board,Line),
+    nth0(X,Line,Elem).
+
+
+
+is_in_line_of_sight(_-Y,_-Y).
+is_in_line_of_sight(X-_,X-_).
+is_in_line_of_sight(X1-Y1,X2-Y2):- abs(X1-X2)=:=abs(Y1-Y2).
+
+
+has_piece_between(Board,X1-Y,X2-Y):-
+	\+(get_board_position(BX-Y,Board, ' ')), between(X1,X2,BX).
+
+has_piece_between(Board,X-Y1,X-Y2):-
+	\+(get_board_position(X-BY,Board, ' ')), between(Y1,Y2,BY).
+
+has_piece_between(Board,X1-Y1,X2-Y2):-
+    X1 \= X2, Y1 \= Y2,
+    abs(X1-X2)=:=abs(Y1-Y2),
+	\+(get_board_position(X-Y,Board, ' ')), abs(X1-X)=:=abs(Y1-Y),between(X1,X2,X),between(Y1,Y2,Y).
+
+
+
 copy_line(_,[], _,[]).
 
 copy_line(TurnColor,[_|T], move(OX-OY, 0-0),[TurnColor|T2]):-
@@ -40,79 +70,46 @@ create_new_board(TurnColor,[H|T], move(OX-OY, TX-TY), [NH|NT]):-
     create_new_board(TurnColor,T, move(OX-NOY, TX-NTY),NT).
 
 
-%from valid_moves_helper:
-%get_board_position(X-Y,Board,Elem)
-
-piece_is_surrounded(X-Y,Board):-
+% bound checks aren't necessary, as get_board_position will fail for invalid numbers anyway.
+piece_is_surrounded(X-Y,[H|T]):-
     R is X+1,
     L is X-1,
     U is Y+1,
     D is Y-1,
-    \+ get_board_position(L-U,Board,' '),
-    \+ get_board_position(X-U,Board,' '),
-    \+ get_board_position(R-U,Board,' '),
-    \+ get_board_position(L-Y,Board,' '),
-    \+ get_board_position(X-Y,Board,' '),
-    \+ get_board_position(X-Y,Board,'x'),  % to help in other places... It's not strictly necessary
-    \+ get_board_position(R-Y,Board,' '),
-    \+ get_board_position(L-D,Board,' '),
-    \+ get_board_position(X-D,Board,' '),
-    \+ get_board_position(R-D,Board,' ').
+    \+ get_board_position(L-U,[H|T],' '),
+    \+ get_board_position(X-U,[H|T],' '),
+    \+ get_board_position(R-U,[H|T],' '),
+    \+ get_board_position(L-Y,[H|T],' '),
+    \+ get_board_position(X-Y,[H|T],' '),
+    \+ get_board_position(X-Y,[H|T],'x'),  % to help in other places... It's not strictly necessary
+    \+ get_board_position(R-Y,[H|T],' '),
+    \+ get_board_position(L-D,[H|T],' '),
+    \+ get_board_position(X-D,[H|T],' '),
+    \+ get_board_position(R-D,[H|T],' ').
 
 
 get_dead_pieces_aux(3,Board,X-Y):-
-    length(Board,Len),
-    Len2 is Len-1,
-    between(0,Len2,Y),
-    
-    nth0(Y,Board,Line),
-    length(Line,LLen),
-    LLen2 is LLen-1,
-    between(0,LLen2,X),
+    iterate_pieces(Board,X-Y,Line), 
 
     nth0(X,Line,'x').
 
 
 get_dead_pieces_aux(_,Board,X-Y):-
-        length(Board,Len),
-        Len2 is Len-1,
-        between(0,Len2,Y),
-        
-        nth0(Y,Board,Line),
-        length(Line,LLen),
-        LLen2 is LLen-1,
-        between(0,LLen2,X),
-    
-        \+nth0(X,Line,'x'),
-        \+nth0(X,Line,' '),
-        piece_is_surrounded(X-Y,Board).
+    iterate_pieces(Board,X-Y,Line), 
+    \+nth0(X,Line,'x'),
+    \+nth0(X,Line,' '),
+    piece_is_surrounded(X-Y,Board).
 
 
 get_dead_pieces_aux(2,Board,X-Y):-
-    length(Board,Len),
-    Len2 is Len-1,
-        between(0,Len2,Y),
-            
-            nth0(Y,Board,Line),
-            length(Line,LLen),
-            LLen2 is LLen-1,
-            between(0,LLen2,X),
-        
-            nth0(X,Line,'x'),
-
+    iterate_pieces(Board,X-Y,Line), 
+    nth0(X,Line,'x'),
             L is X-1,
             U is Y+1,
             piece_is_surrounded(L-U,Board).
 
 get_dead_pieces_aux(2,Board,X-Y):-
-    length(Board,Len),
-    Len2 is Len-1,
-        between(0,Len2,Y),
-            
-            nth0(Y,Board,Line),
-            length(Line,LLen),
-            LLen2 is LLen-1,
-            between(0,LLen2,X),
+    iterate_pieces(Board,X-Y,Line), 
         
             nth0(X,Line,'x'),
 
@@ -120,15 +117,8 @@ get_dead_pieces_aux(2,Board,X-Y):-
             piece_is_surrounded(X-U,Board).
 
 get_dead_pieces_aux(2,Board,X-Y):-
-    length(Board,Len),
-    Len2 is Len-1,
-        between(0,Len2,Y),
-            
-            nth0(Y,Board,Line),
-            length(Line,LLen),
-            LLen2 is LLen-1,
-            between(0,LLen2,X),
-        
+    iterate_pieces(Board,X-Y,Line),
+
             nth0(X,Line,'x'),
 
             R is X+1,
@@ -137,29 +127,15 @@ get_dead_pieces_aux(2,Board,X-Y):-
 
 
 get_dead_pieces_aux(2,Board,X-Y):-
-    length(Board,Len),
-    Len2 is Len-1,
-    between(0,Len2,Y),
-                        
-    nth0(Y,Board,Line),
-    length(Line,LLen),
-    LLen2 is LLen-1,
-    between(0,LLen2,X),
-    
+    iterate_pieces(Board,X-Y,Line),
+
     nth0(X,Line,'x'),
     R is X+1,
     piece_is_surrounded(R-Y,Board).    
 
 
 get_dead_pieces_aux(2,Board,X-Y):-
-        length(Board,Len),
-        Len2 is Len-1,
-        between(0,Len2,Y),
-                            
-        nth0(Y,Board,Line),
-        length(Line,LLen),
-        LLen2 is LLen-1,
-        between(0,LLen2,X),
+    iterate_pieces(Board,X-Y,Line),
         
         nth0(X,Line,'x'),
         L is X-1,
@@ -167,14 +143,7 @@ get_dead_pieces_aux(2,Board,X-Y):-
 
 
 get_dead_pieces_aux(2,Board,X-Y):-
-        length(Board,Len),
-        Len2 is Len-1,
-        between(0,Len2,Y),
-
-        nth0(Y,Board,Line),
-        length(Line,LLen),
-        LLen2 is LLen-1,
-        between(0,LLen2,X),
+    iterate_pieces(Board,X-Y,Line),
         
         nth0(X,Line,'x'),
         L is X-1,
@@ -183,34 +152,29 @@ get_dead_pieces_aux(2,Board,X-Y):-
 
     
 get_dead_pieces_aux(2,Board,X-Y):-
-    length(Board,Len),
-    Len2 is Len-1,
-    between(0,Len2,Y),
-                        
-    nth0(Y,Board,Line),
-    length(Line,LLen),
-    LLen2 is LLen-1,
-    between(0,LLen2,X),
-    
+    iterate_pieces(Board,X-Y,Line),
     nth0(X,Line,'x'),
     D is Y-1,
     piece_is_surrounded(X-D,Board).
 
 
 get_dead_pieces_aux(2,Board,X-Y):-
-        length(Board,Len),
-        Len2 is Len-1,
-        between(0,Len2,Y),
-        
-        nth0(Y,Board,Line),
-        length(Line,LLen),
-        LLen2 is LLen-1,
-        between(0,LLen2,X),
-        
+    iterate_pieces(Board,X-Y,Line),        
         nth0(X,Line,'x'),
         R is X+1,
         D is Y-1,
         piece_is_surrounded(R-D,Board).
+
+iterate_pieces(Board,X-Y,Line):-
+    length(Board,Len),
+    Len2 is Len-1,
+    between(0,Len2,Y),
+
+    nth0(Y,Board,Line),
+    length(Line,LLen),
+    LLen2 is LLen-1,
+    between(0,LLen2,X).
+
 
 get_dead_pieces(ChurnVariant,Board,DeadPieces):-
     findall(DeadPiece,get_dead_pieces_aux(ChurnVariant,Board,DeadPiece),DeadPieces).
@@ -218,23 +182,22 @@ get_dead_pieces(ChurnVariant,Board,DeadPieces):-
 
 
 
-board_empty_position_aux(_,[],[]).
 
-board_empty_position_aux(X-Y,[H|T],[H|NT]):- 
-    \+ (X=0,Y=0),
-    NX is X-1,
-    board_empty_position_aux(NX-Y,T,NT).
-
-board_empty_position_aux(0-0,[_|T],[' '|NT]):- 
-    board_empty_position_aux((-1)-0,T,NT).
-
-
-board_empty_position(_,[],[]).
-board_empty_position(X-Y,[H|T],[NH|NT]):-
-    NY is Y-1,
-    board_empty_position_aux(X-Y,H,NH),
-    board_empty_position_aux(X-NY,T,NT).
-
+%board_empty_position(_,[],[]).
+board_empty_position(X-Y,Board , NewBoard):-
+    nth0(Y,Board,Line),
+    X1 is X+1,
+    length(BeforeElem, X),
+    length(L2, X1),
+    append(BeforeElem,_,Line),
+    append(L2,AfterElem,Line),
+    append(BeforeElem,[' '|AfterElem],NewLine),
+    Y1 is Y+1,
+    length(BeforeLine, Y),
+    length(L3, Y1),
+    append(BeforeLine,_,Board),
+    append(L3,AfterLine,Board),
+    append(BeforeLine,[NewLine|AfterLine],NewBoard). 
 
 
 remove_dead_pieces_aux([X-Y|T],Board, NBoard):-

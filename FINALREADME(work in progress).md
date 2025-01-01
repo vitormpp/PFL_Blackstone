@@ -11,7 +11,7 @@ In the context of the Functional and Logic Programming curricular unit, we were 
 |Group Member | Student Number | Contribution |
 |---|---|---|
 | Gabriela Rodrigues da Silva | 202206777 | 50% |
-| (insert here) | (insert here) | 50% |
+| Vítor Manuel Pereira Pires | 202207301 | 50% |
 
 ## Installation and Execution
 
@@ -21,7 +21,7 @@ In the context of the Functional and Logic Programming curricular unit, we were 
 
 
 ## The Game - Blackstone
-Blackstone is a two-player game designed by Blackstone in March 2024. It is played on a square board of any even size. The following screenshot demonstrates the initial configuration for a 8 by 8 board:
+Blackstone is a two-player game designed by Mark Steere in March 2024. It is played on a square board of any even size, of side length 6 or longer. The following screenshot demonstrates the initial configuration for a 8 by 8 board:
 
 < image goes here >
 

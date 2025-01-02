@@ -15,7 +15,7 @@ create_list(Element, Size, [Element|Sublist]) :-
     create_list(Element, Size1, Sublist).
 
 % cycle(+N, +List, -Result)
-% This predicate generates a list by repeating the elements of the input list `List` `N` times. The result is unified with `Result`.
+% cycle/3 generates a list by repeating the elements of the input list `List` `N` times (like an append N times). The result is unified with `Result`.
 cycle(0, _, []).
 cycle(N, List, Result) :-
     N > 0,
@@ -85,3 +85,9 @@ set_piece_at(Board, X, Y, Piece, NewBoard):-
 set_in_row(Row, Index, Piece, NewRow):-
     nth0(Index, Row, _, Rest),
     nth0(Index, NewRow, Piece, Rest).
+
+% get_piece_at(+Board, +X, +Y, -Piece)
+% get_piece_at/4 gets the piece at position (X, Y) in the board Board. The result is unified with Piece.
+get_piece_at(Board, X, Y, Piece):-
+    nth0(X, Board, Row),
+    nth0(Y, Row, Piece).

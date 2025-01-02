@@ -115,14 +115,14 @@ read_until_between(Min,Max,Value):-
 
 % prints the board size question
 input_form(ChurnVariant,P1Type,P2Type,GameConfig):-    
-    write('Board size: '),
+    write('Board size: \n'),
     read_number(Size),
     skip_line,!,
     validate(Size,ChurnVariant,P1Type,P2Type,GameConfig).     
 
 % prints the churn question
 input_form(P1Type,P2Type,GameConfig):-    
-    write('Churn variant (1 - default, 2 - medium, 3 - high): '),
+    write('Churn variant (1 - default, 2 - medium, 3 - high): \n'),
     get_code(ChurnVariant),
     skip_line,
     number_from_code(ChurnVariant,Number),!,
@@ -131,14 +131,14 @@ input_form(P1Type,P2Type,GameConfig):-
 
 % prints the difficulty question
 input_form_difficulty(P1Type,P2Type,GameConfig):-    
-    write('Difficulty level(1/2): '),
+    write('Difficulty level(1/2): \n'),
     get_code(DifficultyLevel),
     skip_line,!,
     number_from_code(DifficultyLevel,Number),
     validate_difficulty(Number,P1Type,P2Type,GameConfig).
 
 input_form_difficulty(P1Type,GameConfig):-    
-    write('Difficulty level(1/2): '),
+    write('Difficulty level(1/2): \n'),
     get_code(DifficultyLevel),
     skip_line,!,
     number_from_code(DifficultyLevel,Number),
@@ -147,14 +147,14 @@ input_form_difficulty(P1Type,GameConfig):-
 
 
 input_form(P1Type,GameConfig):-
-    write('Player 2 type ((H)uman/(C)omputer): '),
+    write('Player 2 type ((H)uman/(C)omputer): \n'),
     get_char(P2Type),
     skip_line,!,
     validate(P1Type,P2Type,GameConfig).
     
 % prints the human/computer question
 input_form(GameConfig):-
-    write('Player 1 type ((H)uman/(C)omputer): '),
+    write('Player 1 type ((H)uman/(C)omputer): \n'),
     get_char(P1Type),
     skip_line,!,
     validate(P1Type,GameConfig).

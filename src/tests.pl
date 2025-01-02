@@ -44,6 +44,8 @@ test_loop_final_1:- gameloop(state(0, player(h,'r'), player(h,'b'), 1, [['r',' '
 
 test_loop_final_2:- gameloop(state(0, player(h,'r'), player(c-1,'b'), 1, [['r',' ',' '],['b',' ',' ']])).
 
+test_loop_final_3:- gameloop(state(0, player(c-1,'r'), player(c-1,'b'), 1, [['r',' ',' '],['b',' ',' ']])).
+
 
 test_piece_is_surrounded_final_1:- piece_is_surrounded(0-1,[['x','x',' '],['b','r',' ']]).
 

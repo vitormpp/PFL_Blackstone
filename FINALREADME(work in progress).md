@@ -16,8 +16,16 @@ In the context of the Functional and Logic Programming curricular unit, we were 
 ## Installation and Execution
 
 1) Ensure the correct installation of SICStus Prolog 4.9.
-2) In the SICStus console,
-
+2) Download the zip of code from GitHub, and extract to some folder.
+3) To run game:
+- **Linux**: open the extracted folder in the terminal and run:
+```
+cd src/
+sicstus
+consult('game.pl').
+<name of the function>
+```
+- **Windows**: open the `SICStus` and consult the `game.pl` file and run `<name of the function>` in the terminal.
 
 
 ## The Game - Blackstone

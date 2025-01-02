@@ -79,7 +79,6 @@ set_piece_at(Board, X, Y, Piece, NewBoard):-
     set_in_row(Row, Y, Piece, NewRow),
     nth0(X, NewBoard, NewRow, Rest).
 
-
 % set_in_row(+Row, +X, +Piece, -NewRow)
 % set_in_row/4 sets the piece Piece at position X (removing the piece that was already there) in the row Row. The result is unified with NewRow.
 set_in_row(Row, Index, Piece, NewRow):-
@@ -91,3 +90,12 @@ set_in_row(Row, Index, Piece, NewRow):-
 get_piece_at(Board, X, Y, Piece):-
     nth0(X, Board, Row),
     nth0(Y, Row, Piece).
+
+% Determines if a given position is empty
+is_empty(' ').
+
+% Determines if a given position is red
+is_red('r').
+
+% Determines if a given position is blue
+is_blue('b').

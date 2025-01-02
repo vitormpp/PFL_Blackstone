@@ -3,13 +3,11 @@
 - move initial game state creation functions into a different file, for consistency's sake.
 - value(GameState, Player, Value) . -> pls do this. actually, write it like this everywhere: value(GameState, _ , Value). Because the player variable won't be used anyway, as it si stored in the state. If the amount of parameters of the function wasn't predetermined, I would just put two. By the way: player 1 plays on even turns, player 2 plays on odd turns. Use mod 2. - actually, I made it so that the color codes are passed, to make it easier to interpret
 
-- PROBLEM: ALL COORDINATES NEED TO CHANGE! WE NEED TO INVERT THE Y AXIS!!!
 
+- PROBLEM: I think that the choose_move input may fail with some error inputs, but I'm not sure and it should be tested.
 
 - game_over should NOT print (it doesn't right, now, but I'll note it here)
 
-
-- Maybe we should have an "access tutorial" button/option somewhere.
 
 - In main loop -> input has glitches:
   - pressing enter before entering input ends the game. 

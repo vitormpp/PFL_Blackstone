@@ -83,24 +83,24 @@ value(GameState, Player, Value).
 %even turns is red and P1. Odd turns is blue and P2 
 
 % choose_move(+GameState, +Level, -Move)
-choose_move(state(TurnNumber, player(c-2), P2, Churn, Board), _, Move):-
+choose_move(state(TurnNumber, player(c-2,'r'), P2, Churn, Board), _, Move):-
 	0 =:= TurnNumber mod 2,
 	findall(M-Value,
 		(valid_moves(state(TurnNumber,
-					player(c-2),
+					player(c-2,'r'),
 					P2,
 					Churn,
 					Board),
 				ListOfMoves),
 			member(M, ListOfMoves),
 			move(valid_moves(state(TurnNumber,
-						player(c-2),
+						player(c-2,'r'),
 						P2,
 						Churn,
 						Board),
 					M,
 					NewState),
-				value(NewState, 'r', Value))),
+				value(NewState, player(c-2,'r'), Value))),
 		MovesValues),
 	findall(VMove,
 		(member(VMove - V, MovesValues),
@@ -109,34 +109,34 @@ choose_move(state(TurnNumber, player(c-2), P2, Churn, Board), _, Move):-
 		MostValuableMoves),
 	random_member(Move, MostValuableMoves).
 
-choose_move(state(TurnNumber, player(c-1), P2, Churn, Board), _, Move):-
+choose_move(state(TurnNumber, player(c-1,'r'), P2, Churn, Board), _, Move):-
 	0 =:= TurnNumber mod 2,
 	valid_moves(state(TurnNumber,
-			player(c-1),
+			player(c-1,'r'),
 			P2,
 			Churn,
 			Board),
 		ListOfMoves),
 	random_member(Move, ListOfMoves).
 
-choose_move(state(TurnNumber, P1, player(c-2), Churn, Board), _, Move):-
+choose_move(state(TurnNumber, P1, player(c-2,'b'), Churn, Board), _, Move):-
 	(\+ 0 =:= TurnNumber mod 2),
 	findall(M-Value,
 		(valid_moves(state(TurnNumber,
                     P1,
-					player(c-2),
+					player(c-2,'b'),
 					Churn,
 					Board),
 				ListOfMoves),
 			member(M, ListOfMoves),
 			move(valid_moves(state(TurnNumber,
                         P1,
-                        player(c - 2),
+                        player(c - 2,'b'),
 						Churn,
 						Board),
 					M,
 					NewState),
-				value(NewState, 'b', Value))),
+				value(NewState, player(c - 2,'b'), Value))),
 		MovesValues),
         findall(VMove,
             (member(VMove - V, MovesValues),
@@ -145,11 +145,11 @@ choose_move(state(TurnNumber, P1, player(c-2), Churn, Board), _, Move):-
             MostValuableMoves),
         random_member(Move, MostValuableMoves).
 
-choose_move(state(TurnNumber, P1, player(c-1), Churn, Board), _, Move):-
+choose_move(state(TurnNumber, P1, player(c-1,'b'), Churn, Board), _, Move):-
 	 \+ (0 =:= TurnNumber mod 2),
 	valid_moves(state(TurnNumber,
 			P1,
-			player(c-1),
+			player(c-1,'b'),
 			Churn,
 			Board),
 		ListOfMoves),
@@ -157,7 +157,7 @@ choose_move(state(TurnNumber, P1, player(c-1), Churn, Board), _, Move):-
 
 
 
-choose_move(state(TurnNumber, player(h), P2, Churn, Board), _, Move):-
+choose_move(state(TurnNumber, player(h,'r'), P2, Churn, Board), _, Move):-
     0 =:= TurnNumber mod 2,
 	write('Player one(r) (Xi-Yi,Xf-Yf): '),nl,
     read_number(X1),
@@ -168,10 +168,10 @@ choose_move(state(TurnNumber, player(h), P2, Churn, Board), _, Move):-
     get_char(Sep3),
     read_number(Y2),
     skip_line,
-    validate_move(state(TurnNumber, player(h), P2, Churn, Board),X1,Sep1,Y1,Sep2,X2,Sep3,Y2, Move).
+    validate_move(state(TurnNumber, player(h,'r'), P2, Churn, Board),X1,Sep1,Y1,Sep2,X2,Sep3,Y2, Move).
 
 
-choose_move(state(TurnNumber, P1, player(h), Churn, Board), _, Move):-
+choose_move(state(TurnNumber, P1, player(h,'b'), Churn, Board), _, Move):-
     0 =\= TurnNumber mod 2,
     write('Player two(b) (Xi-Yi,Xf-Yf): '),nl,
     read_number(X1),
@@ -182,7 +182,7 @@ choose_move(state(TurnNumber, P1, player(h), Churn, Board), _, Move):-
     get_char(Sep3),
     read_number(Y2),
     skip_line,
-    validate_move(state(TurnNumber, P1, player(h), Churn, Board),X1,Sep1,Y1,Sep2,X2,Sep3,Y2,Move).
+    validate_move(state(TurnNumber, P1, player(h,'b'), Churn, Board),X1,Sep1,Y1,Sep2,X2,Sep3,Y2,Move).
     
     
 

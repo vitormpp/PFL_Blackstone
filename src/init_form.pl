@@ -13,7 +13,7 @@ validate(P1Type,GameConfig):-
 
 validate(P1Type,GameConfig):-
     member(P1Type,['H']),!, 
-    input_form(player(h),GameConfig).
+    input_form(player(h,'r'),GameConfig).
 validate(_,GameConfig):-input_form(GameConfig).
 
 
@@ -24,7 +24,7 @@ validate(P1Type,P2Type,GameConfig):-
     
 validate(P1Type,P2Type,GameConfig):-
         member(P2Type,['H']),!, 
-        input_form(P1Type,player(h),GameConfig).
+        input_form(P1Type,player(h,'b'),GameConfig).
 validate(P1Type,_,GameConfig):-input_form(P1Type,GameConfig).
     
 
@@ -34,13 +34,13 @@ validate(P1Type,_,GameConfig):-input_form(P1Type,GameConfig).
 % validates the answer to the difficulty question and moves on to the next question.
 validate_difficulty(DifficultyLevel,P1Type,GameConfig):-
     member(DifficultyLevel,[1,2]),!,
-    input_form(P1Type,player(c-DifficultyLevel),GameConfig).
+    input_form(P1Type,player(c-DifficultyLevel,'b'),GameConfig).
 % if the input isn't valid, it repeats the question.
 validate_difficulty(_,P1Type,GameConfig):- write('Invalid input.\n'), input_form(P1Type,GameConfig).
 
 validate_difficulty(DifficultyLevel,GameConfig):-
     member(DifficultyLevel,[1,2]),!,
-    input_form(player(c-DifficultyLevel),GameConfig).
+    input_form(player(c-DifficultyLevel,'r'),GameConfig).
 
 % if the input isn't valid, it repeats the question.
 validate_difficulty(_,GameConfig):- write('Invalid input.\n'), input_form(GameConfig).

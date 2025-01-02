@@ -1,3 +1,11 @@
+
+:- use_module(library(lists)).
+
+/*
+    File: board.pl
+    Description: This file contains the predicates that are used to create and manipulate the board.
+*/
+
 % create_list(+Element, +Size, -List)
 % crate_list/2 creates a list of Size elements, all of them being Element.
 create_list(_, 0, []).
@@ -63,3 +71,17 @@ create_row(Index, Size, Row):-
     N is Size - 1,
     create_list(' ', N, R),
     append(R, ['b'], Row).
+
+% set_piece_at(+Board, +X, +Y, +Piece, -NewBoard)
+% set_piece_at/4 sets the piece Piece at position (X, Y) in the board Board. The result is unified with NewBoard.
+set_piece_at(Board, X, Y, Piece, NewBoard):-
+    nth0(X, Board, Row, Rest),
+    set_in_row(Row, Y, Piece, NewRow),
+    nth0(X, NewBoard, NewRow, Rest).
+
+
+% set_in_row(+Row, +X, +Piece, -NewRow)
+% set_in_row/4 sets the piece Piece at position X (removing the piece that was already there) in the row Row. The result is unified with NewRow.
+set_in_row(Row, Index, Piece, NewRow):-
+    nth0(Index, Row, _, Rest),
+    nth0(Index, NewRow, Piece, Rest).

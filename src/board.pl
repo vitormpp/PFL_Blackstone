@@ -97,11 +97,17 @@ get_piece_at(X-Y, Board, Piece):-
 get_positions(Board, Piece, Positions):-
     findall(X-Y, get_piece_at(X-Y, Board, Piece), Positions).
 
-% Determines if a given position is empty
+% count_pieces(+Board, +Piece, -Count)
+% count_pieces/3 counts the number of pieces Piece in the board Board. The result is unified with Count.
+count_pieces(Board, Piece, Count):-
+    get_positions(Board, Piece, Positions),
+    length(Positions, Count).
+
+% Determines if is empty
 is_empty(' ').
 
-% Determines if a given position is red
+% Determines if is red
 is_red('r').
 
-% Determines if a given position is blue
+% Determines is blue
 is_blue('b').

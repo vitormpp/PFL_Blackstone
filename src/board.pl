@@ -72,22 +72,23 @@ create_row(Index, Size, Row):-
     create_list(' ', N, R),
     append(R, ['b'], Row).
 
-% set_piece_at(+Board, +X, +Y, +Piece, -NewBoard)
+% set_piece_at(+X-Y, +Board, +Piece, -NewBoard)
 % set_piece_at/4 sets the piece Piece at position (X, Y) in the board Board. The result is unified with NewBoard.
-set_piece_at(Board, X, Y, Piece, NewBoard):-
+set_piece_at(X-Y, Board, Piece, NewBoard):-
     nth0(X, Board, Row, Rest),
     set_in_row(Row, Y, Piece, NewRow),
     nth0(X, NewBoard, NewRow, Rest).
 
 % set_in_row(+Row, +X, +Piece, -NewRow)
 % set_in_row/4 sets the piece Piece at position X (removing the piece that was already there) in the row Row. The result is unified with NewRow.
+set_in_row([], _, _, []).
 set_in_row(Row, Index, Piece, NewRow):-
     nth0(Index, Row, _, Rest),
     nth0(Index, NewRow, Piece, Rest).
 
-% get_piece_at(+Board, +X, +Y, -Piece)
-% get_piece_at/4 gets the piece at position (X, Y) in the board Board. The result is unified with Piece.
-get_piece_at(Board, X, Y, Piece):-
+% get_piece_at(+X-Y, +Board, -Piece)
+% get_piece_at/3 gets the piece at position (X, Y) in the board Board. The result is unified with Piece.
+get_piece_at(X-Y, Board, Piece):-
     nth0(X, Board, Row),
     nth0(Y, Row, Piece).
 
@@ -99,3 +100,4 @@ is_red('r').
 
 % Determines if a given position is blue
 is_blue('b').
+

@@ -1,25 +1,44 @@
-%state(TurnNumber, Player1,Player2, Variant,Board) 
-
-% Move representation : move(OX-OY,TX-TY)
-
-% GameConfig( (H/H, H/PC, PC/H, or PC/PC) - ser computador vs computador/ vs pessoa, level 1 vs level 2 difficulty, board size, churn variant)
-
-% use  get_char for input
-
-
-% mandatory:
-
+:- use_module(library(random)).
 :- consult('init_form.pl').
 :- consult('display_game_helpers.pl').
 :- consult('move_helpers.pl').
 :- consult('gameloop.pl').
 :- consult('choose_move_helper.pl').
-:- use_module(library(random)).
+
+/*
+	File: game.pl
+	Description: This file contains the predicates that are used to play the game.
+*/
+
+%state(TurnNumber, Player1,Player2, Variant,Board) 
+
+% Move representation : move(OX-OY,TX-TY)
+%move(originX-originY,targetX-targetY).
+
+% GameConfig( (H/H, H/PC, PC/H, or PC/PC) - ser computador vs computador/ vs pessoa, level 1 vs level 2 difficulty, board size, churn variant)
+
+% use  get_char for input
+
+%even turns is red and P1. Odd turns is blue and P2 
 
 
-play:-write('Welcome to Blackstone!\nWould you like to:\n 1 - Play\n 2 - Consult Rules\n 3 - Quit\n'), get_char(C),skip_line,main_menu_evaluate(C).
+% mandatory:
 
 
+% play/0 starts the game
+play:-
+	write('Welcome to Blackstone!\nWould you like to:\n 1 - Play\n 2 - Consult Rules\n 3 - Quit\n'), 
+	get_char(C),
+	skip_line,
+	main_menu_evaluate(C).
+
+% initial_state(+GameConfig, -GameState)
+% initial_state/2 Unifies Board with a board of size Size x Size.
+initial_state(gameConfig(Player1, Player2, Variant, Size), state(1, Player1, Player2, Variant, Board)) :-
+	create_board(Size, Board).
+
+% display_game(+GameState)
+% display_game/1 displays the game board.
 display_game(state(_, _, _, _, Board))  :- 
     length(Board, BSize),
 	BSize > 0,
@@ -28,12 +47,8 @@ display_game(state(_, _, _, _, Board))  :-
 	Size>0,
 	display_board(Board).
 	
-
-
-
-
-    
 % move(+GameState, +Move, -NewGameState)
+% move/3 applies the move Move to the game state GameState, resulting in the new game state NewGameState.
 move(state(TurnNumber, Player1, Player2, ChurnVariant, Board), move(OX-OY, TX-TY), state(NTurnNumber, Player1, Player2, ChurnVariant, NBoard)):-
 	get_turn_color(TurnNumber, TurnColor),
 	get_board_position(OX-OY,Board,TurnColor),
@@ -45,8 +60,8 @@ move(state(TurnNumber, Player1, Player2, ChurnVariant, Board), move(OX-OY, TX-TY
 	NTurnNumber is TurnNumber + 1.
 
 
-%move(originX-originY,targetX-targetY).
-%valid_moves(+GameState, -ListOfMoves):-
+% valid_moves(+GameState, -ListOfMoves):-
+% valid_moves/2 returns a list of all valid moves for the current player.
 valid_moves(state(TurnNumber, Player1,Player2, Variant, Board), ListOfMoves):-
 	findall(Move,move(state(TurnNumber, Player1,Player2, Variant, Board),Move,_),ListOfMoves).
 %	findall(Moves,
@@ -57,32 +72,27 @@ valid_moves(state(TurnNumber, Player1,Player2, Variant, Board), ListOfMoves):-
     
 
 % game_over(+GameState, -Winner)
+% game_over/2 checks if the game is over and returns the winner.
 game_over(state(_, _, _, _, Board), 'x'):-
 	 \+ (member(Line, Board),
 		member('r', Line)),
 	 \+ (member(Line, Board),
 		member('b', Line)),
 	!.
+
 game_over(state(_, _, _, _, Board), 'b'):-
 	 \+ (member(Line, Board),
 		member('r', Line)).
+
 game_over(state(_, _, _, _, Board), 'r'):-
 	 \+ (member(Line, Board),
 		member('b', Line)).
     
-
-
 % value(+GameState, +Player, -Value)
 value(GameState, Player, Value).
 
-
-
-
-
-
-%even turns is red and P1. Odd turns is blue and P2 
-
 % choose_move(+GameState, +Level, -Move)
+% choose_move/3 chooses a move for the computer to make.
 choose_move(state(TurnNumber, player(c-2,'r'), P2, Churn, Board), _, Move):-
 	1 =:= TurnNumber mod 2,
 	findall(M-Value,
@@ -109,6 +119,8 @@ choose_move(state(TurnNumber, player(c-2,'r'), P2, Churn, Board), _, Move):-
 		MostValuableMoves),
 	random_member(Move, MostValuableMoves).
 
+% choose_move(+GameState, +Level, -Move)
+% choose_move/3 chooses a move for the computer to make.
 choose_move(state(TurnNumber, player(c-1,'r'), P2, Churn, Board), _, Move):-
 	1 =:= TurnNumber mod 2,
 	valid_moves(state(TurnNumber,
@@ -183,12 +195,6 @@ choose_move(state(TurnNumber, P1, player(h,'b'), Churn, Board), _, Move):-
     read_number(Y2),
     skip_line,
     validate_move(state(TurnNumber, P1, player(h,'b'), Churn, Board),X1,Sep1,Y1,Sep2,X2,Sep3,Y2,Move).
-    
-
-% initial_state(+GameConfig, -GameState)
-% initial_state/2 Unifies Board with a board of size Size x Size.
-initial_state(gameConfig(Player1, Player2, Variant, Size), state(1, Player1, Player2, Variant, Board)) :-
-	create_board(Size, Board).
 
 
 % value(+GameState, +Player, -Value)
@@ -200,4 +206,13 @@ initial_state(gameConfig(Player1, Player2, Variant, Size), state(1, Player1, Pla
 	- Capturing opponent's pieces;
 	- Strategic positioning;
 */
-value(state(_, _, _, _, Board), player(_,Piece), Value).
+value(state(TurnNumber, _, _, Variant, Board), player(_,Piece), Value):-
+	oponent(Piece, Oponent),
+	count_pieces(Board, Piece, PlayerCount),
+	count_pieces(Board, Oponent, OponentCount),
+	findall(Move,move(state(TurnNumber, _, _, Variant, Board),Move,_),ListOfMoves),
+	length(ListOfMoves, PlayerMoves),
+	get_dead_pieces(Variant, Board, DeadPieces),
+	findall(X-Y, get_piece_at(X-Y, DeadPieces, Oponent), DeadPiecePositions),
+	length(DeadPiecePositions, DeadPieceCount),
+	Value is PlayerCount - OponentCount + PlayerMoves / PlayerCount + DeadPieceCount.

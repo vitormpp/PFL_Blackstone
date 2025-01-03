@@ -84,7 +84,7 @@ value(GameState, Player, Value).
 
 % choose_move(+GameState, +Level, -Move)
 choose_move(state(TurnNumber, player(c-2,'r'), P2, Churn, Board), _, Move):-
-	0 =:= TurnNumber mod 2,
+	1 =:= TurnNumber mod 2,
 	findall(M-Value,
 		(valid_moves(state(TurnNumber,
 					player(c-2,'r'),
@@ -110,7 +110,7 @@ choose_move(state(TurnNumber, player(c-2,'r'), P2, Churn, Board), _, Move):-
 	random_member(Move, MostValuableMoves).
 
 choose_move(state(TurnNumber, player(c-1,'r'), P2, Churn, Board), _, Move):-
-	0 =:= TurnNumber mod 2,
+	1 =:= TurnNumber mod 2,
 	valid_moves(state(TurnNumber,
 			player(c-1,'r'),
 			P2,
@@ -120,7 +120,7 @@ choose_move(state(TurnNumber, player(c-1,'r'), P2, Churn, Board), _, Move):-
 	random_member(Move, ListOfMoves).
 
 choose_move(state(TurnNumber, P1, player(c-2,'b'), Churn, Board), _, Move):-
-	(\+ 0 =:= TurnNumber mod 2),
+	(\+ 1 =:= TurnNumber mod 2),
 	findall(M-Value,
 		(valid_moves(state(TurnNumber,
                     P1,
@@ -146,7 +146,7 @@ choose_move(state(TurnNumber, P1, player(c-2,'b'), Churn, Board), _, Move):-
         random_member(Move, MostValuableMoves).
 
 choose_move(state(TurnNumber, P1, player(c-1,'b'), Churn, Board), _, Move):-
-	 \+ (0 =:= TurnNumber mod 2),
+	 \+ (1 =:= TurnNumber mod 2),
 	valid_moves(state(TurnNumber,
 			P1,
 			player(c-1,'b'),
@@ -158,7 +158,7 @@ choose_move(state(TurnNumber, P1, player(c-1,'b'), Churn, Board), _, Move):-
 
 
 choose_move(state(TurnNumber, player(h,'r'), P2, Churn, Board), _, Move):-
-    0 =:= TurnNumber mod 2,
+    1 =:= TurnNumber mod 2,
 	write('Player one(r) (Xi-Yi,Xf-Yf): '),nl,
     read_number(X1),
     get_char(Sep1),
@@ -172,7 +172,7 @@ choose_move(state(TurnNumber, player(h,'r'), P2, Churn, Board), _, Move):-
 
 
 choose_move(state(TurnNumber, P1, player(h,'b'), Churn, Board), _, Move):-
-    0 =\= TurnNumber mod 2,
+    1 =\= TurnNumber mod 2,
     write('Player two(b) (Xi-Yi,Xf-Yf): '),nl,
     read_number(X1),
     get_char(Sep1),
@@ -186,6 +186,18 @@ choose_move(state(TurnNumber, P1, player(h,'b'), Churn, Board), _, Move):-
     
 
 % initial_state(+GameConfig, -GameState)
-initial_state(config(Size, Variant), gamestate(1, Player1Info, Player2Info, Variant, Board)) :-
-	create_board(Size, Board),
-	initialize_players(Player1Info, Player2Info).
+% initial_state/2 Unifies Board with a board of size Size x Size.
+initial_state(gameConfig(Player1, Player2, Variant, Size), state(1, Player1, Player2, Variant, Board)) :-
+	create_board(Size, Board).
+
+
+% value(+GameState, +Player, -Value)
+% value/3 evaluates how good or bad a move (chosen by the computer). The higher the value, the better the move.
+/*
+	Key factors for evaluation:
+	- Blocking opponent's movement;
+	- Preserving mobility;
+	- Capturing opponent's pieces;
+	- Strategic positioning;
+*/
+value(state(_, _, _, _, Board), player(_,Piece), Value).

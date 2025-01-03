@@ -1,66 +1,65 @@
 :-use_module(library(lists)).
 :-use_module(library(between)).
 
-
+% get_turn_color(+TurnNum, -Color)
+% get_turn_color/2 returns the color of the player that is playing in the turn number TurnNum.
 get_turn_color(TurnNum,'r'):-
-    0 =:= TurnNum mod 2.
-get_turn_color(TurnNum,'b'):-
     1 =:= TurnNum mod 2.
+get_turn_color(TurnNum,'b'):-
+    0 =:= TurnNum mod 2.
+
+% get_board_position(+X-Y, +Board, -Elem)
 % helper function that obtains the value at a given board position.
-get_board_position(X-Y,Board,Elem):-
+get_board_position(X-Y, Board, Elem):-
     nth0(Y,Board,Line),
     nth0(X,Line,Elem).
 
+% is_in_line_of_sight(+X1-Y1, +X2-Y2)
+% is_in_line_of_sight/2 checks if the two given positions (X1, Y1) and (X2, Y2) are in line of sight.
+% That is true if they are in the same row, column or diagonal.
+is_in_line_of_sight(_-Y, _-Y).
+is_in_line_of_sight(X-_, X-_).
+is_in_line_of_sight(X1-Y1, X2-Y2):- 
+    abs(X1-X2) =:= abs(Y1-Y2).
 
-
-is_in_line_of_sight(_-Y,_-Y).
-is_in_line_of_sight(X-_,X-_).
-is_in_line_of_sight(X1-Y1,X2-Y2):- abs(X1-X2)=:=abs(Y1-Y2).
-
-
-has_piece_between(Board,X1-Y,X2-Y):-
+% has_piece_between(+Board, +X1-Y1, +X2-Y2)
+% has_piece_between/3 checks if there is a piece between the two given positions (X1, Y1) and (X2, Y2).
+has_piece_between(Board, X1-Y, X2-Y):-
 	\+(get_board_position(BX-Y,Board, ' ')), between(X1,X2,BX).
 
-has_piece_between(Board,X-Y1,X-Y2):-
+has_piece_between(Board, X-Y1, X-Y2):-
 	\+(get_board_position(X-BY,Board, ' ')), between(Y1,Y2,BY).
 
-has_piece_between(Board,X1-Y1,X2-Y2):-
+has_piece_between(Board, X1-Y1, X2-Y2):-
     X1 \= X2, Y1 \= Y2,
     abs(X1-X2)=:=abs(Y1-Y2),
 	\+(get_board_position(X-Y,Board, ' ')), abs(X1-X)=:=abs(Y1-Y),between(X1,X2,X),between(Y1,Y2,Y).
 
 
-
+% copy_line(+TurnColor, +Line, +Move, -NewLine)
+% copy_line/4 copies a line of the board, applying the given move.
 copy_line(_,[], _,[]).
 
-copy_line(TurnColor,[_|T], move(OX-OY, 0-0),[TurnColor|T2]):-
+copy_line(TurnColor, [_|T], move(OX-OY, 0-0), [TurnColor|T2]):-
     \+ (OX=0,OY=0),
-    
     NOX is OX-1,
-
     copy_line(TurnColor,T,move(NOX-OY,(-1)-0),T2).
 
-
-copy_line(TurnColor,[_|T], move(0-0, TX-TY),['x'|T2]):-
+copy_line(TurnColor, [_|T], move(0-0, TX-TY), ['x'|T2]):-
     \+ (TX=0,TY=0),
-    
     NTX is TX-1,
-
     copy_line(TurnColor,T,move((-1)-0,NTX-TY),T2).
 
-
-
-copy_line(TurnColor,[H|T], move(OX-OY, TX-TY),[H|T2]):-
+copy_line(TurnColor, [H|T], move(OX-OY, TX-TY), [H|T2]):-
     \+ (TX=0,TY=0),
     \+ (OX=0,OY=0),
-    
     NOX is OX-1,
     NTX is TX-1,
-
     copy_line(TurnColor,T,move(NOX-OY,NTX-TY),T2).
 
 
-
+% create_new_board(+TurnColor, +Board, +Move, -NewBoard)
+% create_new_board/4 creates a new board, applying the given move.
 create_new_board(_,[], _, []).
 
 create_new_board(TurnColor,[H|T], move(OX-OY, TX-TY), [NH|NT]):-

@@ -35,48 +35,34 @@ is_in_line_of_sight(X1-Y1, X2-Y2):-
 % has_piece_between(+Board, +X1-Y1, +X2-Y2)
 % has_piece_between/3 checks if there is a piece between the two given positions (X1, Y1) and (X2, Y2).
 has_piece_between(Board, X1-Y, X2-Y):-
-	\+(get_board_position(BX-Y,Board, ' ')), between(X1,X2,BX).
+    MinX is min(X1,X2)+1,
+    MaxX is max(X1,X2)-1,
+	\+(get_board_position(BX-Y,Board, ' ')), between(MinX,MaxX,BX).
 
 has_piece_between(Board, X-Y1, X-Y2):-
-	\+(get_board_position(X-BY,Board, ' ')), between(Y1,Y2,BY).
+    MinY is min(Y1,Y2)+1,
+    MaxY is max(Y1,Y2)-1,
+    \+(get_board_position(X-BY,Board, ' ')), between(MinY,MinY,BY).
+
 
 has_piece_between(Board, X1-Y1, X2-Y2):-
+    MinX is min(X1,X2)+1,
+    MaxX is max(X1,X2)-1,
+    MinY is min(Y1,Y2)+1,
+    MaxY is max(Y1,Y2)-1,
     X1 \= X2, Y1 \= Y2,
     abs(X1-X2)=:=abs(Y1-Y2),
-	\+(get_board_position(X-Y,Board, ' ')), abs(X1-X)=:=abs(Y1-Y),between(X1,X2,X),between(Y1,Y2,Y).
-
-
-% copy_line(+TurnColor, +Line, +Move, -NewLine)
-% copy_line/4 copies a line of the board, applying the given move.
-copy_line(_,[], _,[]).
-
-copy_line(TurnColor, [_|T], move(OX-OY, 0-0), [TurnColor|T2]):-
-    \+ (OX=0,OY=0),
-    NOX is OX-1,
-    copy_line(TurnColor,T,move(NOX-OY,(-1)-0),T2).
-
-copy_line(TurnColor, [_|T], move(0-0, TX-TY), ['x'|T2]):-
-    \+ (TX=0,TY=0),
-    NTX is TX-1,
-    copy_line(TurnColor,T,move((-1)-0,NTX-TY),T2).
-
-copy_line(TurnColor, [H|T], move(OX-OY, TX-TY), [H|T2]):-
-    \+ (TX=0,TY=0),
-    \+ (OX=0,OY=0),
-    NOX is OX-1,
-    NTX is TX-1,
-    copy_line(TurnColor,T,move(NOX-OY,NTX-TY),T2).
+	\+(get_board_position(X-Y,Board, ' ')), abs(X1-X)=:=abs(Y1-Y),between(MinX,MaxX,X),between(MinY,MaxY,Y).
 
 
 % create_new_board(+TurnColor, +Board, +Move, -NewBoard)
 % create_new_board/4 creates a new board, applying the given move.
 create_new_board(_,[], _, []).
 
-create_new_board(TurnColor,[H|T], move(OX-OY, TX-TY), [NH|NT]):-
-    copy_line(TurnColor,H,move(OX-OY, TX-TY),NH),
-    NOY is OY-1,
-    NTY is TY-1,    
-    create_new_board(TurnColor,T, move(OX-NOY, TX-NTY),NT).
+create_new_board(TurnColor, Board, move(OX-OY, TX-TY), NewBoard):-
+    set_piece_at(OX-OY, Board, 'x', NewBoard1),
+    set_piece_at(TX-TY, NewBoard1, TurnColor, NewBoard).
+
 
 
 % piece_is_surrounded(+X-Y, +Board)
@@ -102,82 +88,37 @@ piece_is_surrounded(X-Y,[H|T]):-
 % get_dead_pieces_aux(+ChurnVariant, +Board, -X-Y)
 % get_dead_pieces_aux/3 returns the position of a dead piece in the board.
 get_dead_pieces_aux(3, Board, X-Y):-
-    iterate_pieces(Board, X-Y, Line),
-    nth0(X,Line,'x').
+    get_board_position(X-Y,Board,'x').
 
 get_dead_pieces_aux(_, Board, X-Y):-
-    iterate_pieces(Board, X-Y, Line), 
-    \+nth0(X, Line, 'x'),
-    \+nth0(X, Line, ' '),
+    get_board_position(X-Y,Board,Piece),
+    member(Piece,['r','b']),
     piece_is_surrounded(X-Y, Board).
-
-get_dead_pieces_aux(2, Board, X-Y):-
-    iterate_pieces(Board, X-Y, Line), 
-    nth0(X,Line,'x'),
-    L is X-1,
-    U is Y+1,
-    piece_is_surrounded(L-U,Board).
-
-get_dead_pieces_aux(2, Board, X-Y):-
-    iterate_pieces(Board, X-Y, Line),     
-    nth0(X, Line, 'x'),
-    U is Y+1,
-    piece_is_surrounded(X-U, Board).
-
-get_dead_pieces_aux(2, Board, X-Y):-
-    iterate_pieces(Board, X-Y, Line),
-    nth0(X, Line, 'x'),
-    R is X+1,
-    U is Y+1,
-    piece_is_surrounded(R-U,Board).    
-
-get_dead_pieces_aux(2, Board, X-Y):-
-    iterate_pieces(Board, X-Y, Line),
-    nth0(X, Line, 'x'),
-    R is X+1,
-    piece_is_surrounded(R-Y, Board).    
-
-get_dead_pieces_aux(2, Board, X-Y):-
-    iterate_pieces(Board, X-Y, Line),    
-    nth0(X, Line, 'x'),
-    L is X-1,
-    piece_is_surrounded(L-Y, Board).    
-
-get_dead_pieces_aux(2, Board, X-Y):-
-    iterate_pieces(Board, X-Y, Line),  
-    nth0(X, Line, 'x'),
-    L is X-1,
-    D is Y-1,
-    piece_is_surrounded(L-D, Board).  
-    
-get_dead_pieces_aux(2, Board, X-Y):-
-    iterate_pieces(Board, X-Y, Line),
-    nth0(X, Line, 'x'),
-    D is Y-1,
-    piece_is_surrounded(X-D, Board).
-
-get_dead_pieces_aux(2, Board, X-Y):-
-    iterate_pieces(Board, X-Y,Line),        
-    nth0(X, Line, 'x'),
-    R is X+1,
-    D is Y-1,
-    piece_is_surrounded(R-D, Board).
-
-iterate_pieces(Board, X-Y, Line):-
-    length(Board, Len),
-    Len2 is Len-1,
-    between(0, Len2, Y),
-    nth0(Y, Board, Line),
-    length(Line, LLen),
-    LLen2 is LLen-1,
-    between(0, LLen2, X).
 
 % get_dead_pieces(+ChurnVariant, +Board, -DeadPieces)
 % get_dead_pieces/3 returns a list of dead pieces in the board.
 % Dead pieces are pieces that are surrounded by other pieces.
 get_dead_pieces(ChurnVariant, Board, DeadPieces):-
-    setof(DeadPiece, get_dead_pieces_aux(ChurnVariant,Board,DeadPiece), DeadPieces),
-    write(DeadPieces).
+    member(ChurnVariant,[1,3]),
+    findall(DeadPiece, get_dead_pieces_aux(ChurnVariant,Board,DeadPiece), Res),
+    sort(Res, DeadPieces).
+
+get_dead_pieces(2, Board, DeadPieces):-
+    findall(DeadPiece, get_dead_pieces_aux(1,Board,DeadPiece), Res),
+    sort(Res, DeadPieces1),
+    findall(X-Y,(
+        get_board_position(X-Y,Board,'x'),
+        member(X2-Y2,DeadPieces1),
+        are_adjacent(X-Y,X2-Y2)
+    ),Res2),
+    append(Res2,DeadPieces1,DeadPieces2),
+    sort(DeadPieces2,DeadPieces).
+
+are_adjacent(X1-Y1,X2-Y2):-
+    DifX is abs(X2-X1),
+    DifY is abs(Y2-Y1),
+    DifY=<1,
+    DifX=<1.
 
 % board_empty_position(+X-Y, +Board, -NewBoard)
 % board_empty_position/3 empties a position in the board.

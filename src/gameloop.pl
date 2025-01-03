@@ -1,3 +1,8 @@
+/*
+    File: gameloop.pl
+    Description: This file contains the predicates that are used to interact with the user and play the game.
+*/
+
 % play_without_preamble/0 is the main entry point of the game.
 play_without_preamble:-	
     input_form(GameConfig),

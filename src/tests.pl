@@ -8,14 +8,11 @@ test_valid_moves_final_1:- valid_moves(state(0, player(h,'r'), player(h,'b'), 1,
 
 test_valid_moves_final_2:- valid_moves(state(0, player(h,'r'), player(h,'b'), 1, [['r',' '],[' ',' ']]), ListOfMoves), length(ListOfMoves,3), member(move(0-0,1-0),ListOfMoves), member(move(0-0,1-1),ListOfMoves), member(move(0-0,0-1),ListOfMoves),!.
 
-
-
 test_valid_moves_final_3:- valid_moves(state(0, player(h,'r'), player(h,'b'), 1, [['r',' ',' '],['b',' ',' ']]), ListOfMoves),write(ListOfMoves), length(ListOfMoves,3), member(move(0-0,1-0),ListOfMoves), member(move(0-0,1-1),ListOfMoves), member(move(0-0,2-0),ListOfMoves),!.
 
+test_move_final_1:-move(state(1, player(h,'r'), player(h,'b'), 1, [['r',' ',' ']]), move(0-0,2-0),state(2, player(h,'r'), player(h,'b'), 1, [['x',' ','r']])).
 
-test_move_final_1:-move(state(0, player(h,'r'), player(h,'b'), 1, [['r',' ',' ']]), move(0-0,2-0),state(1, player(h), player(h), 1, [['x',' ','r']])).
-
-test_move_final_2:-move(state(0, player(h,'r'), player(h,'b'), 1, [['r',' ']]), move(0-0,1-0),state(1, player(h), player(h), 1, [['x',' ']])).
+test_move_final_2:-move(state(1, player(h,'r'), player(h,'b'), 1, [['r',' ']]), move(0-0,1-0),state(2, player(h,'r'), player(h,'b'), 1, [['x',' ']])).
 
 test_move_3_helper:-move(state(1, player(h,'r'), player(h,'b'), 1, [['x','x',' '],['x','b','r']]), move(1-1,2-0),State),write(State).
 test_move_final_3:-move(state(1, player(h,'r'), player(h,'b'), 1, [['x','x',' '],['x','b','r']]), move(1-1,2-0),state(1, player(h), player(h), 1, [['x','x',' '],['x','x',' ']])).
@@ -53,3 +50,18 @@ test_get_board_position_final_1:- between(0,1,Y), between(0,2,X), get_board_posi
 
 
 test_game_over_final_1:- game_over(state(1, player(h,'r'), player(h,'b'), 1, [['x','x',' '],['x','x','x']]),'x').
+
+
+test_1:-
+    get_dead_pieces(1,[['b','r','x'],['x','x','x'],['x',' ',' ']],A),
+    get_dead_pieces(2,[['b','r','x'],['x','x','x'],['x',' ',' ']],B), % 0-2 não pode aparecer na lista
+    get_dead_pieces(3,[['b','r','x'],['x','x','x'],['x',' ',' ']],C),
+    write(A),nl,
+    write(B),nl,
+    write(C),nl.
+
+test_2:-
+    valid_moves(state(1, player(h,'r'), player(h,'b'), 1, [['x',' ',' '],[' ',' ','r']]), A),
+    valid_moves(state(1, player(h,'r'), player(h,'b'), 1, [['x','',' '],[' ','x','r']]), B),
+    write(A), nl,
+    write(B), nl.

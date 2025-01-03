@@ -144,8 +144,6 @@ input_form_difficulty(P1Type,GameConfig):-
     number_from_code(DifficultyLevel,Number),
     validate_difficulty(Number,P1Type,GameConfig).
 
-
-
 input_form(P1Type,GameConfig):-
     write('Player 2 type ((H)uman/(C)omputer): \n'),
     get_char(P2Type),

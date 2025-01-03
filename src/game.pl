@@ -1,4 +1,5 @@
 :- use_module(library(random)).
+:- consult('board.pl').
 :- consult('init_form.pl').
 :- consult('display_game_helpers.pl').
 :- consult('move_helpers.pl').
@@ -132,7 +133,7 @@ choose_move(state(TurnNumber, player(c-1,'r'), P2, Churn, Board), _, Move):-
 	random_member(Move, ListOfMoves).
 
 choose_move(state(TurnNumber, P1, player(c-2,'b'), Churn, Board), _, Move):-
-	(\+ 1 =:= TurnNumber mod 2),
+	0 =:= TurnNumber mod 2,
 	findall(M-Value,
 		(valid_moves(state(TurnNumber,
                     P1,
@@ -158,7 +159,7 @@ choose_move(state(TurnNumber, P1, player(c-2,'b'), Churn, Board), _, Move):-
         random_member(Move, MostValuableMoves).
 
 choose_move(state(TurnNumber, P1, player(c-1,'b'), Churn, Board), _, Move):-
-	 \+ (1 =:= TurnNumber mod 2),
+	0 =:= TurnNumber mod 2,
 	valid_moves(state(TurnNumber,
 			P1,
 			player(c-1,'b'),
@@ -184,7 +185,7 @@ choose_move(state(TurnNumber, player(h,'r'), P2, Churn, Board), _, Move):-
 
 
 choose_move(state(TurnNumber, P1, player(h,'b'), Churn, Board), _, Move):-
-    1 =\= TurnNumber mod 2,
+    0 =:= TurnNumber mod 2,
     write('Player two(b) (Xi-Yi,Xf-Yf): '),nl,
     read_number(X1),
     get_char(Sep1),
@@ -210,9 +211,9 @@ value(state(TurnNumber, _, _, Variant, Board), player(_,Piece), Value):-
 	oponent(Piece, Oponent),
 	count_pieces(Board, Piece, PlayerCount),
 	count_pieces(Board, Oponent, OponentCount),
-	%findall(Move,move(state(TurnNumber, _, _, Variant, Board),Move,_),ListOfMoves),
-	%length(ListOfMoves, PlayerMoves),
+	findall(Move,move(state(TurnNumber, _, _, Variant, Board),Move,_),ListOfMoves),
+	length(ListOfMoves, PlayerMoves),
 	get_dead_pieces(Variant, Board, DeadPieces),
-	findall(X-Y, get_piece_at(X-Y, DeadPieces, Oponent), DeadPiecePositions),
-	length(DeadPiecePositions, DeadPieceCount),
+	findall(X-Y, get_piece_at(X-Y, DeadPieces, Oponent), OponentDeadpieces),
+	length(DeadPiecePositions, OponentDeadPieces),
 	Value is PlayerCount - OponentCount + DeadPieceCount.

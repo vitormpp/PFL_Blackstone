@@ -23,9 +23,9 @@ In the context of the Functional and Logic Programming curricular unit, we were 
 cd src/
 sicstus
 consult('game.pl').
-<name of the function>
+play.
 ```
-- **Windows**: open the `SICStus` and consult the `game.pl` file and run `<name of the function>` in the terminal.
+- **Windows**: open the `SICStus` and consult the `game.pl` file and run `play.` in the terminal.
 
 
 ## The Game - Blackstone

@@ -75,9 +75,9 @@ create_row(Index, Size, Row):-
 % set_piece_at(+X-Y, +Board, +Piece, -NewBoard)
 % set_piece_at/4 sets the piece Piece at position (X, Y) in the board Board. The result is unified with NewBoard.
 set_piece_at(X-Y, Board, Piece, NewBoard):-
-    nth0(X, Board, Row, Rest),
-    set_in_row(Row, Y, Piece, NewRow),
-    nth0(X, NewBoard, NewRow, Rest).
+    nth0(Y, Board, Row, Rest),
+    set_in_row(Row, X, Piece, NewRow),
+    nth0(Y, NewBoard, NewRow, Rest).
 
 % set_in_row(+Row, +X, +Piece, -NewRow)
 % set_in_row/4 sets the piece Piece at position X (removing the piece that was already there) in the row Row. The result is unified with NewRow.
@@ -89,8 +89,13 @@ set_in_row(Row, Index, Piece, NewRow):-
 % get_piece_at(+X-Y, +Board, -Piece)
 % get_piece_at/3 gets the piece at position (X, Y) in the board Board. The result is unified with Piece.
 get_piece_at(X-Y, Board, Piece):-
-    nth0(X, Board, Row),
-    nth0(Y, Row, Piece).
+    nth0(Y, Board, Row),
+    nth0(X, Row, Piece).
+
+% get_positions(+Board, +Piece, -Positions)
+% get_positions/3 gets all the positions in the board Board that have the piece Piece. The result is unified with Positions.
+get_positions(Board, Piece, Positions):-
+    findall(X-Y, get_piece_at(X-Y, Board, Piece), Positions).
 
 % Determines if a given position is empty
 is_empty(' ').

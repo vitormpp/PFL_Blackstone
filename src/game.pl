@@ -210,9 +210,9 @@ value(state(TurnNumber, _, _, Variant, Board), player(_,Piece), Value):-
 	oponent(Piece, Oponent),
 	count_pieces(Board, Piece, PlayerCount),
 	count_pieces(Board, Oponent, OponentCount),
-	findall(Move,move(state(TurnNumber, _, _, Variant, Board),Move,_),ListOfMoves),
-	length(ListOfMoves, PlayerMoves),
+	%findall(Move,move(state(TurnNumber, _, _, Variant, Board),Move,_),ListOfMoves),
+	%length(ListOfMoves, PlayerMoves),
 	get_dead_pieces(Variant, Board, DeadPieces),
 	findall(X-Y, get_piece_at(X-Y, DeadPieces, Oponent), DeadPiecePositions),
 	length(DeadPiecePositions, DeadPieceCount),
-	Value is PlayerCount - OponentCount + PlayerMoves / PlayerCount + DeadPieceCount.
+	Value is PlayerCount - OponentCount + DeadPieceCount.

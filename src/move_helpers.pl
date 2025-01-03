@@ -69,121 +69,111 @@ create_new_board(TurnColor,[H|T], move(OX-OY, TX-TY), [NH|NT]):-
     create_new_board(TurnColor,T, move(OX-NOY, TX-NTY),NT).
 
 
+% piece_is_surrounded(+X-Y, +Board)
+% piece_is_surrounded/2 checks if the piece at position (X, Y) is surrounded by other pieces.
 % bound checks aren't necessary, as get_board_position will fail for invalid numbers anyway.
 piece_is_surrounded(X-Y,[H|T]):-
     R is X+1,
     L is X-1,
     U is Y+1,
     D is Y-1,
+    \+ get_board_position(X-Y,[H|T],' '),
+    \+ get_board_position(X-Y,[H|T],'x'),  % to help in other places... It's not strictly necessary
     \+ get_board_position(L-U,[H|T],' '),
     \+ get_board_position(X-U,[H|T],' '),
     \+ get_board_position(R-U,[H|T],' '),
     \+ get_board_position(L-Y,[H|T],' '),
-    \+ get_board_position(X-Y,[H|T],' '),
-    \+ get_board_position(X-Y,[H|T],'x'),  % to help in other places... It's not strictly necessary
     \+ get_board_position(R-Y,[H|T],' '),
     \+ get_board_position(L-D,[H|T],' '),
     \+ get_board_position(X-D,[H|T],' '),
     \+ get_board_position(R-D,[H|T],' ').
 
 
-get_dead_pieces_aux(3,Board,X-Y):-
-    iterate_pieces(Board,X-Y,Line), 
-
+% get_dead_pieces_aux(+ChurnVariant, +Board, -X-Y)
+% get_dead_pieces_aux/3 returns the position of a dead piece in the board.
+get_dead_pieces_aux(3, Board, X-Y):-
+    iterate_pieces(Board, X-Y, Line),
     nth0(X,Line,'x').
 
+get_dead_pieces_aux(_, Board, X-Y):-
+    iterate_pieces(Board, X-Y, Line), 
+    \+nth0(X, Line, 'x'),
+    \+nth0(X, Line, ' '),
+    piece_is_surrounded(X-Y, Board).
 
-get_dead_pieces_aux(_,Board,X-Y):-
-    iterate_pieces(Board,X-Y,Line), 
-    \+nth0(X,Line,'x'),
-    \+nth0(X,Line,' '),
-    piece_is_surrounded(X-Y,Board).
-
-
-get_dead_pieces_aux(2,Board,X-Y):-
-    iterate_pieces(Board,X-Y,Line), 
+get_dead_pieces_aux(2, Board, X-Y):-
+    iterate_pieces(Board, X-Y, Line), 
     nth0(X,Line,'x'),
-            L is X-1,
-            U is Y+1,
-            piece_is_surrounded(L-U,Board).
+    L is X-1,
+    U is Y+1,
+    piece_is_surrounded(L-U,Board).
 
-get_dead_pieces_aux(2,Board,X-Y):-
-    iterate_pieces(Board,X-Y,Line), 
-        
-            nth0(X,Line,'x'),
+get_dead_pieces_aux(2, Board, X-Y):-
+    iterate_pieces(Board, X-Y, Line),     
+    nth0(X, Line, 'x'),
+    U is Y+1,
+    piece_is_surrounded(X-U, Board).
 
-            U is Y+1,
-            piece_is_surrounded(X-U,Board).
-
-get_dead_pieces_aux(2,Board,X-Y):-
-    iterate_pieces(Board,X-Y,Line),
-
-            nth0(X,Line,'x'),
-
-            R is X+1,
-            U is Y+1,
-            piece_is_surrounded(R-U,Board).    
-
-
-get_dead_pieces_aux(2,Board,X-Y):-
-    iterate_pieces(Board,X-Y,Line),
-
-    nth0(X,Line,'x'),
+get_dead_pieces_aux(2, Board, X-Y):-
+    iterate_pieces(Board, X-Y, Line),
+    nth0(X, Line, 'x'),
     R is X+1,
-    piece_is_surrounded(R-Y,Board).    
+    U is Y+1,
+    piece_is_surrounded(R-U,Board).    
 
+get_dead_pieces_aux(2, Board, X-Y):-
+    iterate_pieces(Board, X-Y, Line),
+    nth0(X, Line, 'x'),
+    R is X+1,
+    piece_is_surrounded(R-Y, Board).    
 
-get_dead_pieces_aux(2,Board,X-Y):-
-    iterate_pieces(Board,X-Y,Line),
-        
-        nth0(X,Line,'x'),
-        L is X-1,
-        piece_is_surrounded(L-Y,Board).    
+get_dead_pieces_aux(2, Board, X-Y):-
+    iterate_pieces(Board, X-Y, Line),    
+    nth0(X, Line, 'x'),
+    L is X-1,
+    piece_is_surrounded(L-Y, Board).    
 
-
-get_dead_pieces_aux(2,Board,X-Y):-
-    iterate_pieces(Board,X-Y,Line),
-        
-        nth0(X,Line,'x'),
-        L is X-1,
-        D is Y-1,
-        piece_is_surrounded(L-D,Board).  
-
-    
-get_dead_pieces_aux(2,Board,X-Y):-
-    iterate_pieces(Board,X-Y,Line),
-    nth0(X,Line,'x'),
+get_dead_pieces_aux(2, Board, X-Y):-
+    iterate_pieces(Board, X-Y, Line),  
+    nth0(X, Line, 'x'),
+    L is X-1,
     D is Y-1,
-    piece_is_surrounded(X-D,Board).
+    piece_is_surrounded(L-D, Board).  
+    
+get_dead_pieces_aux(2, Board, X-Y):-
+    iterate_pieces(Board, X-Y, Line),
+    nth0(X, Line, 'x'),
+    D is Y-1,
+    piece_is_surrounded(X-D, Board).
+
+get_dead_pieces_aux(2, Board, X-Y):-
+    iterate_pieces(Board, X-Y,Line),        
+    nth0(X, Line, 'x'),
+    R is X+1,
+    D is Y-1,
+    piece_is_surrounded(R-D, Board).
 
 
-get_dead_pieces_aux(2,Board,X-Y):-
-    iterate_pieces(Board,X-Y,Line),        
-        nth0(X,Line,'x'),
-        R is X+1,
-        D is Y-1,
-        piece_is_surrounded(R-D,Board).
-
-iterate_pieces(Board,X-Y,Line):-
-    length(Board,Len),
+iterate_pieces(Board, X-Y, Line):-
+    length(Board, Len),
     Len2 is Len-1,
-    between(0,Len2,Y),
-
-    nth0(Y,Board,Line),
-    length(Line,LLen),
+    between(0, Len2, Y),
+    nth0(Y, Board, Line),
+    length(Line, LLen),
     LLen2 is LLen-1,
-    between(0,LLen2,X).
+    between(0, LLen2, X).
 
+% get_dead_pieces(+ChurnVariant, +Board, -DeadPieces)
+% get_dead_pieces/3 returns a list of dead pieces in the board.
+% Dead pieces are pieces that are surrounded by other pieces.
+get_dead_pieces(ChurnVariant, Board, DeadPieces):-
+    findall(DeadPiece, get_dead_pieces_aux(ChurnVariant,Board,DeadPiece), DeadPieces),
+    write(DeadPieces).
 
-get_dead_pieces(ChurnVariant,Board,DeadPieces):-
-    findall(DeadPiece,get_dead_pieces_aux(ChurnVariant,Board,DeadPiece),DeadPieces).
-
-
-
-
-
-%board_empty_position(_,[],[]).
-board_empty_position(X-Y,Board , NewBoard):-
+% board_empty_position(+X-Y, +Board, -NewBoard)
+% board_empty_position/3 empties a position in the board.
+% board_empty_position(_,[],[]).
+board_empty_position(X-Y, Board, NewBoard):-
     nth0(Y,Board,Line),
     X1 is X+1,
     length(BeforeElem, X),
@@ -198,13 +188,15 @@ board_empty_position(X-Y,Board , NewBoard):-
     append(L3,AfterLine,Board),
     append(BeforeLine,[NewLine|AfterLine],NewBoard). 
 
-
+% remove_dead_pieces_aux(+DeadPieces, +Board, -NBoard)
+% remove_dead_pieces_aux/3 removes the dead pieces from the board.
 remove_dead_pieces_aux([X-Y|T],Board, NBoard):-
     board_empty_position(X-Y,Board,NewBoard),
     remove_dead_pieces_aux(T,NewBoard, NBoard).
 
 remove_dead_pieces_aux([],Board, Board).
 
+% remove_dead_pieces(+ChurnVariant, +Board, -NBoard)
 remove_dead_pieces(ChurnVariant,Board, NBoard):-
     get_dead_pieces(ChurnVariant,Board,DeadPieces),
     remove_dead_pieces_aux(DeadPieces,Board, NBoard).

@@ -105,4 +105,3 @@ is_red('r').
 
 % Determines if a given position is blue
 is_blue('b').
-

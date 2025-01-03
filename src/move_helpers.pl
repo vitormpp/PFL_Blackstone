@@ -1,12 +1,22 @@
 :-use_module(library(lists)).
 :-use_module(library(between)).
 
+/*
+    File: move_helpers.pl
+    Description: This file contains the predicates that are used to manipulate moves.
+*/
+
 % get_turn_color(+TurnNum, -Color)
 % get_turn_color/2 returns the color of the player that is playing in the turn number TurnNum.
 get_turn_color(TurnNum,'r'):-
     1 =:= TurnNum mod 2.
 get_turn_color(TurnNum,'b'):-
     0 =:= TurnNum mod 2.
+
+% get_oponent(+Color, -Oponent)
+% get_oponent/2 returns the oponent of the given color.
+get_oponent('r','b').
+get_oponent('b','r').
 
 % get_board_position(+X-Y, +Board, -Elem)
 % helper function that obtains the value at a given board position.
@@ -153,7 +163,6 @@ get_dead_pieces_aux(2, Board, X-Y):-
     D is Y-1,
     piece_is_surrounded(R-D, Board).
 
-
 iterate_pieces(Board, X-Y, Line):-
     length(Board, Len),
     Len2 is Len-1,
@@ -167,7 +176,7 @@ iterate_pieces(Board, X-Y, Line):-
 % get_dead_pieces/3 returns a list of dead pieces in the board.
 % Dead pieces are pieces that are surrounded by other pieces.
 get_dead_pieces(ChurnVariant, Board, DeadPieces):-
-    findall(DeadPiece, get_dead_pieces_aux(ChurnVariant,Board,DeadPiece), DeadPieces),
+    setof(DeadPiece, get_dead_pieces_aux(ChurnVariant,Board,DeadPiece), DeadPieces),
     write(DeadPieces).
 
 % board_empty_position(+X-Y, +Board, -NewBoard)
@@ -196,7 +205,6 @@ remove_dead_pieces_aux([X-Y|T],Board, NBoard):-
 
 remove_dead_pieces_aux([],Board, Board).
 
-% remove_dead_pieces(+ChurnVariant, +Board, -NBoard)
 remove_dead_pieces(ChurnVariant,Board, NBoard):-
     get_dead_pieces(ChurnVariant,Board,DeadPieces),
     remove_dead_pieces_aux(DeadPieces,Board, NBoard).

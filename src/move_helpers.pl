@@ -30,6 +30,8 @@ get_board_position(X-Y, Board, Elem):-
 is_in_line_of_sight(_-Y, _-Y).
 is_in_line_of_sight(X-_, X-_).
 is_in_line_of_sight(X1-Y1, X2-Y2):- 
+    X1\=X2,
+    Y1\=Y2,
     abs(X1-X2) =:= abs(Y1-Y2).
 
 % has_piece_between(+Board, +X1-Y1, +X2-Y2)

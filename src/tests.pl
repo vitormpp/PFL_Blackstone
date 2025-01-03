@@ -61,7 +61,7 @@ test_1:-
     write(C),nl.
 
 test_2:-
-    valid_moves(state(1, player(h,'r'), player(h,'b'), 1, [['x',' ',' '],[' ',' ','r']]), A),
-    valid_moves(state(1, player(h,'r'), player(h,'b'), 1, [['x','',' '],[' ','x','r']]), B),
+    valid_moves(state(1, player(h,'r'), player(h,'b'), 1, [['x','r',' '],[' ',' ','r']]), A),
     write(A), nl,
+    valid_moves(state(1, player(h,'r'), player(h,'b'), 1, [['x','',' '],[' ','x','r']]), B),
     write(B), nl.

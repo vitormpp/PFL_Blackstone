@@ -51,11 +51,12 @@ display_game(state(_, _, _, _, Board))  :-
 % move(+GameState, +Move, -NewGameState)
 % move/3 applies the move Move to the game state GameState, resulting in the new game state NewGameState.
 move(state(TurnNumber, Player1, Player2, ChurnVariant, Board), move(OX-OY, TX-TY), state(NTurnNumber, Player1, Player2, ChurnVariant, NBoard)):-
+	write(move(OX-OY, TX-TY)), nl,
 	get_turn_color(TurnNumber, TurnColor),
-	get_board_position(OX-OY,Board,TurnColor),
-	get_board_position(TX-TY,Board, ' '),
-	is_in_line_of_sight(OX-OX,TX-TY),
-    \+ (has_piece_between(Board,OX-OY,TX-TY)),
+	get_board_position(OX-OY, Board, TurnColor),
+	get_board_position(TX-TY, Board, ' '),
+	is_in_line_of_sight(OX-OY,TX-TY),
+    \+ (has_piece_between(Board, OX-OY, TX-TY)),
 	create_new_board(TurnColor, Board,  move(OX-OY, TX-TY), B2),
 	remove_dead_pieces(ChurnVariant, B2, NBoard),
 	NTurnNumber is TurnNumber + 1.
@@ -64,7 +65,7 @@ move(state(TurnNumber, Player1, Player2, ChurnVariant, Board), move(OX-OY, TX-TY
 % valid_moves(+GameState, -ListOfMoves):-
 % valid_moves/2 returns a list of all valid moves for the current player.
 valid_moves(state(TurnNumber, Player1,Player2, Variant, Board), ListOfMoves):-
-	findall(Move,move(state(TurnNumber, Player1,Player2, Variant, Board),Move,_),ListOfMoves).
+	findall(Move, move(state(TurnNumber, Player1, Player2, Variant, Board),Move,_),ListOfMoves).
 %	findall(Moves,
 %		valid_moves_aux(state(TurnNumber, _, _, _, Board),
 %			Moves),

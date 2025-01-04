@@ -101,6 +101,10 @@ test_minimax_3:-
     minimax(state(3,player(c-3,'r'),player(c-3,'b'),1,[['b','r',' '],['x',' ',' '],['b',' ',' ']]),3,player(c-3,'r'),Move),
     write('Final answer: '),write(Move),nl.
 
+test_minimax_4:-
+    minimax(state(3,player(c-3,'r'),player(c-3,'b'),1,[['b',' ',' '],[' ',' ',' '],[' ',' ','r']]),1,player(c-3,'r'),Move),
+    write('Final answer: '),write(Move),nl.
+
 test_valid_moves_1:-
     valid_moves(state(1,player(c-2,'r'),player(c-1,'b'),1,[[' ',' ',' '],[' ','r',' '],[' ',' ',' ']]),Moves),
     write('Final answer: '),write(Moves),nl.

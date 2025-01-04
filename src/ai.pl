@@ -9,8 +9,7 @@ minimax(GameState, Depth, Player, BestMove):-
 % If the depth is 0, return the heuristic value of the node
 minimax_aux(GameState, 0, player(c-3,Color), _, _, BestValue, _) :-
 	!,
-	value(GameState, player(c-3,Color), BestValue),
-	write(Color), write(' Value: '), write(BestValue), nl.
+	value(GameState, player(c-3,Color), BestValue).
 
 minimax_aux(GameState, Depth, player(c-3,Color), _, _, BestValue, _) :-
 	Depth > 0,
@@ -26,7 +25,6 @@ evaluate_moves(_, _, _, [], _, _, BestValue, BestMove, BestValue, BestMove).
 
 evaluate_moves(GameState, Depth, player(c-3,Color), [Move | ListOfMoves], Alpha, Beta, CurrentBestValue, CurrentBestMove, BestValue, BestMove) :-
 	move(GameState, Move, NewGameState),
-	write(NewGameState), nl,
 	get_opponent(Color, Opponent),
 	NewDepth is Depth - 1,
 	NegAlpha is -Beta,

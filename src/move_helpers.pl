@@ -6,10 +6,6 @@
     Description: This file contains the predicates that are used to manipulate moves.
 */
 
-% not_equals(+Pos1, +Pos2)
-% not_equals/2 checks if two coordinates aren't equal.
-not_equals(X1-_,X2-_):-X1\=X2.
-not_equals(_-Y1,_-Y2):-Y1\=Y2.
 
 
 % get_turn_color(+TurnNum, -Color)

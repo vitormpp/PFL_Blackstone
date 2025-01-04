@@ -58,6 +58,7 @@ move(state(TurnNumber, Player1, Player2, ChurnVariant, Board), move(OX-OY, TX-TY
 	get_turn_color(TurnNumber, TurnColor),
 	get_piece_at(OX-OY, Board, TurnColor),
 	get_piece_at(TX-TY, Board, ' '),
+	\+ (OX=TX,OY=TY),
 	is_in_line_of_sight(OX-OY, TX-TY),
     \+ (has_piece_between(Board, OX-OY, TX-TY)),
 	create_new_board(TurnColor, Board,  move(OX-OY, TX-TY), B2),
@@ -177,16 +178,13 @@ choose_move(state(TurnNumber, player(h,'r'), P2, Churn, Board), _, Move):-
      1 =:= TurnNumber mod 2,
 	write('Player one - r '),nl,
 	read_move(X1-Y1,X2-Y2),
-    skip_line,
     validate_move(state(TurnNumber, player(h,'r'), P2, Churn, Board),X1-Y1,X2-Y2, Move).
 
 
 choose_move(state(TurnNumber, P1, player(h,'b'), Churn, Board), _, Move):-
- 
     0 =:= TurnNumber mod 2,
     write('Player two - b '),nl,
 	read_move(X1-Y1,X2-Y2),
-    skip_line,
     validate_move(state(TurnNumber, P1, player(h,'b'), Churn, Board),X1-Y1,X2-Y2,Move).
 
 choose_move(state(TurnNumber, player(c-3,'r'), _, Churn, Board), _, Move):-

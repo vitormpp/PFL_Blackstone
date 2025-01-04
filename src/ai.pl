@@ -54,7 +54,7 @@ cut_or_continue(GameState, Depth, player(c-3,Color), _, NewAlpha, Beta, CurrentB
 
 
 
-get_states(Depth,MaxDepth,Acc,States):-
+get_states(us,P1,P2,Depth,MaxDepth,Acc,States):-
     Depth<MaxDepth,
     Depth>=0,
     findall(NewList,
@@ -62,22 +62,47 @@ get_states(Depth,MaxDepth,Acc,States):-
             member(S,Acc),
             last(S,State-_),
             move(State,move(X1-X2,Y1-Y2),NewState),
-            append(S,[NewState-move(X1-X2,Y1-Y2)],NewList)
+		    append(S,[NewState-move(X1-X2,Y1-Y2)],NewList)
         ),
         NewAcc),
         NewDepth is Depth+1,
-        get_states(NewDepth,MaxDepth,NewAcc,States).
+        get_states(other,P1,P2,NewDepth,MaxDepth,NewAcc,States).
 
 
+get_states(other,P1,P2,Depth,MaxDepth,Acc,States):-
+	Depth<MaxDepth,
+	Depth>=0,
+	findall(NewList,
+		(
+		member(S,Acc),
+		last(S,State-_),
+		move(State,move(X1-X2,Y1-Y2),NewState),
+		value(NewState,P2,Value),
+		\+ (
+			move(State,_,NewState2),
+			value(NewState2,P2,Value2),
+			Value2>Value			
+			),
+		append(S,[NewState-move(X1-X2,Y1-Y2)],NewList)
+		),
+				NewAcc),
+
+				NewDepth is Depth+1,
+	get_states(us,P1,P2,NewDepth,MaxDepth,NewAcc,States).
+		
 get_states(MaxDepth,MaxDepth,States,States).
 
+
+get_other_player(player(_,'r'),_,player(_,'r'),player(_,'r')).
+get_other_player(_,player(_,'b'),player(_,'b'),player(_,'b')).
 
 get_best_move(state(TurnNumber, P1, P2, Churn, Board),player(P,Color),Depth,Move):-
     Depth>0,
     get_turn_color(TurnNumber,Color),
 
+	get_other_player(P1,P2,player(P,Color),OtherP),
     findall(Value-M,(
-        get_states(0,Depth,[[state(TurnNumber, P1, P2, Churn, Board)-move(none)]],StatesList),
+        get_states(us,player(P,Color),OtherP,0,Depth,[[state(TurnNumber, P1, P2, Churn, Board)-move(none)]],StatesList),
         member([_,S-M|T],StatesList),
         last([S-M|T],State-_),
         value(State,player(P,Color),Value)

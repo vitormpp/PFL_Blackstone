@@ -32,7 +32,7 @@ validate(P1Type,_,GameConfig):-input_form(P1Type,GameConfig).
 
 
 % validates the answer to the difficulty question and moves on to the next question.
-validate_difficulty(DifficultyLevel,P1Type,GameConfig):-
+validate_difficulty(P1Type,DifficultyLevel,GameConfig):-
     member(DifficultyLevel,[1,2]),!,
     input_form(P1Type,player(c-DifficultyLevel,'b'),GameConfig).
 % if the input isn't valid, it repeats the question.
@@ -130,19 +130,19 @@ input_form(P1Type,P2Type,GameConfig):-
 
 
 % prints the difficulty question
-input_form_difficulty(P1Type,P2Type,GameConfig):-    
-    write('Difficulty level(1/2): \n'),
-    get_code(DifficultyLevel),
-    skip_line,!,
-    number_from_code(DifficultyLevel,Number),
-    validate_difficulty(Number,P1Type,P2Type,GameConfig).
-
 input_form_difficulty(P1Type,GameConfig):-    
     write('Difficulty level(1/2): \n'),
     get_code(DifficultyLevel),
     skip_line,!,
     number_from_code(DifficultyLevel,Number),
-    validate_difficulty(Number,P1Type,GameConfig).
+    validate_difficulty(P1Type,Number,GameConfig).
+
+input_form_difficulty(GameConfig):-    
+    write('Difficulty level(1/2): \n'),
+    get_code(DifficultyLevel),
+    skip_line,!,
+    number_from_code(DifficultyLevel,Number),
+    validate_difficulty(Number,GameConfig).
 
 input_form(P1Type,GameConfig):-
     write('Player 2 type ((H)uman/(C)omputer): \n'),

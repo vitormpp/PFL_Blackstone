@@ -49,8 +49,9 @@ test_piece_is_surrounded_final_1:- piece_is_surrounded(0-1,[['x','x',' '],['b','
 test_get_board_position_final_1:- between(0,1,Y), between(0,2,X), get_board_position(X-Y,[['x',' ',' '],['b','r',' ']],Elem),write(Elem).
 
 
-test_game_over_final_1:- game_over(state(1, player(h,'r'), player(h,'b'), 1, [['x','x',' '],['x','x','x']]),'x').
-
+test_game_over_final_1:- game_over(state(1, player(h,'r'), player(h,'b'), 1, [['r','r',' '],['r','r','r']]),'r').
+test_game_over_final_2:- game_over(state(1, player(h,'r'), player(h,'b'), 1, [['x','x',' '],['x','x','x']]),'r').
+test_game_over_final_3:- game_over(state(2, player(h,'r'), player(h,'b'), 1, [['x','x',' '],['x','x','x']]),'r').
 
 test_1:-
     get_dead_pieces(1,[['b','r','x'],['x','x','x'],['x',' ',' ']],A),
@@ -63,5 +64,20 @@ test_1:-
 test_2:-
     valid_moves(state(1, player(h,'r'), player(h,'b'), 1, [['x','r',' '],[' ',' ','r']]), A),
     write(A), nl,
-    valid_moves(state(1, player(h,'r'), player(h,'b'), 1, [['x','',' '],[' ','x','r']]), B),
-    write(B), nl.
+    valid_moves(state(1, player(h,'r'), player(h,'b'), 1, [['x',' ',' '],[' ','x','r']]), B),
+    write(B), nl,
+    valid_moves(state(1, player(h,'r'), player(h,'b'), 1, [['r','r',' ']]), C),
+    write(C), nl.
+
+test_3_1:-
+    has_piece_between([['r','r',' ']], 0-0, 2-0).
+
+test_3_2:-
+    has_piece_between([['r'],['r'],[' ']], 0-0, 0-2).
+
+test_3_3:-
+    has_piece_between([['r',' ',' '],[' ','r',' '],[' ',' ',' ']], 0-0, 2-2).
+
+test_4:-
+    value(state(1,player(c-2,'r'),player(c-1,'b'),1,[['r','b',' '],[' ','r',' ']]),player(c-2,'r'),Value),
+    write(Value),nl.

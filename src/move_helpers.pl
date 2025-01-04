@@ -39,13 +39,14 @@ is_in_line_of_sight(X1-Y1, X2-Y2):-
 has_piece_between(Board, X1-Y, X2-Y):-
     MinX is min(X1,X2)+1,
     MaxX is max(X1,X2)-1,
-	\+(get_board_position(BX-Y,Board, ' ')), between(MinX,MaxX,BX).
+	between(MinX,MaxX,BX), 
+    \+(get_board_position(BX-Y,Board, ' ')).
 
 has_piece_between(Board, X-Y1, X-Y2):-
     MinY is min(Y1,Y2)+1,
     MaxY is max(Y1,Y2)-1,
-    \+(get_board_position(X-BY,Board, ' ')), between(MinY,MinY,BY).
-
+    between(MinY,MaxY,BY), 
+    \+(get_board_position(X-BY,Board, ' ')).
 
 has_piece_between(Board, X1-Y1, X2-Y2):-
     MinX is min(X1,X2)+1,
@@ -54,8 +55,9 @@ has_piece_between(Board, X1-Y1, X2-Y2):-
     MaxY is max(Y1,Y2)-1,
     X1 \= X2, Y1 \= Y2,
     abs(X1-X2)=:=abs(Y1-Y2),
-	\+(get_board_position(X-Y,Board, ' ')), abs(X1-X)=:=abs(Y1-Y),between(MinX,MaxX,X),between(MinY,MaxY,Y).
-
+    between(MinX,MaxX,X), between(MinY,MaxY,Y),
+	\+(get_board_position(X-Y,Board, ' ')), 
+    abs(X1-X)=:=abs(Y1-Y).
 
 % create_new_board(+TurnColor, +Board, +Move, -NewBoard)
 % create_new_board/4 creates a new board, applying the given move.
@@ -92,7 +94,7 @@ piece_is_surrounded(X-Y,[H|T]):-
 get_dead_pieces_aux(3, Board, X-Y):-
     get_board_position(X-Y,Board,'x').
 
-get_dead_pieces_aux(_, Board, X-Y):-
+get_dead_pieces_aux(Board, X-Y):-
     get_board_position(X-Y,Board,Piece),
     member(Piece,['r','b']),
     piece_is_surrounded(X-Y, Board).
@@ -100,13 +102,12 @@ get_dead_pieces_aux(_, Board, X-Y):-
 % get_dead_pieces(+ChurnVariant, +Board, -DeadPieces)
 % get_dead_pieces/3 returns a list of dead pieces in the board.
 % Dead pieces are pieces that are surrounded by other pieces.
-get_dead_pieces(ChurnVariant, Board, DeadPieces):-
-    member(ChurnVariant,[1,3]),
-    findall(DeadPiece, get_dead_pieces_aux(ChurnVariant,Board,DeadPiece), Res),
+get_dead_pieces(1, Board, DeadPieces):-
+    findall(DeadPiece, get_dead_pieces_aux(Board,DeadPiece), Res),
     sort(Res, DeadPieces).
 
 get_dead_pieces(2, Board, DeadPieces):-
-    findall(DeadPiece, get_dead_pieces_aux(1,Board,DeadPiece), Res),
+    findall(DeadPiece, get_dead_pieces_aux(Board,DeadPiece), Res),
     sort(Res, DeadPieces1),
     findall(X-Y,(
         get_board_position(X-Y,Board,'x'),
@@ -115,6 +116,18 @@ get_dead_pieces(2, Board, DeadPieces):-
     ),Res2),
     append(Res2,DeadPieces1,DeadPieces2),
     sort(DeadPieces2,DeadPieces).
+
+get_dead_pieces(3, Board, DeadPieces):-
+    findall(DeadPiece, get_dead_pieces_aux(Board,DeadPiece), Res),
+    sort(Res, DeadPieces1),
+    findall(X-Y,(
+        length(DeadPieces1,N),
+        N>0,
+        get_board_position(X-Y,Board,'x')
+        ),
+    DeadPieces2),
+    append(DeadPieces1,DeadPieces2,DeadPieces3),
+    sort(DeadPieces3,DeadPieces).
 
 are_adjacent(X1-Y1,X2-Y2):-
     DifX is abs(X2-X1),

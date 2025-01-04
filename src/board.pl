@@ -109,5 +109,5 @@ is_empty(' ').
 % Determines if is red
 is_red('r').
 
-% Determines is blue
+% Determines if is blue
 is_blue('b').

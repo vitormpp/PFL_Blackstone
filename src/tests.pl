@@ -90,9 +90,29 @@ test_value_2:-
 test_read_number:- read_number(X), write('You wrote: '),write(X),nl.
 
 test_minimax_1:-
-    minimax(state(1,player(c-2,'r'),player(c-1,'b'),1,[['b','x',' '],['x','x',' '], [' ',' ','r']],1),player(c-2,'r'),Move,Value),
-    write(Move),nl,
-    write(Value),nl.
+    minimax(state(3,player(c-3,'r'),player(c-3,'b'),1,[['b','r',' '],['x',' ',' '],['b',' ',' ']]),1,player(c-3,'r'),Move),
+    write('Final answer: '),write(Move),nl.
+
+test_minimax_2:-
+    minimax(state(3,player(c-3,'r'),player(c-3,'b'),1,[['b','r',' '],['x',' ',' '],['b',' ',' ']]),2,player(c-3,'r'),Move),
+    write('Final answer: '),write(Move),nl.
+
+test_minimax_3:-
+    minimax(state(3,player(c-3,'r'),player(c-3,'b'),1,[['b','r',' '],['x',' ',' '],['b',' ',' ']]),3,player(c-3,'r'),Move),
+    write('Final answer: '),write(Move),nl.
+
+test_valid_moves_1:-
+    valid_moves(state(1,player(c-2,'r'),player(c-1,'b'),1,[[' ',' ',' '],[' ','r',' '],[' ',' ',' ']]),Moves),
+    write('Final answer: '),write(Moves),nl.
+
+test_minimax_1_1:-
+    minimax_aux(state(3,player(c-3,'r'),player(c-3,'b'),1,[['b','r',' '],['x',' ',' '],['b',' ',' ']]),0,player(c-3,'r'),-1000,1000,Value,Move),
+    write(Value),nl,
+    write(Move),nl.
+
+test_minimax_1_2:-
+    minimax_aux(state(3,player(c-3,'r'),player(c-3,'b'),1,[['b','r',' '],['x',' ','r'],['b',' ','r']]),1,player(c-3,'r'),-1000,1000,_,Move),
+    write(Move),nl.
 
 test_update_best_1:-
     update_best(state(1,player(c-2,'r'),player(c-1,'b'),1,[['r',' ',' ']]),1,player(c-2,'r'),[],10,7,move(0-0,1-0),NewAlpha,Move),

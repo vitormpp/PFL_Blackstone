@@ -1,3 +1,8 @@
+/*
+    File: choose_move_helper.pl
+    Description: This file contains the predicates that are used to choose a move for the computer to make.
+*/
+
 % validate_move(+GameState,+Origin,+Destination,-Move)
 % validate_move/4 checks if the input from a player choosing a move corresponds to a valid move move(X1-Y1,X2-Y2), to be unified with Move. X1 and Y2 correspond to the coordinates of the position of the piece to be moved, and X2 and Y2 correspond to the coordinates of the position to which it will be moved. 
 validate_move(state(TurnNo, Player1Info, Player2Info, Variant, Board),X1-Y1,X2-Y2,move(NX1-NY1,NX2-NY2)):-

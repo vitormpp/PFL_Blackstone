@@ -86,8 +86,8 @@ set_in_row(Row, Index, Piece, NewRow):-
     nth0(Index, Row, _, Rest),
     nth0(Index, NewRow, Piece, Rest).
 
-% get_piece_at(+X-Y, +Board, -Piece)
-% get_piece_at/3 gets the piece at position (X, Y) in the board Board. The result is unified with Piece.
+% get_piece_at(?X-Y, +Board, ?Piece)
+% get_piece_at/3 gets the piece at position (X, Y) in the board Board. The result is unified with Piece. It can also be used to obtain all positions containing a piece of a given type.
 get_piece_at(X-Y, Board, Piece):-
     nth0(Y, Board, Row),
     nth0(X, Row, Piece).

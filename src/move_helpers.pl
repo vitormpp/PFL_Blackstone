@@ -18,11 +18,6 @@ get_turn_color(TurnNum,'b'):-
 get_opponent('r','b').
 get_opponent('b','r').
 
-% get_board_position(+X-Y, +Board, -Elem)
-% helper function that obtains the value at a given board position.
-get_board_position(X-Y, Board, Elem):-
-    nth0(Y,Board,Line),
-    nth0(X,Line,Elem).
 
 % is_in_line_of_sight(+X1-Y1, +X2-Y2)
 % is_in_line_of_sight/2 checks if the two given positions (X1, Y1) and (X2, Y2) are in line of sight.
@@ -40,13 +35,13 @@ has_piece_between(Board, X1-Y, X2-Y):-
     MinX is min(X1,X2)+1,
     MaxX is max(X1,X2)-1,
 	between(MinX,MaxX,BX), 
-    \+(get_board_position(BX-Y,Board, ' ')).
+    \+(get_piece_at(BX-Y,Board, ' ')).
 
 has_piece_between(Board, X-Y1, X-Y2):-
     MinY is min(Y1,Y2)+1,
     MaxY is max(Y1,Y2)-1,
     between(MinY,MaxY,BY), 
-    \+(get_board_position(X-BY,Board, ' ')).
+    \+(get_piece_at(X-BY,Board, ' ')).
 
 has_piece_between(Board, X1-Y1, X2-Y2):-
     MinX is min(X1,X2)+1,
@@ -56,7 +51,7 @@ has_piece_between(Board, X1-Y1, X2-Y2):-
     X1 \= X2, Y1 \= Y2,
     abs(X1-X2)=:=abs(Y1-Y2),
     between(MinX,MaxX,X), between(MinY,MaxY,Y),
-	\+(get_board_position(X-Y,Board, ' ')), 
+	\+(get_piece_at(X-Y,Board, ' ')), 
     abs(X1-X)=:=abs(Y1-Y).
 
 % create_new_board(+TurnColor, +Board, +Move, -NewBoard)
@@ -71,31 +66,31 @@ create_new_board(TurnColor, Board, move(OX-OY, TX-TY), NewBoard):-
 
 % piece_is_surrounded(+X-Y, +Board)
 % piece_is_surrounded/2 checks if the piece at position (X, Y) is surrounded by other pieces.
-% bound checks aren't necessary, as get_board_position will fail for invalid numbers anyway.
+% bound checks aren't necessary, as get_piece_at will fail for invalid numbers anyway.
 piece_is_surrounded(X-Y,[H|T]):-
     R is X+1,
     L is X-1,
     U is Y+1,
     D is Y-1,
-    \+ get_board_position(X-Y,[H|T],' '),
-    \+ get_board_position(X-Y,[H|T],'x'),  % to help in other places... It's not strictly necessary
-    \+ get_board_position(L-U,[H|T],' '),
-    \+ get_board_position(X-U,[H|T],' '),
-    \+ get_board_position(R-U,[H|T],' '),
-    \+ get_board_position(L-Y,[H|T],' '),
-    \+ get_board_position(R-Y,[H|T],' '),
-    \+ get_board_position(L-D,[H|T],' '),
-    \+ get_board_position(X-D,[H|T],' '),
-    \+ get_board_position(R-D,[H|T],' ').
+    \+ get_piece_at(X-Y,[H|T],' '),
+    \+ get_piece_at(X-Y,[H|T],'x'),  % to help in other places... It's not strictly necessary
+    \+ get_piece_at(L-U,[H|T],' '),
+    \+ get_piece_at(X-U,[H|T],' '),
+    \+ get_piece_at(R-U,[H|T],' '),
+    \+ get_piece_at(L-Y,[H|T],' '),
+    \+ get_piece_at(R-Y,[H|T],' '),
+    \+ get_piece_at(L-D,[H|T],' '),
+    \+ get_piece_at(X-D,[H|T],' '),
+    \+ get_piece_at(R-D,[H|T],' ').
 
 
 % get_dead_pieces_aux(+ChurnVariant, +Board, -X-Y)
 % get_dead_pieces_aux/3 returns the position of a dead piece in the board.
 get_dead_pieces_aux(3, Board, X-Y):-
-    get_board_position(X-Y,Board,'x').
+    get_piece_at(X-Y,Board,'x').
 
 get_dead_pieces_aux(Board, X-Y):-
-    get_board_position(X-Y,Board,Piece),
+    get_piece_at(X-Y,Board,Piece),
     member(Piece,['r','b']),
     piece_is_surrounded(X-Y, Board).
 
@@ -110,7 +105,7 @@ get_dead_pieces(2, Board, DeadPieces):-
     findall(DeadPiece, get_dead_pieces_aux(Board,DeadPiece), Res),
     sort(Res, DeadPieces1),
     findall(X-Y,(
-        get_board_position(X-Y,Board,'x'),
+        get_piece_at(X-Y,Board,'x'),
         member(X2-Y2,DeadPieces1),
         are_adjacent(X-Y,X2-Y2)
     ),Res2),
@@ -123,12 +118,14 @@ get_dead_pieces(3, Board, DeadPieces):-
     findall(X-Y,(
         length(DeadPieces1,N),
         N>0,
-        get_board_position(X-Y,Board,'x')
+        get_piece_at(X-Y,Board,'x')
         ),
     DeadPieces2),
     append(DeadPieces1,DeadPieces2,DeadPieces3),
     sort(DeadPieces3,DeadPieces).
 
+% are_adjacent(+Originm, +Destination)
+% are_adjacent/2 checks whether two positions X-Y are adjacent.
 are_adjacent(X1-Y1,X2-Y2):-
     DifX is abs(X2-X1),
     DifY is abs(Y2-Y1),

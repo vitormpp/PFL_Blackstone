@@ -56,8 +56,8 @@ display_game(state(TurnNumber, _, _, _, Board))  :-
 % move/3 applies the move Move to the game state GameState, resulting in the new game state NewGameState.
 move(state(TurnNumber, Player1, Player2, ChurnVariant, Board), move(OX-OY, TX-TY), state(NTurnNumber, Player1, Player2, ChurnVariant, NBoard)):-
 	get_turn_color(TurnNumber, TurnColor),
-	get_board_position(OX-OY, Board, TurnColor),
-	get_board_position(TX-TY, Board, ' '),
+	get_piece_at(OX-OY, Board, TurnColor),
+	get_piece_at(TX-TY, Board, ' '),
 	is_in_line_of_sight(OX-OY, TX-TY),
     \+ (has_piece_between(Board, OX-OY, TX-TY)),
 	create_new_board(TurnColor, Board,  move(OX-OY, TX-TY), B2),
@@ -167,31 +167,19 @@ choose_move(state(TurnNumber, P1, player(c-1,'b'), Churn, Board), _, Move):-
 
 choose_move(state(TurnNumber, player(h,'r'), P2, Churn, Board), _, Move):-
      1 =:= TurnNumber mod 2,
-	write('Player one(r) (Xi-Yi,Xf-Yf): '),nl,
-    read_number(X1),
-    get_char(Sep1),
-    read_number(Y1),
-    get_char(Sep2),
-    read_number(X2),
-    get_char(Sep3),
-    read_number(Y2),
+	write('Player one - r '),nl,
+	read_move(X1-Y1,X2-Y2),
     skip_line,
-    validate_move(state(TurnNumber, player(h,'r'), P2, Churn, Board),X1,Sep1,Y1,Sep2,X2,Sep3,Y2, Move).
+    validate_move(state(TurnNumber, player(h,'r'), P2, Churn, Board),X1-Y1,X2-Y2, Move).
 
 
 choose_move(state(TurnNumber, P1, player(h,'b'), Churn, Board), _, Move):-
  
     0 =:= TurnNumber mod 2,
-    write('Player two(b) (Xi-Yi,Xf-Yf): '),nl,
-    read_number(X1),
-    get_char(Sep1),
-    read_number(Y1),
-    get_char(Sep2),
-    read_number(X2),
-    get_char(Sep3),
-    read_number(Y2),
+    write('Player two - b '),nl,
+	read_move(X1-Y1,X2-Y2),
     skip_line,
-    validate_move(state(TurnNumber, P1, player(h,'b'), Churn, Board),X1,Sep1,Y1,Sep2,X2,Sep3,Y2,Move).
+    validate_move(state(TurnNumber, P1, player(h,'b'), Churn, Board),X1-Y1,X2-Y2,Move).
 
 choose_move(state(TurnNumber, player(c-3,'r'), _, Churn, Board), _, Move):-
 	minimax(state(TurnNumber, player(c-3,'r'), _, Churn, Board), 3, player(c-3,'r'), Move).

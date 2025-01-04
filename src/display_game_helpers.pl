@@ -54,7 +54,7 @@ display_number_line(1,Size):-
     Size>0,
     write('     1 '), 
     display_number_line(2,Size).
-% usual recursive case: prints with a single space
+% recursive case for single-digit numbers
 display_number_line(Num,Size):-
     Num>1,
     Num<10,
@@ -65,6 +65,7 @@ display_number_line(Num,Size):-
     Num2 is Num+1, 
     display_number_line(Num2, Size).
 
+% recursive case for 2-digit numbers
 display_number_line(Num,Size):-
     Num>1,
     Num>9,
@@ -93,7 +94,7 @@ display_board([H|T]):- length(H, Size),
 
 
 
-% recursive case: prints line by line    
+% recursive case: prints line by line - for single-digit line numbers    
 display_board(LineNum, [H|T]):-
     length(T, L),
     L>0, % length of the TAIL. This is checking if there are more rows
@@ -109,6 +110,7 @@ display_board(LineNum, [H|T]):-
     display_board(NewLineNum,T).
 
 
+% recursive case: prints line by line - for 2-digit line numbers
 display_board(LineNum, [H|T]):-
     length(T, L),
     L>0, % length of the TAIL. This is checking if there are more rows
@@ -128,5 +130,5 @@ display_board(LineNum, [H|T]):-
 display_board(LineNum, [H]):-
     write(' '),write(LineNum), display_content_line(H),nl.
 
-% just so the function doesn't fail if the board has dimension 0
+% trivial case, as nothing is printed. Allows for the function not to fail in case of a board with length 0.
 display_board(_,[]).

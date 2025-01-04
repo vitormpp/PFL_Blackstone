@@ -48,7 +48,6 @@ test_loop_final_3:- gameloop(state(0, player(c-1,'r'), player(c-1,'b'), 1, [['r'
 
 test_piece_is_surrounded_final_1:- piece_is_surrounded(0-1,[['x','x',' '],['b','r',' ']]).
 
-test_get_board_position_final_1:- between(0,1,Y), between(0,2,X), get_board_position(X-Y,[['x',' ',' '],['b','r',' ']],Elem),write(Elem).
 
 
 test_game_over_final_1:- game_over(state(1, player(h,'r'), player(h,'b'), 1, [['r','r',' '],['r','r','r']]),'r').
@@ -87,6 +86,8 @@ test_value_1:-
 test_value_2:-
     value(state(1,player(c-2,'r'),player(c-1,'b'),1,[['b','x',' '],['x','x',' '], [' ',' ','r']]),player(c-2,'r'),Value),
     write(Value),nl.
+
+test_read_number:- read_number(X), write('You wrote: '),write(X),nl.
 
 test_minimax_1:-
     minimax(state(3,player(c-3,'r'),player(c-3,'b'),1,[['b','r',' '],['x',' ',' '],['b',' ',' ']]),1,player(c-3,'r'),Move),

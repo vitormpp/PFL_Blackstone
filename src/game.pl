@@ -198,17 +198,19 @@ choose_move(state(TurnNumber, _, player(c-3,'b'), Churn, Board), _, Move):-
 % value/3 evaluates how good or bad a move (chosen by the computer). The higher the value, the better the move.
 /*
 	Key factors for evaluation:
-	- Blocking opponent's movement;
 	- Preserving mobility;
 	- Capturing opponent's pieces;
 	- Strategic positioning;
 */
-value(state(_, _, _, _, Board), player(_,Piece), Value):-
+value(state(_, Player1, Player2, Variant, Board), player(_,Piece), Value):-
 	get_opponent(Piece, Oponent),
 	count_pieces(Board, Piece, PlayerCount),
 	count_pieces(Board, Oponent, OponentCount),
-	%get_dead_pieces(Variant, Board, DeadPieces),
-	%findall(X-Y, (member(X-Y, DeadPieces), get_piece_at(X-Y, Board, Oponent)), OponentDeadPieces),
-	%length(OponentDeadPieces, OponentDeadPiecesCount),
-	Value is PlayerCount - OponentCount.
+	length(Board, Size),
+	get_turn(Piece, Turn),
+	valid_moves(state(Turn, Player1, Player2, Variant, Board), ListOfMoves),
+	length(ListOfMoves, Mobility),
+	Value is PlayerCount - OponentCount + (Mobility / (Size * Size)).
 
+get_turn('r',1).
+get_turn('b',0).

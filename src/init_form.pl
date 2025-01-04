@@ -62,10 +62,11 @@ validate_difficulty(_,GameConfig):- write('Invalid input.\n'), input_form(GameCo
 
 % validates the answer to the churn question and moves on to the next question
 validate(ChurnVariant,P1Type,P2Type,GameConfig):-
-    member(ChurnVariant,[1,2,3]),!,
+    member(ChurnVariant,[1,2,3]),
+    write(ChurnVariant), 
     input_form(ChurnVariant,P1Type,P2Type,GameConfig).
 % if the check fails, repeat the question.
-validate_churn(_,P1Type,P2Type,GameConfig):-
+validate(_,P1Type,P2Type,GameConfig):-
     write('Invalid input.\n'),
     input_form(P1Type,P2Type,GameConfig).
 %---
@@ -100,21 +101,33 @@ is_number_code(C,false):-
 read_next_if_new_line:- !, peek_char('\n'),get_char(_).
 read_next_if_new_line.
 
+read_number_if_not_new_line(X,X):-peek_char('\n'),!.
+read_number_if_not_new_line(Acc,X):-
+    peek_char(C),!,
+    C\='\n',
+    read_number(Acc,true,X).
+
 validate_number_code(C,Acc,_,X):-
     is_number_code(C,true),
     !,
-    Acc1 is Acc*10 + C - 48,
-    read_number(Acc1,true,X).
+    number_from_code(C,Number),
+    Acc1 is Acc*10 + Number,
+    read_number_if_not_new_line(Acc1,X).
     
-validate_number_code(C,0,false,X):-
+validate_number_code(C,0,false,X):- 
+    C\='\n',
     \+ is_number_code(C,true),!,
     read_next_if_new_line,
+    write('Invalid input! Please input a number!\n'),
+    read_number(0,false,X).
+%this case breaks if newline...
+validate_number_code('\n',0,false,X):-
+    skip_line,
     write('Invalid input! Please input a number!\n'),
     read_number(0,false,X).
 
 validate_number_code(C,X,true,X):-
     \+ is_number_code(C,true),!,
-    read_next_if_new_line,!,
     skip_line.
 
 read_number(Acc,Val,X):-
@@ -122,18 +135,7 @@ read_number(Acc,Val,X):-
     validate_number_code(C,Acc,Val,X).
 
 % base case: return the value
-read_number(Acc,true,Acc).
-
-
-
-
-% not used.
-read_until_between(Min,Max,Value):-
-    repeat,
-    read_number(Value),
-    Value >= Min,
-    Value =< Max,
-    !.
+read_number(Acc,true,Acc):-write(end).
 
 
 % prints the board size question
@@ -158,20 +160,16 @@ input_form(P1Type,P2Type,GameConfig):-
 % prints the difficulty question
 input_form_difficulty(P1Type,GameConfig):-    
     write('Difficulty level(1/2): \n'),
-    get_code(DifficultyLevel),
-    skip_line,
-    number_from_code(DifficultyLevel,Number),!,
-    validate_difficulty(P1Type,Number,GameConfig).
+    read_number(DifficultyLevel),!,skip_line,
+    validate_difficulty(P1Type,DifficultyLevel,GameConfig).
 input_form_difficulty(P1Type,GameConfig):-    
     !, write('Invalid input!\n'),
     input_form_difficulty(P1Type,GameConfig).
 
 input_form_difficulty(GameConfig):-    
     write('Difficulty level(1/2): \n'),
-    get_code(DifficultyLevel),
-    skip_line,
-    number_from_code(DifficultyLevel,Number),!,
-    validate_difficulty(Number,GameConfig).
+    read_number(DifficultyLevel),!,skip_line,
+    validate_difficulty(DifficultyLevel,GameConfig).
 
 input_form_difficulty(GameConfig):-    
     !, write('Invalid input!\n'),

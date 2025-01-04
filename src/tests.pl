@@ -88,6 +88,8 @@ test_value_2:-
     value(state(1,player(c-2,'r'),player(c-1,'b'),1,[['b','x',' '],['x','x',' '], [' ',' ','r']]),player(c-2,'r'),Value),
     write(Value),nl.
 
+test_read_number:- read_number(X), write('You wrote: '),write(X),nl.
+
 test_minimax_1:-
     minimax(state(1,player(c-2,'r'),player(c-1,'b'),1,[['b','x',' '],['x','x',' '], [' ',' ','r']],1),player(c-2,'r'),Move,Value),
     write(Move),nl,

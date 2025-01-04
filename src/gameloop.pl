@@ -12,6 +12,7 @@ play_without_preamble:-
 % read_play_again/0 reads the user input to check if the user wants to play again.
 read_play_again:-
     get_char('y'),
+    skip_line,
     play_without_preamble,!. 
 read_play_again:- 
     write('Ending game!\n').

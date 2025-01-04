@@ -1,10 +1,21 @@
-main_menu_evaluate('1'):-!,input_form(GameConfig),
-initial_state(GameConfig, GameState),
-gameloop(GameState).
-main_menu_evaluate('2'):-!,write('Blackstone is a two-player game designed by Blackstone in March 2024. It is played on a square board of any even size.\nStarting with the red player, each player can, in each turn, move one of their own pieces any number of steps in an unobstructed horizontal, vertical or diagonal path. Before the other moves, a x piece is placed on the square the moved piece had originally been.\nIf a r or b piece is unnable to move, it is removed. In the medium churn variant, all x pieces surrounding it are removed as well. In the high churn variant, all x pieces are eliminated.\nA player wins when all of their oponent\'s pieces are eliminated.\n'),play.
+/*
+    File: init_form.pl
+    Description: This file contains the predicates that are used to initialize the game.
+*/
+
+% main_menu_evaluate(+Option)
+% main_menu_evaluate/1 evaluates the option chosen by the user in the main menu.
+main_menu_evaluate('1'):-
+    !,input_form(GameConfig),
+    initial_state(GameConfig, GameState),
+    gameloop(GameState).
+main_menu_evaluate('2'):-
+    !,write('Blackstone is a two-player game designed by Blackstone in March 2024. It is played on a square board of any even size.\nStarting with the red player, each player can, in each turn, move one of their own pieces any number of steps in an unobstructed horizontal, vertical or diagonal path. Before the other moves, a x piece is placed on the square the moved piece had originally been.\nIf a r or b piece is unnable to move, it is removed. In the medium churn variant, all x pieces surrounding it are removed as well. In the high churn variant, all x pieces are eliminated.\nA player wins when all of their oponent\'s pieces are eliminated.\n'),
+    play.
 main_menu_evaluate('3'):-!.
-main_menu_evaluate(_):- write('Invalid input!\n'),play.
-% IDK if the previous things should be here, as they will not work unless olay is defined eventually.
+main_menu_evaluate(_):- 
+    write('Invalid input!\n'),
+    play.
 
 
 validate(P1Type,GameConfig):-
@@ -14,7 +25,9 @@ validate(P1Type,GameConfig):-
 validate(P1Type,GameConfig):-
     member(P1Type,['H']),!, 
     input_form(player(h,'r'),GameConfig).
-validate(_,GameConfig):-input_form(GameConfig).
+validate(_,GameConfig):-
+    write('Invalid input!\n'),
+    input_form(GameConfig).
 
 
 
@@ -25,10 +38,10 @@ validate(P1Type,P2Type,GameConfig):-
 validate(P1Type,P2Type,GameConfig):-
         member(P2Type,['H']),!, 
         input_form(P1Type,player(h,'b'),GameConfig).
-validate(P1Type,_,GameConfig):-input_form(P1Type,GameConfig).
+validate(P1Type,_,GameConfig):-
+    write('Invalid input!\n'),
+    input_form(P1Type,GameConfig).
     
-
-
 
 
 % validates the answer to the difficulty question and moves on to the next question.
@@ -83,25 +96,35 @@ is_number_code(C,false):-
     C > 57.
 
 % reads a number from the console digit by digit. Stops if the character read isn't a number
-read_number(Acc,_,X):-
-    get_code(C),
+
+read_next_if_new_line:- !, peek_char('\n'),get_char(_).
+read_next_if_new_line.
+
+validate_number_code(C,Acc,_,X):-
     is_number_code(C,true),
     !,
     Acc1 is Acc*10 + C - 48,
-    validate_next_character(Acc1,X).
+    read_number(Acc1,true,X).
+    
+validate_number_code(C,0,false,X):-
+    \+ is_number_code(C,true),!,
+    read_next_if_new_line,
+    write('Invalid input! Please input a number!\n'),
+    read_number(0,false,X).
+
+validate_number_code(C,X,true,X):-
+    \+ is_number_code(C,true),!,
+    read_next_if_new_line,!,
+    skip_line.
+
+read_number(Acc,Val,X):-
+    get_code(C),
+    validate_number_code(C,Acc,Val,X).
 
 % base case: return the value
 read_number(Acc,true,Acc).
 
-% my complicated addition to make it so that the read_number function ends if the user clicks a single new line, instead of 2. It checks if the next character is a number, and only if it is does it call read_number.
-validate_next_character(X,X):-
-    peek_code(C),
-    \+ is_number_code(C,true).
 
-validate_next_character(Acc,X):-
-    peek_code(C),
-    is_number_code(C,true),
-    read_number(Acc,true,X).
 
 
 % not used.
@@ -120,29 +143,40 @@ input_form(ChurnVariant,P1Type,P2Type,GameConfig):-
     skip_line,!,
     validate(Size,ChurnVariant,P1Type,P2Type,GameConfig).     
 
+
+
+
 % prints the churn question
 input_form(P1Type,P2Type,GameConfig):-    
     write('Churn variant (1 - default, 2 - medium, 3 - high): \n'),
-    get_code(ChurnVariant),
-    skip_line,
-    number_from_code(ChurnVariant,Number),!,
-    validate(Number,P1Type,P2Type,GameConfig).
+    read_number(ChurnVariant),
+    skip_line,!,
+    validate(ChurnVariant,P1Type,P2Type,GameConfig).
+
 
 
 % prints the difficulty question
 input_form_difficulty(P1Type,GameConfig):-    
     write('Difficulty level(1/2): \n'),
     get_code(DifficultyLevel),
-    skip_line,!,
-    number_from_code(DifficultyLevel,Number),
+    skip_line,
+    number_from_code(DifficultyLevel,Number),!,
     validate_difficulty(P1Type,Number,GameConfig).
+input_form_difficulty(P1Type,GameConfig):-    
+    !, write('Invalid input!\n'),
+    input_form_difficulty(P1Type,GameConfig).
 
 input_form_difficulty(GameConfig):-    
     write('Difficulty level(1/2): \n'),
     get_code(DifficultyLevel),
-    skip_line,!,
-    number_from_code(DifficultyLevel,Number),
+    skip_line,
+    number_from_code(DifficultyLevel,Number),!,
     validate_difficulty(Number,GameConfig).
+
+input_form_difficulty(GameConfig):-    
+    !, write('Invalid input!\n'),
+    input_form_difficulty(GameConfig).
+
 
 input_form(P1Type,GameConfig):-
     write('Player 2 type ((H)uman/(C)omputer): \n'),

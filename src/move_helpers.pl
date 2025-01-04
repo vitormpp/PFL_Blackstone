@@ -15,8 +15,8 @@ get_turn_color(TurnNum,'b'):-
 
 % get_oponent(+Color, -Oponent)
 % get_oponent/2 returns the oponent of the given color.
-get_oponent('r','b').
-get_oponent('b','r').
+get_opponent('r','b').
+get_opponent('b','r').
 
 % get_board_position(+X-Y, +Board, -Elem)
 % helper function that obtains the value at a given board position.

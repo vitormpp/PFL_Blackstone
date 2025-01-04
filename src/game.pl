@@ -83,7 +83,7 @@ game_over(state(TurnNumber, _, _, _, Board), P2):-
 	 \+ (member(Line, Board),
 		member('b', Line)),!,
 	 get_turn_color(TurnNumber,P1),
-	 get_oponent(P1,P2).
+	 get_opponent(P1,P2).
 
 game_over(state(_, _, _, _, Board), 'b'):-
 	 \+ (member(Line, Board),
@@ -112,9 +112,10 @@ choose_move(state(TurnNumber, player(c-2,'r'), P2, Churn, Board), _, Move):-
 		),
 		MovesValues),
 	findall(VMove,
-		(member(VMove - V, MovesValues),
-			 \+ (member(_ - V2, MovesValues),
-				V2 > V)),
+			(
+				member(VMove - V, MovesValues),
+	 			\+ (member(_ - V2, MovesValues), V2 > V)
+			),
 		MostValuableMoves),
 	random_member(Move, MostValuableMoves).
 
@@ -202,13 +203,57 @@ choose_move(state(TurnNumber, P1, player(h,'b'), Churn, Board), _, Move):-
 	- Capturing opponent's pieces;
 	- Strategic positioning;
 */
-value(state(TurnNumber, _, _, Variant, Board), player(_,Piece), Value):-
-	get_oponent(Piece, Oponent),
+value(state(_, _, _, _, Board), player(_,Piece), Value):-
+	get_opponent(Piece, Oponent),
 	count_pieces(Board, Piece, PlayerCount),
 	count_pieces(Board, Oponent, OponentCount),
-	%findall(Move, move(state(TurnNumber, _, _, Variant, Board), Move, _),ListOfMoves),
-	%length(ListOfMoves, PlayerMoves),
 	%get_dead_pieces(Variant, Board, DeadPieces),
-	%findall(X-Y, get_piece_at(X-Y, DeadPieces, Oponent), OponentDeadpieces),
-	%length(DeadPiecePositions, OponentDeadPiecesCount),
+	%findall(X-Y, (member(X-Y, DeadPieces), get_piece_at(X-Y, Board, Oponent)), OponentDeadPieces),
+	%length(OponentDeadPieces, OponentDeadPiecesCount),
 	Value is PlayerCount - OponentCount.
+
+
+choose_move(state(TurnNumber, player(c-3,'r'), _, Churn, Board), _, Move):-
+	minimax(state(TurnNumber, player(c-3,'r'), _, Churn, Board), 3, player(c-3,'r'), Move).
+
+choose_move(state(TurnNumber, _, player(c-3,'b'), Churn, Board), _, Move):-
+	minimax(state(TurnNumber, _, player(c-3,'b'), Churn, Board), 3, player(c-3,'b'), Move).
+
+
+minimax(GameState, Depth, Player, Move):-
+	minimax_aux(GameState, Depth, -inf, inf, Player, _, Move).
+
+% If the depth is 0, return the heuristic value of the node
+minimax_aux(GameState, 0, player(c-3,Color), _, _, BestValue, _) :-
+	value(GameState, player(c-3,Color), BestValue).
+
+
+minimax_aux(GameState, Depth, player(c-3,Color), Alpha, Beta, BestValue, BestMove) :-
+	Depth > 0,
+	valid_moves(GameState, ListOfMoves),
+	evaluate_moves(GameState, Depth, player(c-3,Color), ListOfMoves, Alpha, Beta, BestValue, BestMove).
+
+evaluate_moves(_, _, _, [], _, _, -inf, _) :- !.
+
+evaluate_moves(GameState, Depth, player(c-3,Color), [Move | ListOfMoves], Alpha, Beta, BestValue, BestMove) :-
+	move(GameState, Move, NewGameState),
+	NewDepth is Depth - 1,
+	get_opponent(Color, Opponent),
+	minimax_aux(NewGameState, NewDepth, Alpha, Beta, player(c-Opponent), OpponentValue, _),
+	CurrentValue is -OpponentValue,
+	update_alpha(Alpha, CurrentValue, NewAlpha),
+	update_best(GameState, Depth, player(c-3,Color), ListOfMoves, NewAlpha, Beta, Move, BestValue, BestMove).
+
+update_alpha(Alpha, CurrentValue, NewAlpha) :-
+	CurrentValue > Alpha,
+	NewAlpha is CurrentValue.
+
+update_alpha(Alpha, CurrentValue, NewAlpha) :-
+	CurrentValue =< Alpha,
+	NewAlpha is Alpha.
+
+update_best(GameState, Depth, player(c-3,Color), ListOfMoves, NewAlpha, Beta, _, BestValue, BestMove):-
+	NewAlpha < Beta,!,
+	evaluate_moves(GameState, Depth, player(c-3,Color), ListOfMoves, NewAlpha, Beta, BestValue, BestMove).
+
+update_best(_, _, _, _, NewAlpha, _, Move, NewAlpha, Move).

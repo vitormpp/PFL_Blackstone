@@ -35,12 +35,12 @@ validate(_,GameConfig):- % invalid input - repeats first player question
 % validate(+P1Type, +P2Type, -GameConfig)
 % validate/2 evaluates whether the second player type input was valid, and proceeds to the appropriate question afterwards.
 validate(P1Type,'C',GameConfig):- % computer player - asks for a difficulty value
-        input_form_difficulty(P1Type,GameConfig).
+        !,input_form_difficulty(P1Type,GameConfig).
     
 validate(P1Type,'H',GameConfig):- %player is human - proceeds to churn variant question
-        input_form(P1Type,player(h,'b'),GameConfig).
+    !,input_form(P1Type,player(h,'b'),GameConfig).
 validate(P1Type,_,GameConfig):- % invalid input - repeats second player question
-    write('Invalid input!\n'),
+    !,write('Invalid input!\n'),
     input_form(P1Type,GameConfig).
     
 
@@ -67,11 +67,11 @@ validate_difficulty(_,GameConfig):- write('Invalid input.\n'), input_form(GameCo
 % validate(ChurnVariant,P1Type,P2Type,GameConfig):-
 % validate\4 validates the answer to the churn question and moves on to the board size question
 validate(ChurnVariant,P1Type,P2Type,GameConfig):-
-    member(ChurnVariant,[1,2,3]),
+    member(ChurnVariant,[1,2,3]),!,
     input_form(ChurnVariant,P1Type,P2Type,GameConfig).
 % if the check fails, repeat the question.
 validate(_,P1Type,P2Type,GameConfig):-
-    write('Invalid input.\n'),
+    write('Invalid input.\n'),!,
     input_form(P1Type,P2Type,GameConfig).
 %---
 

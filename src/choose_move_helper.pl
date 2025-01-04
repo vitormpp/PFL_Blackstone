@@ -15,16 +15,16 @@ validate_move(state(TurnNo, Player1Info, Player2Info, Variant, Board),X1-Y1,X2-Y
     member(move(NX1-NY1,NX2-NY2),ListOfMoves),!.
 
 % if any of the inputs or the move itself is invalid, an error message is desplayed and a "asking for input" cycle is repeated.
-validate_move(GameState,_,_,_,_,_,_,_,Move):-
-    write('Invalid input!'),nl,
+validate_move(GameState,_,_,Move):-
+    write('Invalid input!'),nl,!,
     display_game(GameState),choose_move(GameState,_,Move).
 
 read_move(X1-Y1,X2-Y2):-
     write('Source X: '),
-    read_number(X1),skip_line,
+    read_number(X1),skip_line,!,
     write('Source Y: '),
-    read_number(Y1),skip_line,
+    read_number(Y1),skip_line,!,
     write('Target X: '),
-    read_number(X2),skip_line,
+    read_number(X2),skip_line,!,
     write('Target Y: '),
-    read_number(Y2),skip_line.
+    read_number(Y2),skip_line,!.

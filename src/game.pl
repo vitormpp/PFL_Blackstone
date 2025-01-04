@@ -98,10 +98,10 @@ game_over(state(_, _, _, _, Board), 'r'):-
 % choose_move/3 chooses a move for the computer to make.
 choose_move(state(TurnNumber, player(c-4,'r'), P2, Churn, Board), _, Move):-
 	1 =:= TurnNumber mod 2,
-	get_best_move(state(TurnNumber, player(c-4,'r'), P2, Churn, Board), player(c-4,'r'),5,Move).
+	get_best_move(state(TurnNumber, player(c-4,'r'), P2, Churn, Board), player(c-4,'r'),3,Move).
 choose_move(state(TurnNumber, P1,player(c-4,'b'), Churn, Board), _, Move):-
 	0 =:= TurnNumber mod 2,
-	get_best_move(state(TurnNumber, P1, player(c-4,'b'), Churn, Board), player(c-4,'b'),5,Move).
+	get_best_move(state(TurnNumber, P1, player(c-4,'b'), Churn, Board), player(c-4,'b'),3,Move).
 
 
 choose_move(state(TurnNumber, player(c-2,'r'), P2, Churn, Board), _, Move):-

@@ -58,7 +58,7 @@ move(state(TurnNumber, Player1, Player2, ChurnVariant, Board), move(OX-OY, TX-TY
 	get_turn_color(TurnNumber, TurnColor),
 	get_piece_at(OX-OY, Board, TurnColor),
 	get_piece_at(TX-TY, Board, ' '),
-	\+ (OX=TX,OY=TY),
+	not_equals(OX-OY,TX-TY),
 	is_in_line_of_sight(OX-OY, TX-TY),
     \+ (has_piece_between(Board, OX-OY, TX-TY)),
 	create_new_board(TurnColor, Board,  move(OX-OY, TX-TY), B2),

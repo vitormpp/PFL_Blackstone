@@ -104,9 +104,6 @@ is_number_code(C,false):-
 is_number_code(C,false):- 
     C > 57.
 
-% read_next_if_new_line\0 checks whether the next character in the console input is a new line character and, if so, reads it.
-read_next_if_new_line:- !, peek_char('\n'),get_char(_).
-read_next_if_new_line.
 
 % read_number_if_not_new_line(+Acc, -X)
 % read_number_if_not_new_line/2 is an helper predicate that determines whether the read_number/3 predicate should continue its iteration. 
@@ -127,13 +124,22 @@ validate_number_code(C,Acc,_,X):- % if it's a digit, continues iterating
     read_number_if_not_new_line(Acc1,X).
     
 validate_number_code(C,0,false,X):- % if it's not a digit but no digit has been read so far, writes an invalid input message and tries to obtain a digit by repeating read_number/3
-    \+ is_number_code(C,true),!,
-    read_next_if_new_line,
+    is_number_code(C,false),
+    peek_char('\n'),!,
+    skip_line,
     write('Invalid input! Please input a number!\n'),
     read_number(0,false,X).
 
+
+validate_number_code(C,0,false,X):- % if it's not a digit but no digit has been read so far, writes an invalid input message and tries to obtain a digit by repeating read_number/3
+    is_number_code(C,false),
+    peek_char(Next),!,
+    Next\='\n',
+    read_number(0,false,X).
+
+
 validate_number_code(C,X,true,X):- % if it's not a digit and digits have been read, ends.
-    \+ is_number_code(C,true),!.
+   is_number_code(C,false),!.
 
 
 
@@ -151,11 +157,11 @@ read_number(Acc,false,X):-
     validate_number_code(C,Acc,false,X).
 % if the next character is a new-line, ignore it and write an invalid input message. This fixes a bug where two new lines needed to be inserted for them to be flagged as incorrect. 
 read_number(Acc,false,X):-
-    peek_char('\n'),skip_line,write('Invalid input! Please write a number!\n'),
+    peek_char('\n'),
+    skip_line,
+    write('Invalid input! Please write a number!\n'),
     read_number(Acc,false,X).
 
-% base case - unifies the accumulator with the variable
-read_number(Acc,true,Acc):-write(end).
 
 % input_form(+ChurnVariant, +P1Type, +P2Type, -GameConfig)    
 % input_form/4 prints the board size question and handles the respective input.

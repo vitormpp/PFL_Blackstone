@@ -93,104 +93,6 @@ game_over(state(_, _, _, _, Board), 'b'):-
 game_over(state(_, _, _, _, Board), 'r'):-
 	 \+ (member(Line, Board),
 		member('b', Line)).
-    
-% choose_move(+GameState, +Level, -Move)
-% choose_move/3 chooses a move for the computer to make.
-choose_move(state(TurnNumber, player(c-4,'r'), P2, Churn, Board), _, Move):-
-	1 =:= TurnNumber mod 2,
-	get_best_move(state(TurnNumber, player(c-4,'r'), P2, Churn, Board), player(c-4,'r'),3,Move).
-choose_move(state(TurnNumber, P1,player(c-4,'b'), Churn, Board), _, Move):-
-	0 =:= TurnNumber mod 2,
-	get_best_move(state(TurnNumber, P1, player(c-4,'b'), Churn, Board), player(c-4,'b'),3,Move).
-
-
-choose_move(state(TurnNumber, player(c-2,'r'), P2, Churn, Board), _, Move):-
-	1 =:= TurnNumber mod 2,
-	findall(M-Value,
-		(
-			move(state(TurnNumber,
-				player(c-2,'r'),
-				P2,
-				Churn,
-				Board),
-				M,
-				NewState
-			),
-			value(NewState, player(c-2,'r'), Value)
-		),
-		MovesValues),
-	findall(VMove,
-			(
-				member(VMove - V, MovesValues),
-	 			\+ (member(_ - V2, MovesValues), V2 > V)
-			),
-		MostValuableMoves),
-	random_member(Move, MostValuableMoves).
-
-% choose_move(+GameState, +Level, -Move)
-% choose_move/3 chooses a move for the computer to make.
-choose_move(state(TurnNumber, player(c-1,'r'), P2, Churn, Board), _, Move):-
- 
-	1 =:= TurnNumber mod 2,
-	valid_moves(state(TurnNumber,
-			player(c-1,'r'),
-			P2,
-			Churn,
-			Board),
-		ListOfMoves),
-	random_member(Move, ListOfMoves).
-
-choose_move(state(TurnNumber, P1, player(c-2,'b'), Churn, Board), _, Move):-
- 
-	0 =:= TurnNumber mod 2,
-	findall(M-Value,
-		(
-			move(state(TurnNumber,
-				P1,
-				player(c-2,'b'),
-				Churn,
-				Board),
-				M,
-				NewState),
-			value(NewState, player(c-2,'b'), Value)
-			),
-		MovesValues),
-
-	    findall(VMove,
-            (member(VMove - V, MovesValues),
-                 \+ (member(_ - V2, MovesValues),
-                    V2 > V)),
-            MostValuableMoves),
-        random_member(Move, MostValuableMoves).
-
-choose_move(state(TurnNumber, P1, player(c-1,'b'), Churn, Board), _, Move):-
- 	0 =:= TurnNumber mod 2,
-	valid_moves(state(TurnNumber,
-			P1,
-			player(c-1,'b'),
-			Churn,
-			Board),
-		ListOfMoves),
-	random_member(Move, ListOfMoves).
-
-choose_move(state(TurnNumber, player(h,'r'), P2, Churn, Board), _, Move):-
-     1 =:= TurnNumber mod 2,
-	write('Player one - r '),nl,
-	read_move(X1-Y1,X2-Y2),
-    validate_move(state(TurnNumber, player(h,'r'), P2, Churn, Board),X1-Y1,X2-Y2, Move).
-
-
-choose_move(state(TurnNumber, P1, player(h,'b'), Churn, Board), _, Move):-
-    0 =:= TurnNumber mod 2,
-    write('Player two - b '),nl,
-	read_move(X1-Y1,X2-Y2),
-    validate_move(state(TurnNumber, P1, player(h,'b'), Churn, Board),X1-Y1,X2-Y2,Move).
-
-choose_move(state(TurnNumber, player(c-3,'r'), _, Churn, Board), _, Move):-
-	minimax(state(TurnNumber, player(c-3,'r'), _, Churn, Board), 3, player(c-3,'r'), Move).
-
-choose_move(state(TurnNumber, _, player(c-3,'b'), Churn, Board), _, Move):-
-	minimax(state(TurnNumber, _, player(c-3,'b'), Churn, Board), 3, player(c-3,'b'), Move).
 
 
 % value(+GameState, +Player, -Value)
@@ -211,5 +113,105 @@ value(state(_, Player1, Player2, Variant, Board), player(_,Piece), Value):-
 	length(ListOfMoves, Mobility),
 	Value is PlayerCount - OponentCount + (Mobility / (Size * Size)).
 
-get_turn('r',1).
-get_turn('b',0).
+
+% choose_move(+GameState, +Level, -Move)
+% choose_move/3 chooses a move for the computer to make.
+choose_move(state(TurnNumber, player(h,'r'), P2, Churn, Board), _, Move):-
+	1 =:= TurnNumber mod 2,
+   write('Player one - r '),nl,
+   read_move(X1-Y1,X2-Y2),
+   validate_move(state(TurnNumber, player(h,'r'), P2, Churn, Board),X1-Y1,X2-Y2, Move).
+
+choose_move(state(TurnNumber, P1, player(h,'b'), Churn, Board), _, Move):-
+    0 =:= TurnNumber mod 2,
+    write('Player two - b '),nl,
+	read_move(X1-Y1,X2-Y2),
+    validate_move(state(TurnNumber, P1, player(h,'b'), Churn, Board),X1-Y1,X2-Y2,Move).
+
+choose_move(state(TurnNumber, player(c-1,'r'), P2, Churn, Board), _, Move):-
+	1 =:= TurnNumber mod 2,
+	valid_moves(state(TurnNumber,
+			player(c-1,'r'),
+			P2,
+			Churn,
+			Board),
+		ListOfMoves),
+	random_member(Move, ListOfMoves).
+
+choose_move(state(TurnNumber, player(c-2,'r'), P2, Churn, Board), _, Move):-
+	1 =:= TurnNumber mod 2,
+	findall(
+		M-Value,
+		(
+			move(state(TurnNumber,
+				player(c-2,'r'),
+				P2,
+				Churn,
+				Board),
+				M,
+				NewState
+			),
+			value(NewState, player(c-2,'r'), Value)
+		),
+		MovesValues),
+	findall(
+		VMove,
+		(
+			member(VMove - V, MovesValues),
+			\+ (member(_ - V2, MovesValues), V2 > V)
+		),
+		MostValuableMoves
+	),
+	random_member(Move, MostValuableMoves).
+	
+choose_move(state(TurnNumber, P1, player(c-1,'b'), Churn, Board), _, Move):-
+ 	0 =:= TurnNumber mod 2,
+	valid_moves(state(TurnNumber,
+			P1,
+			player(c-1,'b'),
+			Churn,
+			Board),
+		ListOfMoves),
+	random_member(Move, ListOfMoves).
+
+	choose_move(state(TurnNumber, P1, player(c-2,'b'), Churn, Board), _, Move):-
+		0 =:= TurnNumber mod 2,
+		findall(
+			M-Value,
+			(
+				move(state(TurnNumber,
+					P1,
+					player(c-2,'b'),
+					Churn,
+					Board),
+					M,
+					NewState),
+				value(NewState, player(c-2,'b'), Value)
+			),
+			MovesValues
+		),
+		findall(
+			VMove,
+			(	
+				member(VMove - V, MovesValues),
+				\+ (member(_ - V2, MovesValues), V2 > V)
+			),
+			MostValuableMoves
+		),
+		random_member(Move, MostValuableMoves).
+
+choose_move(state(TurnNumber, player(c-3,'r'), _, Churn, Board), _, Move):-
+	1 =:= TurnNumber mod 2,
+	minimax(state(TurnNumber, player(c-3,'r'), _, Churn, Board), 3, player(c-3,'r'), Move).
+
+choose_move(state(TurnNumber, _, player(c-3,'b'), Churn, Board), _, Move):-
+	0 =:= TurnNumber mod 2,
+	minimax(state(TurnNumber, _, player(c-3,'b'), Churn, Board), 3, player(c-3,'b'), Move).
+
+choose_move(state(TurnNumber, player(c-4,'r'), P2, Churn, Board), _, Move):-
+	1 =:= TurnNumber mod 2,
+	get_best_move(state(TurnNumber, player(c-4,'r'), P2, Churn, Board), player(c-4,'r'),3,Move).
+
+choose_move(state(TurnNumber, P1,player(c-4,'b'), Churn, Board), _, Move):-
+	0 =:= TurnNumber mod 2,
+	get_best_move(state(TurnNumber, P1, player(c-4,'b'), Churn, Board), player(c-4,'b'),3,Move).

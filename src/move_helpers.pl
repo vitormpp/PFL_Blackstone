@@ -20,6 +20,10 @@ get_turn_color(TurnNum,'b'):-
 get_opponent('r','b').
 get_opponent('b','r').
 
+% get_turn(+Color, -TurnNum)
+% get_turn/2 returns the turn number of the given color.
+get_turn('r', 1).
+get_turn('b', 0).
 
 % is_in_line_of_sight(+X1-Y1, +X2-Y2)
 % is_in_line_of_sight/2 checks if the two given positions (X1, Y1) and (X2, Y2) are in line of sight.

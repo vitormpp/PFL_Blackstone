@@ -78,7 +78,7 @@ validate(_,P1Type,P2Type,GameConfig):-
 % validate(+Size, +ChurnVariant, +P1Type, +P2Type, -GameConfig):-
 % validates the answer to the board size question. If the input so far is valid, gameConfig(P1Type,P2Type,ChurnVariant,Size) is unified with GameConfig. 
 validate(Size,ChurnVariant,P1Type,P2Type,gameConfig(P1Type,P2Type,ChurnVariant,Size)):-
-    Size>=6, 0 is Size mod 2,!.
+    Size>=6,Size<100, 0 is Size mod 2,!.
 % if the answer isn't valid, repeat the question.
 validate(_,ChurnVariant,P1Type,P2Type,GameConfig):-
     write('Invalid input.\n'),

@@ -48,7 +48,7 @@ validate(P1Type,_,GameConfig):- % invalid input - repeats second player question
 % validate_difficulty(+P1Type, +DifficultyLevel -GameConfig)
 % validate_difficulty/3 validates the answer to the difficulty question for a player two computer and moves on to the churn variant question.
 validate_difficulty(P1Type,DifficultyLevel,GameConfig):-
-    member(DifficultyLevel,[1,2]),!,
+    member(DifficultyLevel,[1,2,3,4]),!,
     input_form(P1Type,player(c-DifficultyLevel,'b'),GameConfig).
 % if the input isn't valid, it repeats the question.
 validate_difficulty(_,P1Type,GameConfig):- write('Invalid input.\n'), input_form(P1Type,GameConfig).
@@ -56,7 +56,7 @@ validate_difficulty(_,P1Type,GameConfig):- write('Invalid input.\n'), input_form
 % validate_difficulty( +DifficultyLevel -GameConfig)
 % validate_difficulty/3 validates the answer to the difficulty question for a player one computer and moves on to the second player type question.
 validate_difficulty(DifficultyLevel,GameConfig):-
-    member(DifficultyLevel,[1,2]),!,
+    member(DifficultyLevel,[1,2,3,4]),!,
     input_form(player(c-DifficultyLevel,'r'),GameConfig).
 
 % if the input isn't valid, it repeats the question.
@@ -186,7 +186,7 @@ input_form(P1Type,P2Type,GameConfig):-
 % input_form_difficulty(+P1Type, -GameConfig)    
 % input_form_difficulty/2 prints the difficulty question for a second-player computer player and handles the respective input.
 input_form_difficulty(P1Type,GameConfig):-    
-    write('Difficulty level(1/2): \n'),
+    write('Difficulty level(1/2/3/4): \n'),
     read_number(DifficultyLevel),!,skip_line,
     validate_difficulty(P1Type,DifficultyLevel,GameConfig).
 input_form_difficulty(P1Type,GameConfig):- % on invalid input, repeats the question    
@@ -196,7 +196,7 @@ input_form_difficulty(P1Type,GameConfig):- % on invalid input, repeats the quest
 % input_form_difficulty(-GameConfig)    
 % input_form_difficulty/1 prints the difficulty question for a first-player computer player and handles the respective input.
 input_form_difficulty(GameConfig):-    
-    write('Difficulty level(1/2): \n'),
+    write('Difficulty level(1/2/3/4): \n'),
     read_number(DifficultyLevel),!,skip_line,
     validate_difficulty(DifficultyLevel,GameConfig).
 

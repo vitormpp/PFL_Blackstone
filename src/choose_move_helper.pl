@@ -1,3 +1,8 @@
+/*
+    File: choose_move_helper.pl
+    Description: This file contains the predicates that are used to choose a move for the computer to make.
+*/
+
 validate_move(state(TurnNo, Player1Info, Player2Info, Variant, Board),X1,Sep1,Y1,Sep2,X2,Sep3,Y2,move(NX1-NY1,NX2-NY2)):-
     member(Sep1,[',',' ','-']),
     member(Sep2,[',',' ','-']),

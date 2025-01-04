@@ -133,8 +133,7 @@ validate_number_code(C,0,false,X):- % if it's not a digit but no digit has been 
     read_number(0,false,X).
 
 validate_number_code(C,X,true,X):- % if it's not a digit and digits have been read, ends.
-    \+ is_number_code(C,true),!,
-    skip_line.
+    \+ is_number_code(C,true),!.
 
 
 

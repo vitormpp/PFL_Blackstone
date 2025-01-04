@@ -115,24 +115,31 @@ validate_number_code(C,Acc,_,X):-
     read_number_if_not_new_line(Acc1,X).
     
 validate_number_code(C,0,false,X):- 
-    C\='\n',
     \+ is_number_code(C,true),!,
     read_next_if_new_line,
     write('Invalid input! Please input a number!\n'),
     read_number(0,false,X).
 %this case breaks if newline...
-validate_number_code('\n',0,false,X):-
-    skip_line,
-    write('Invalid input! Please input a number!\n'),
-    read_number(0,false,X).
 
 validate_number_code(C,X,true,X):-
     \+ is_number_code(C,true),!,
     skip_line.
 
-read_number(Acc,Val,X):-
-    get_code(C),
-    validate_number_code(C,Acc,Val,X).
+
+
+read_number(Acc,true,X):-
+    get_code(C),!,
+    validate_number_code(C,Acc,true,X).
+   
+
+read_number(Acc,false,X):-
+    peek_char(Next),
+    Next\='\n',
+    get_code(C),!,
+    validate_number_code(C,Acc,false,X).
+read_number(Acc,false,X):-
+    peek_char('\n'),skip_line,write('Invalid input! Please write a number!\n'),
+    read_number(Acc,false,X).
 
 % base case: return the value
 read_number(Acc,true,Acc):-write(end).

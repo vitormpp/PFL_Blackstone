@@ -66,7 +66,6 @@ cut_or_continue(GameState, Depth, player(c-3,Color), _, NewAlpha, Beta, CurrentB
 	evaluate_moves(GameState, Depth, player(c-3,Color), [], NewAlpha, Beta, CurrentBestValue, CurrentBestMove, BestValue, BestMove).
 
 
-
 %second AI:
 
 go_to_next_if_possible([],_,_,_,_,_,States,States).

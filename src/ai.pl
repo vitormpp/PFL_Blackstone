@@ -52,10 +52,16 @@ cut_or_continue(GameState, Depth, player(c-3,Color), _, NewAlpha, Beta, CurrentB
 
 %second AI:
 
+go_to_next_if_possible([],_,_,_,_,_,States,States).
+
+go_to_next_if_possible(NewAcc,Who,P1,P2,Depth,MaxDepth,_,States):-
+	length(NewAcc,N),
+	N>0,
+	get_states(Who,P1,P2,Depth,MaxDepth,NewAcc,States).
 
 
 get_states(us,P1,P2,Depth,MaxDepth,Acc,States):-
-    Depth<MaxDepth,
+	Depth<MaxDepth,
     Depth>=0,
     findall(NewList,
         (
@@ -66,7 +72,7 @@ get_states(us,P1,P2,Depth,MaxDepth,Acc,States):-
         ),
         NewAcc),
         NewDepth is Depth+1,
-        get_states(other,P1,P2,NewDepth,MaxDepth,NewAcc,States).
+        go_to_next_if_possible(NewAcc,other,P1,P2,NewDepth,MaxDepth,Acc,States).
 
 
 get_states(other,P1,P2,Depth,MaxDepth,Acc,States):-
@@ -86,11 +92,10 @@ get_states(other,P1,P2,Depth,MaxDepth,Acc,States):-
 		append(S,[NewState-move(X1-X2,Y1-Y2)],NewList)
 		),
 				NewAcc),
-
 				NewDepth is Depth+1,
-	get_states(us,P1,P2,NewDepth,MaxDepth,NewAcc,States).
+        go_to_next_if_possible(NewAcc,us,P1,P2,NewDepth,MaxDepth,Acc,States).
 		
-get_states(MaxDepth,MaxDepth,States,States).
+get_states(_,_,_,MaxDepth,MaxDepth,States,States).
 
 
 get_other_player(player(_,'r'),_,player(_,'r'),player(_,'r')).
@@ -109,7 +114,7 @@ get_best_move(state(TurnNumber, P1, P2, Churn, Board),player(P,Color),Depth,Move
     ),
     MovesValues
     ),
-    findall(VMove,
+	findall(VMove,
         (member(V-VMove, MovesValues),
              \+ (member( V2-_, MovesValues),
                 V2 > V)),
@@ -121,5 +126,7 @@ get_best_move(state(TurnNumber, P1, P2, Churn, Board),player(P,Color),Depth,Move
 test_get_best_move:-
     get_best_move(state(1, player(h,'r'), player(h,'b'), 1, [['r',' ','r'],['b','b',' ']]), player(_,'r'),4,Move),write(Move).
 
-
+test_get_best_move_2:-
+		get_best_move(state(1, player(h,'r'), player(h,'b'), 1, [['r',' '],[' ',' ']]), player(_,'r'),4,Move),write(Move).
+	
 test_findall:- findall(X,(between(0,5,X),write('wut')),_).

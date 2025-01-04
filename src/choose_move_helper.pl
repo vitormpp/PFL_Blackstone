@@ -12,7 +12,6 @@ validate_move(state(TurnNo, Player1Info, Player2Info, Variant, Board),X1-Y1,X2-Y
     NX1 is X1-1,
     NX2 is X2-1,
     valid_moves(state(TurnNo, Player1Info, Player2Info, Variant, Board), ListOfMoves),
-    write(ListOfMoves),
     member(move(NX1-NY1,NX2-NY2),ListOfMoves),!.
 % if any of the inputs or the move itself is invalid, an error message is desplayed and a "asking for input" cycle is repeated.
 validate_move(GameState,_,_,Move):-

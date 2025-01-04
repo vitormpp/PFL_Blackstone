@@ -124,6 +124,8 @@ get_dead_pieces(3, Board, DeadPieces):-
     append(DeadPieces1,DeadPieces2,DeadPieces3),
     sort(DeadPieces3,DeadPieces).
 
+% are_adjacent(+Originm, +Destination)
+% are_adjacent/2 checks whether two positions X-Y are adjacent.
 are_adjacent(X1-Y1,X2-Y2):-
     DifX is abs(X2-X1),
     DifY is abs(Y2-Y1),

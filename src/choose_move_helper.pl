@@ -19,6 +19,8 @@ validate_move(GameState,_,_,Move):-
     write('Invalid input!'),nl,!,
     display_game(GameState),choose_move(GameState,_,Move).
 
+% read_move(-X1-Y1,-X2-Y2)
+% read_move/2 reads the input from the player, corresponding to the move to be made. X1 and Y2 correspond to the coordinates of the position of the piece to be moved, and X2 and Y2 correspond to the coordinates of the position to which it will be moved.
 read_move(X1-Y1,X2-Y2):-
     write('Source X: '),
     read_number(X1),skip_line,!,

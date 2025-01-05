@@ -142,5 +142,3 @@ get_best_move(state(TurnNumber, P1, P2, Churn, Board),player(P,Color),Depth,Move
                 V2 > V)),
         MostValuableMoves),
     random_member(Move, MostValuableMoves).
-
-

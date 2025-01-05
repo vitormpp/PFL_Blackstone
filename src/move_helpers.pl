@@ -6,8 +6,6 @@
     Description: This file contains the predicates that are used to manipulate moves.
 */
 
-
-
 % get_turn_color(+TurnNum, -Color)
 % get_turn_color/2 returns the color of the player that is playing in the turn number TurnNum.
 get_turn_color(TurnNum,'r'):-

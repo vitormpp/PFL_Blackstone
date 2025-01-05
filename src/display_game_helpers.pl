@@ -92,8 +92,6 @@ display_board([H|T]):- length(H, Size),
     display_grid_line(' ', ' ', Size),nl,
     display_number_line(1, Size),nl.
 
-
-
 % recursive case: prints line by line - for single-digit line numbers    
 display_board(LineNum, [H|T]):-
     length(T, L),
@@ -109,7 +107,6 @@ display_board(LineNum, [H|T]):-
     NewLineNum is LineNum-1,
     display_board(NewLineNum,T).
 
-
 % recursive case: prints line by line - for 2-digit line numbers
 display_board(LineNum, [H|T]):-
     length(T, L),
@@ -123,8 +120,6 @@ display_board(LineNum, [H|T]):-
     nl,
     NewLineNum is LineNum-1,
     display_board(NewLineNum,T).
-
-
 
 % base case: prints the final line, without recursion. This was made separately because printing the final line is handled externally, in case we manage to support different end characters.
 display_board(LineNum, [H]):-

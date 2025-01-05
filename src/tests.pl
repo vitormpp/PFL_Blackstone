@@ -105,6 +105,123 @@ test_minimax_4:-
     minimax(state(3,player(c-3,'r'),player(c-3,'b'),1,[['b',' ',' '],[' ',' ',' '],[' ',' ','r']]),1,player(c-3,'r'),Move),
     write('Final answer: '),write(Move),nl.
 
+test_minimax_5_2:-
+    minimax(state(20,player(c-3,'r'),player(c-3,'b'),1,
+        [
+            [' ','x',' ','x',' ','r'],
+            [' ','x',' ','x','x','x'],
+            ['x','x','x','x','b',' '],
+            [' ',' ','x','x','x','x'],
+            ['x','x','x',' ','b','r'],
+            [' ',' ','x',' ','x',' ']
+        ]),
+    2,player(c-3,'b'),Move),
+    write('Final answer: '),write(Move),nl.
+
+test_minimax_5_3:-
+    minimax(state(20,player(c-3,'r'),player(c-3,'b'),1,
+        [
+            [' ','x',' ','x',' ','r'],
+            [' ','x',' ','x','x','x'],
+            ['x','x','x','x','b',' '],
+            [' ',' ','x','x','x','x'],
+            ['x','x','x',' ','b','r'],
+            [' ',' ','x',' ','x',' ']
+        ]),
+    3,player(c-3,'b'),Move),
+    write('Final answer: '),write(Move),nl.
+
+test_minimax_5_4:-
+    minimax(state(20,player(c-3,'r'),player(c-3,'b'),1,
+        [
+            [' ','x',' ','x',' ','r'],
+            [' ','x',' ','x','x','x'],
+            ['x','x','x','x','b',' '],
+            [' ',' ','x','x','x','x'],
+            ['x','x','x',' ','b','r'],
+            [' ',' ','x',' ','x',' ']
+        ]),
+    4,player(c-3,'b'),Move),
+    write('Final answer: '),write(Move),nl.
+
+test_minimax_6_1:-
+    minimax(state(20,player(c-3,'r'),player(c-3,'b'),1,
+        [
+            ['x','x','x','x','x','x'],
+            ['x','x',' ','x','x','x'],
+            ['x','x','b','x','x','x'],
+            ['x','x',' ','x','x','x'],
+            ['x',' ',' ',' ',' ','x'],
+            ['x',' ',' ',' ','x','r']
+        ]),
+    1,player(c-3,'b'),Move),
+    write('Final answer: '),write(Move),nl.
+
+test_minimax_6_2:-
+    minimax(state(20,player(c-3,'r'),player(c-3,'b'),1,
+        [
+            ['x','x','x','x','x','x'],
+            ['x','x',' ','x','x','x'],
+            ['x','x','b','x','x','x'],
+            ['x','x',' ','x','x','x'],
+            ['x',' ',' ',' ',' ','x'],
+            ['x',' ',' ',' ','x','r']
+        ]),
+    2,player(c-3,'b'),Move),
+    write('Final answer: '),write(Move),nl.
+
+test_minimax_6_3:-
+    minimax(state(20,player(c-3,'r'),player(c-3,'b'),1,
+        [
+            ['x','x','x','x','x','x'],
+            ['x','x',' ','x','x','x'],
+            ['x','x','b','x','x','x'],
+            ['x','x',' ','x','x','x'],
+            ['x',' ',' ',' ',' ','x'],
+            ['x',' ',' ',' ','x','r']
+        ]),
+    3,player(c-3,'b'),Move),
+    write('Final answer: '),write(Move),nl.
+
+test_minimax_6_4:-
+    minimax(state(20,player(c-3,'r'),player(c-3,'b'),1,
+        [
+            ['x','x','x','x','x','x'],
+            ['x','x',' ','x','x','x'],
+            ['x','x','b','x','x','x'],
+            ['x','x',' ','x','x','x'],
+            ['x',' ',' ',' ',' ','x'],
+            ['x',' ',' ',' ','x','r']
+        ]),
+    3,player(c-3,'b'),Move),
+    write('Final answer: '),write(Move),nl.
+
+test_minimax_6_6:-
+    minimax(state(20,player(c-3,'r'),player(c-3,'b'),1,
+        [
+            ['x','x','x','x','x','x'],
+            ['x','x',' ','x','x','x'],
+            ['x','x','b','x','x','x'],
+            ['x','x',' ','x','x','x'],
+            ['x',' ',' ',' ',' ','x'],
+            ['x',' ',' ',' ','x','r']
+        ]),
+    6,player(c-3,'b'),Move),
+    write('Final answer: '),write(Move),nl.
+
+test_minimax_5_6:-
+    minimax(state(20,player(c-3,'r'),player(c-3,'b'),1,
+        [
+            [' ','x',' ','x',' ','r'],
+            [' ','x',' ','x','x','x'],
+            ['x','x','x','x','b',' '],
+            [' ',' ','x','x','x','x'],
+            ['x','x','x',' ','b','r'],
+            [' ',' ','x',' ','x',' ']
+        ]),
+    6,player(c-3,'b'),Move),
+    write('Final answer: '),write(Move),nl.
+
 test_valid_moves_1:-
     valid_moves(state(1,player(c-2,'r'),player(c-1,'b'),1,[[' ',' ',' '],[' ','r',' '],[' ',' ',' ']]),Moves),
     write('Final answer: '),write(Moves),nl.

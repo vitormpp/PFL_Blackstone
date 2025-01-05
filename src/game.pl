@@ -12,21 +12,6 @@
 	Description: This file contains the predicates that are used to play the game.
 */
 
-%state(TurnNumber, Player1,Player2, Variant,Board) 
-
-% Move representation : move(OX-OY,TX-TY)
-%move(originX-originY,targetX-targetY).
-
-% GameConfig( (H/H, H/PC, PC/H, or PC/PC) - ser computador vs computador/ vs pessoa, level 1 vs level 2 difficulty, board size, churn variant)
-
-% use  get_char for input
-
-%even turns is red and P1. Odd turns is blue and P2 
-
-
-% mandatory:
-
-
 % play/0 starts the game
 play:-
 	write('Welcome to Blackstone!\nWould you like to:\n 1 - Play\n 2 - Consult Rules\n 3 - Quit\n'), 
@@ -109,9 +94,12 @@ value(state(_, Player1, Player2, Variant, Board), player(_,Piece), Value):-
 	count_pieces(Board, Oponent, OponentCount),
 	length(Board, Size),
 	get_turn(Piece, Turn),
-	valid_moves(state(Turn, Player1, Player2, Variant, Board), ListOfMoves),
-	length(ListOfMoves, Mobility),
-	Value is PlayerCount - OponentCount + (Mobility / (Size * Size)).
+	Turn1 is Turn+1,
+	valid_moves(state(Turn, Player1, Player2, Variant, Board), ListOfMoves1),
+	valid_moves(state(Turn1, Player1, Player2, Variant, Board), ListOfMoves2),
+	length(ListOfMoves1, Mobility1),
+	length(ListOfMoves2, Mobility2),
+	Value is PlayerCount - OponentCount + ((Mobility1 - Mobility2) / (Size * Size)).
 
 
 % choose_move(+GameState, +Level, -Move)

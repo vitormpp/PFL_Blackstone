@@ -186,7 +186,7 @@ input_form(P1Type,P2Type,GameConfig):-
 % input_form_difficulty(+P1Type, -GameConfig)    
 % input_form_difficulty/2 prints the difficulty question for a second-player computer player and handles the respective input.
 input_form_difficulty(P1Type,GameConfig):-    
-    write('Difficulty level(1/2/3/4): \n'),
+    write('Difficulty level (1/2/3/4): \n'),
     read_number(DifficultyLevel),!,skip_line,
     validate_difficulty(P1Type,DifficultyLevel,GameConfig).
 input_form_difficulty(P1Type,GameConfig):- % on invalid input, repeats the question    
@@ -196,7 +196,7 @@ input_form_difficulty(P1Type,GameConfig):- % on invalid input, repeats the quest
 % input_form_difficulty(-GameConfig)    
 % input_form_difficulty/1 prints the difficulty question for a first-player computer player and handles the respective input.
 input_form_difficulty(GameConfig):-    
-    write('Difficulty level(1/2/3/4): \n'),
+    write('Difficulty level (1/2/3/4): \n'),
     read_number(DifficultyLevel),!,skip_line,
     validate_difficulty(DifficultyLevel,GameConfig).
 

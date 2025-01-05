@@ -102,12 +102,3 @@ get_positions(Board, Piece, Positions):-
 count_pieces(Board, Piece, Count):-
     get_positions(Board, Piece, Positions),
     length(Positions, Count).
-
-% Determines if is empty
-is_empty(' ').
-
-% Determines if is red
-is_red('r').
-
-% Determines if is blue
-is_blue('b').

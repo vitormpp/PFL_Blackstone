@@ -68,6 +68,8 @@ cut_or_continue(GameState, Depth, player(c-3,Color), _, NewAlpha, Beta, CurrentB
 
 %second AI:
 
+% go_to_next_if_possible(+NewAcc, +Who, +P1, +P2, +Depth, +MaxDepth, +PreviousAcc, -States)
+% go_to_next_if_possible/8 determines whether the get_states/7 iterations can continue (that is, whether a game_over state/ a state with no playable moves has been reached). If the end of the loop is detected, States is unified with the (non-empty) accumulator generated up to this point.
 go_to_next_if_possible([],_,_,_,_,_,States,States).
 
 go_to_next_if_possible(NewAcc,Who,P1,P2,Depth,MaxDepth,_,States):-
@@ -76,6 +78,8 @@ go_to_next_if_possible(NewAcc,Who,P1,P2,Depth,MaxDepth,_,States):-
 	get_states(Who,P1,P2,Depth,MaxDepth,NewAcc,States).
 
 
+% get_states(+Who, +P1, +P2, +Depth, +MaxDepth, +Acc,-States)
+% get_states/7 recursively generates a list of lists of state(...)-move(Origin,Destination) representing all reachable states within MaxDepth number of moves, assuming the opponent always makes the greedy choice.
 get_states(us,P1,P2,Depth,MaxDepth,Acc,States):-
 	Depth<MaxDepth,
     Depth>=0,
@@ -90,7 +94,7 @@ get_states(us,P1,P2,Depth,MaxDepth,Acc,States):-
         NewDepth is Depth+1,
         go_to_next_if_possible(NewAcc,other,P1,P2,NewDepth,MaxDepth,Acc,States).
 
-
+%the opponent must be handled separately, as it only makes greedy choices, while "we" can make a temporarily "less optimal" choice that leads to a larger advantage later on.
 get_states(other,P1,P2,Depth,MaxDepth,Acc,States):-
 	Depth<MaxDepth,
 	Depth>=0,
@@ -110,17 +114,19 @@ get_states(other,P1,P2,Depth,MaxDepth,Acc,States):-
 				NewAcc),
 				NewDepth is Depth+1,
         go_to_next_if_possible(NewAcc,us,P1,P2,NewDepth,MaxDepth,Acc,States).
-		
+% base case - unifies States with the accumulator.		
 get_states(_,_,_,MaxDepth,MaxDepth,States,States).
 
-
+% get_other_player(+Player1, +Player2, +WhoWeAre, -OtherPlayer)
+	% get_other_player/4 is used to obtain the opposite player. (Avoids having to write two essentially identical versions of the get_best_moves_function).
 get_other_player(player(_,'r'),_,player(_,'r'),player(_,'r')).
 get_other_player(_,player(_,'b'),player(_,'b'),player(_,'b')).
 
+% get_best_move(+GameState,+Player,+Depth,-Move)
+% get_best_moves/4 returns a valid move for a given GameState and Player, by randomly picking one of the moves leading to a most-valued final state obtained using get_states/7 with a given depth.
 get_best_move(state(TurnNumber, P1, P2, Churn, Board),player(P,Color),Depth,Move):-
     Depth>0,
     get_turn_color(TurnNumber,Color),
-
 	get_other_player(P1,P2,player(P,Color),OtherP),
     findall(Value-M,(
         get_states(us,player(P,Color),OtherP,0,Depth,[[state(TurnNumber, P1, P2, Churn, Board)-move(none)]],StatesList),
@@ -138,11 +144,3 @@ get_best_move(state(TurnNumber, P1, P2, Churn, Board),player(P,Color),Depth,Move
     random_member(Move, MostValuableMoves).
 
 
-
-test_get_best_move:-
-    get_best_move(state(1, player(h,'r'), player(h,'b'), 1, [['r',' ','r'],['b','b',' ']]), player(_,'r'),4,Move),write(Move).
-
-test_get_best_move_2:-
-		get_best_move(state(1, player(h,'r'), player(h,'b'), 1, [['r',' '],[' ',' ']]), player(_,'r'),4,Move),write(Move).
-	
-test_findall:- findall(X,(between(0,5,X),write('wut')),_).

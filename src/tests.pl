@@ -239,3 +239,12 @@ test_update_best_1:-
     update_best(state(1,player(c-2,'r'),player(c-1,'b'),1,[['r',' ',' ']]),1,player(c-2,'r'),[],10,7,move(0-0,1-0),NewAlpha,Move),
     write(NewAlpha),nl,
     write(Move),nl.
+
+test_get_best_move:-
+    get_best_move(state(1, player(h,'r'), player(h,'b'), 1, [['r',' ','r'],['b','b',' ']]), player(_,'r'),4,Move),write(Move).
+    
+test_get_best_move_2:-
+    get_best_move(state(1, player(h,'r'), player(h,'b'), 1, [['r',' '],[' ',' ']]), player(_,'r'),4,Move),write(Move).
+        
+test_findall:- findall(X,(between(0,5,X),write('wut')),_).
+    

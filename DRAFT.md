@@ -26,3 +26,46 @@ By the way, this readme will need to be changed, because it is supposed to inclu
 **Minimax** is a backtracking algorithm that is used in decision making and game theory to find the optimal move for a player, assuming that your oponent also plays optimally.
 The two players are called maximizer (tries to get the highest score possible) and minimizer (tries to get the lowest score possible).
 
+```
+Turn 1
+    ---+---+---+---+---+---+---+--- 
+ 8 |   | r |   | r |   | r |   |   |
+    ---+---+---+---+---+---+---+--- 
+ 7 |   |   |   |   |   |   |   | b |
+    ---+---+---+---+---+---+---+--- 
+ 6 | b |   |   |   |   |   |   |   |
+    ---+---+---+---+---+---+---+--- 
+ 5 |   |   |   |   |   |   |   | b |
+    ---+---+---+---+---+---+---+--- 
+ 4 | b |   |   |   |   |   |   |   |
+    ---+---+---+---+---+---+---+--- 
+ 3 |   |   |   |   |   |   |   | b |
+    ---+---+---+---+---+---+---+--- 
+ 2 | b |   |   |   |   |   |   |   |
+    ---+---+---+---+---+---+---+--- 
+ 1 |   |   | r |   | r |   | r |   |
+    ---+---+---+---+---+---+---+--- 
+     1   2   3   4   5   6   7   8 
+Player one - r 
+```
+
+```
+| ?- play.
+Welcome to Blackstone!
+Would you like to:
+ 1 - Play
+ 2 - Consult Rules
+ 3 - Quit
+|: 1
+Player 1 type ((H)uman/(C)omputer): 
+|: H
+Player 2 type ((H)uman/(C)omputer): 
+|: C
+Difficulty level (1/2/3/4): 
+|: 2
+Churn variant (1 - default, 2 - medium, 3 - high): 
+|: 1
+Board size: 
+|: 8
+
+```

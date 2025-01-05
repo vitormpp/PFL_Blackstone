@@ -31,13 +31,16 @@ play.
 ## The Game - Blackstone
 **Blackstone** is a two-player game designed by Mark Steere in March 2024. It is played on a square board of any even size, of side length 6 or longer. The following screenshot demonstrates the initial configuration for a 8 by 8 board:
 
-< image goes here >
+<div align="center">
+<img src="imgs/initial_board.png" alt="Game Board" width="300"/>
+</div>
+<br>
 
 ```prolog
 (
    1, % Turn number
    player(h,'r'), % Player 1 - a human (with red stones)
-   player(c-1,'b'), % Player 2 - the computer (in easy mode, with blue stones)
+   player(c-2,'b'), % Player 2 - the computer (in easy mode, with blue stones)
    [
       [' ','r',' ','r',' ','r',' ',' '],
       [' ',' ',' ',' ',' ',' ',' ','b'],
@@ -76,18 +79,20 @@ In this implementation, we have integrated all churn variants described in the r
 ### Dificulty levels:
 - **1 - Easy** (Simple Bot): The AI chooses a random move from the list of valid moves.
 - **2 - Hard** (Expert Bot): The AI "greedily" chooses a move from the list of valid moves.
-
-< see if we do more extensions >
+- **3 - Smartest** (Minimax Bot): The AI aims to maximize the value heuristic associated with one player considering that the other is trying to minimize it by iterating through states up to a given depth, with alpha-beta prunning.
+- **4 - Smart** (Brute-Force Bot): The AI tests every reachable state up to a certain depth, considering that its opponent always makes the greedy choice. It selects the move which can lead to the final state with the most value in these conditions.
 
 ## Logic, Arquitecture and Implementation
-
-< small introcution >
+The development of this application involved multiple components. Decisions were made regarding the representation of data, the design of player interaction mechanisms, and the implementation of algorithms, as well as the selection of modules provided by `SICStus`, namely the _lists_ and _between_ modules.
 
 ### Game Configuration Representation
 
 In order to create the initial game state, information is requested from the user, and passed to the initial_state(+GameConfig, -GameState) function.
 
-![Initialization form](imgs/init_form.png)
+<div align="center">
+   <img src="imgs/init_form.png" alt="Init Form" width="400"/>
+</div>
+<br>
 
 The GameConfig term matches the format gameConfig(P1Type,P2Type,ChurnVariant,Size), where:
    - P1Type and P2 are either player(h), signalling a human player, or player(c-DifficultyLevel) otherwise, with DifficultyLevel being either 1 or 2.
@@ -98,7 +103,7 @@ The GameConfig term matches the format gameConfig(P1Type,P2Type,ChurnVariant,Siz
 
 To represent a game state, the term state(TurnNumber, Player1, Player2, Variant, Board) is used, where:
    - `TurnNumber` is a number starting at 1 that is incremented every turn.
-   - `Player1` and `Player2` are player configurations identical to that of `gameConfig (player(h),player(c-DifficultyLevel,Color))`.
+   - `Player1` and `Player2` are player configurations identical to that of `gameConfig(player(h,Color),player(c-DifficultyLevel,Color))`.
    - `Variant` is a number between 1 and 3.
    - `Board` is a list of lists of characters, representing the piece (`'r'` for red, `'b'` for blue, `'x'` for black), or lack thereof (`' '`), in each position.
 
@@ -115,20 +120,46 @@ For uniformization purposes, we considered that coordinates start at `1-1` at th
 
 During the main loop of the game, user interaction is handled by the predicate `choose_move(+GameState, +Level, -Move)`, which takes into account the turn number - used to determine which player's turn it is - and whether that player is a computer or human.
 
-< image showing the player input form for choose_move >
+<div align="center">
+   <img src="imgs/choose_move.png" alt="Init Form" width="600"/>
+</div>
+<br>
 
-< a paragraph or two and maybe some images about how errors are handled and recovered from >
+To avoid an application shutdown or other unexpected behaviour, techniques such as well-placed cuts and addicional predicates that verified input before continuing with the next iteration of a loop were used. The following predicate demonstrates both of these techniques:
 
-< although no more sections are indicated in the project sheet, I think we should include here a new section with some implementation details of the code>
+```prolog
+validate('C',GameConfig):- % computer player - asks for a difficulty value 
+    !, 
+    input_form_difficulty(GameConfig).
 
-### Implementation details
+validate('H',GameConfig):- %player is human - proceeds to second player question
+    !, 
+    input_form(player(h,'r'),GameConfig).
+validate(_,GameConfig):- % invalid input - repeats first player question
+    write('Invalid input!\n'),
+    input_form(GameConfig).
+```
+Moreover, a custom read_number function was created, as the `get_char` and `get_code` predicate were favored over `read`.
 
-## Board generation
+
+### Implementation Details
+
+#### Value Function
+
+To determine the value heuristic for a given player and state, the number of pieces of each player that are on the board are taken into consideration, as well as the number of valid moves available:
+- Value = #Our_Pieces - #Other_Player_Pieces + (#Moves/BoardArea)#### Minimax Algorithm
+
+
+
+< ! write this ! >
+##someone Board generation
+
 As stated in the game rules, the board size is dynamic (i.e, may have a variable size that must be an even number largfer than 6).
 
+< more >
 
 ## Conclusions
-
-
+This project allowed us to apply the knowledge we have gained of logic programming and Prolog to develop a game. We collaboratively designed and agreed upon consistent representations for the data structures used throughout the code. Additionally, several algorithms were explored: a greedy algorithm to select the most favorable current move, a minimax algorithm implemented with depth-first search, and another approach utilizing breadth-first search. Additionally, we made efforts to ensure the game was robust against player input errors.
 
 ## Bibliography
+[1] 

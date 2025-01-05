@@ -144,6 +144,19 @@ test_minimax_5_4:-
     4,player(c-3,'b'),Move),
     write('Final answer: '),write(Move),nl.
 
+test_minimax_5_6:-
+    minimax(state(20,player(c-3,'r'),player(c-3,'b'),1,
+        [
+            [' ','x',' ','x',' ','r'],
+            [' ','x',' ','x','x','x'],
+            ['x','x','x','x','b',' '],
+            [' ',' ','x','x','x','x'],
+            ['x','x','x',' ','b','r'],
+            [' ',' ','x',' ','x',' ']
+        ]),
+    6,player(c-3,'b'),Move),
+    write('Final answer: '),write(Move),nl.
+
 test_minimax_6_1:-
     minimax(state(20,player(c-3,'r'),player(c-3,'b'),1,
         [
@@ -209,19 +222,6 @@ test_minimax_6_6:-
     6,player(c-3,'b'),Move),
     write('Final answer: '),write(Move),nl.
 
-test_minimax_5_6:-
-    minimax(state(20,player(c-3,'r'),player(c-3,'b'),1,
-        [
-            [' ','x',' ','x',' ','r'],
-            [' ','x',' ','x','x','x'],
-            ['x','x','x','x','b',' '],
-            [' ',' ','x','x','x','x'],
-            ['x','x','x',' ','b','r'],
-            [' ',' ','x',' ','x',' ']
-        ]),
-    6,player(c-3,'b'),Move),
-    write('Final answer: '),write(Move),nl.
-
 test_valid_moves_1:-
     valid_moves(state(1,player(c-2,'r'),player(c-1,'b'),1,[[' ',' ',' '],[' ','r',' '],[' ',' ',' ']]),Moves),
     write('Final answer: '),write(Moves),nl.
@@ -247,4 +247,57 @@ test_get_best_move_2:-
     get_best_move(state(1, player(h,'r'), player(h,'b'), 1, [['r',' '],[' ',' ']]), player(_,'r'),4,Move),write(Move).
         
 test_findall:- findall(X,(between(0,5,X),write('wut')),_).
-    
+
+test_gameloop_churn_1:-
+    gameloop(
+        state(
+            20,
+            player(c-2,'r'),
+            player(h,'b'),
+            1,
+            [
+                [' ','x',' ','x',' ','r'],
+                [' ','x',' ','x','x','x'],
+                ['x','x','x','x','b',' '],
+                [' ',' ','x','x','x','x'],
+                ['x','x','x',' ','b','r'],
+                [' ',' ','x',' ','x',' ']
+            ]
+        )
+    ).
+
+test_gameloop_churn_2:-
+    gameloop(
+        state(
+            20,
+            player(c-2,'r'),
+            player(h,'b'),
+            2,
+            [
+                [' ','x',' ','x',' ','r'],
+                [' ','x',' ','x','x','x'],
+                ['x','x','x','x','b',' '],
+                [' ',' ','x','x','x','x'],
+                ['x','x','x',' ','b','r'],
+                [' ',' ','x',' ','x',' ']
+            ]
+        )
+    ).
+
+test_gameloop_churn_3:-
+    gameloop(
+        state(
+            20,
+            player(c-2,'r'),
+            player(h,'b'),
+            3,
+            [
+                [' ','x',' ','x',' ','r'],
+                [' ','x',' ','x','x','x'],
+                ['x','x','x','x','b',' '],
+                [' ',' ','x','x','x','x'],
+                ['x','x','x',' ','b','r'],
+                [' ',' ','x',' ','x',' ']
+            ]
+        )
+    ).

@@ -85,7 +85,7 @@ In this implementation, we have integrated all **churn variants** described in t
 - **2 - Medium Churn Variant**: if the move blocks red or blue stones, remove those stones and also the black stones that contributed to the kills.
 - **3 - High Churn variant**: if the move blocks red or blue stones, remove those stones and also all the black stones from the board.
 
-### **Dificulty levels:**
+### **Difficulty levels:**
 
 - **1 - Easy** (Simple Bot): The AI chooses a random move from the list of valid moves.
 - **2 - Hard** (Expert Bot): The AI "greedily" chooses a move from the list of valid moves.

@@ -114,7 +114,7 @@ The `GameConfig` term matches the format `gameConfig(P1Type, P2Type, ChurnVarian
 
 ### **Internal Game State Representation**
 
-To represent a game state, the term state(TurnNumber, Player1, Player2, Variant, Board) is used, where:
+To represent a game state, the term `state(TurnNumber, Player1, Player2, Variant, Board)` is used, where:
 
 - `TurnNumber` is a number starting at 1 that is incremented every turn.
 - `Player1` and `Player2` are player configurations identical to that of `gameConfig(player(h,Color),player(c-DifficultyLevel,Color))`.

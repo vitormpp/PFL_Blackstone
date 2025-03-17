@@ -1,6 +1,9 @@
 # Blackstone - Prolog Implementation
 
 ## PFL - Practical Assignment 2
+> FEUP - Faculty of Engineering of the University of Porto <br/>
+> Project Evaluation: 20.0 <br/>
+> January, 2025
 
 ## **Introduction**
 

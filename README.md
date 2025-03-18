@@ -103,7 +103,7 @@ The development of this application involved multiple components. Decisions were
 
 ### **Game Configuration Representation**
 
-In order to create the initial game state, information is requested from the user, and passed to the initial_state(+GameConfig, -GameState) function.
+In order to create the initial game state, information is requested from the user, and passed to the `initial_state(+GameConfig, -GameState)` function.
 
 <div align="center">
    <img src="assets/init_form.png" width="400">
@@ -112,7 +112,7 @@ In order to create the initial game state, information is requested from the use
 The `GameConfig` term matches the format `gameConfig(P1Type, P2Type, ChurnVariant, Size)`, where:
 
 - `P1Type` and `P2Type` are either `player(h,Color)`, signalling a human player, or `player(c-DifficultyLevel,Color)`otherwise, with `DifficultyLevel` being a number between 1 and 4.
-- `ChurnVariant` is a number between 1 and 3
+- `ChurnVariant` is a number between 1 and 3.
 - `Size` is an even number greater than 6, representing the size in squares/positions of the side of the square board.
 
 ### **Internal Game State Representation**
